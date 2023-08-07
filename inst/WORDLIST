@@ -1,12 +1,2 @@
-BiocCheck
-CMD
-Pkgdown
-Pre
-Roxygen
-SuperLinter
-github
-gitleaks
+bsafe
 initializer
-pre
-repo
-Forkers
