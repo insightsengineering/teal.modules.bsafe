@@ -1,2 +1,3 @@
 # teal.modules.bsafe
-Teal modules for bsafe
+
+Short description of the package
