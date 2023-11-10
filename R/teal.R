@@ -12,7 +12,7 @@ ui_dv_poc_example <- function(id) {
 # server function for the module
 # histogram_var is a teal.transform::data_extract_spec object
 # specifying which columns of which datasets users can choose
-srv_dv_poc_example <- function(id, data, dataset_name) {
+srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_name) {
   checkmate::assert_class(data, "tdata")
   shiny::moduleServer(id, function(input, output, session) {
     # browser()
@@ -20,8 +20,11 @@ srv_dv_poc_example <- function(id, data, dataset_name) {
     dataset <- shiny::reactive(data[[dataset_name]]())
 
     poc_server(
-        "bsafe",
-        dataset = dataset
+         "bsafe",
+        dataset = dataset,
+        dataset_tdata = data,
+        reporter = reporter,
+        filter_panel_api = filter_panel_api
       )
 
       teal.widgets::verbatim_popup_srv(
