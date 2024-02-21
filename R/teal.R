@@ -3,7 +3,7 @@
 # specifying which columns of which datasets users can choose
 ui_dv_poc_example <- function(id) {
   ns <- shiny::NS(id)
-  shiny::tagList(    
+  shiny::tagList(
     teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code"),
     poc_UI(ns("bsafe"))
   )
@@ -20,21 +20,21 @@ srv_dv_poc_example <- function(id, data, dataset_name) {
     dataset <- shiny::reactive(data[[dataset_name]]())
 
     poc_server(
-        "bsafe",
-        dataset = dataset
-      )
+      "bsafe",
+      dataset = dataset
+    )
 
-      teal.widgets::verbatim_popup_srv(
+    teal.widgets::verbatim_popup_srv(
       id = "rcode",
       verbatim_content = "Non Functional",
       title = "R Code"
     )
- })
+  })
 }
 
 # the function which creates the teal module for users
 tm_dv_poc_example <- function(label = "BSAFE", dataset_name) {
-  checkmate::assert_character(label)  
+  checkmate::assert_character(label)
 
   teal::module(
     label = label,
@@ -47,17 +47,16 @@ tm_dv_poc_example <- function(label = "BSAFE", dataset_name) {
 
 
 mock_teal <- function() {
-  
-app <- teal::init(
-  data = list(bsafe_data = bsafe_data),
-  modules = list(
-    tm_dv_poc_example(
-    label = "teal.modules.bsafe",
-    dataset_name = "bsafe_data"
+  app <- teal::init(
+    data = list(bsafe_data = bsafe_data),
+    modules = list(
+      tm_dv_poc_example(
+        label = "teal.modules.bsafe",
+        dataset_name = "bsafe_data"
+      ),
+      teal.modules.general::tm_variable_browser()
     ),
-    teal.modules.general::tm_variable_browser()
-  ),
-  header = "DaVinci test of a bsafe as teal module"
-)
+    header = "DaVinci test of a bsafe as teal module"
+  )
   shiny::shinyApp(app$ui, app$server)
 }
