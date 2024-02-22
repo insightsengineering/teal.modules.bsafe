@@ -1,31 +1,41 @@
-Type: Package
 Package: teal.modules.bsafe
-Title: R Package Template
-Version: 0.1.0
-Date: 2023-07-05
-Authors@R:
-    person("insightsengineering", , , "insightsengineering@example.com", role = c("aut", "cre"))
-Description: R package template with GitHub Actions workflows included.
+Type: Package
+Title: Bayesian Safety R Shiny Module
+Version: 0.0.1-0
+Authors@R: c(person('Lars', 'Andersen', role = c('aut', 'cre'),
+                     email = 'lars.andersen@boehringer-ingelheim.com'),
+             person("Luis", "Morís Fernández",
+                     email = "luis.moris.fernandez@gmail.com", role = "aut"),
+             person("Alexander", "Stemke", role = "aut",
+                     email = "alexander.stemke@boehringer-ingelheim.com"),
+             person("Boehringer Ingelheim Pharma GmbH & Co. KG",
+                     role = c("cph", "fnd")))
+Description: This package is for deploying the Bayesian Safety R Shiny App.
 License: Apache License 2.0 | file LICENSE
-URL: https://github.com/insightsengineering/teal.modules.bsafe/
-BugReports: https://github.com/insightsengineering/teal.modules.bsafe/issues
-Depends:
-    R (>= 3.6)
-Imports:
-    plumber,
-    shiny,
-    stringr
-Suggests:
-    future,
-    httr,
-    knitr,
-    shinytest,
-    testthat (>= 2.0)
-VignetteBuilder:
-    knitr
-biocViews:
 Encoding: UTF-8
-Language: en-US
 LazyData: true
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+Depends: 
+    R (>= 4.0)
+Imports:
+    shiny (>= 1.6.0),
+    shinyjs (>= 2.0.0),
+    utils,
+    purrr,
+    dplyr,
+    rmarkdown,
+    stringr,
+    checkmate,
+    magrittr,
+    bsafe,
+    htmltools,
+    teal,
+    teal.modules.general,
+    teal.widgets,
+    teal.reporter,
+    kableExtra,
+    knitr,
+    rlang,
+    teal.code
+Suggests:
+    testthat (>= 3.0.4)
+RoxygenNote: 7.3.1

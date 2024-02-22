@@ -1,0 +1,288 @@
+---
+title: "Adverse Events Summary Tables"
+output: 
+  pdf_document:
+    extra_dependencies: ["booktabs", "threeparttablex", "longtable"]
+    includes:
+      before_body: lot.tex
+classoption: landscape
+params:
+  ae_summary_Rmd: "holder"
+  date: "holder"
+  bsafe_version: "holder"
+  pwemap_version: "holder"
+  seed: "holder"
+---
+
+```{r setup, include=FALSE}
+# nolint start: object_name_linter
+COMMA_PLUS_ONE_SPACE <- 2 
+STRING_START <- 1
+# Adverse Event proportion table data
+array_inci <- params$ae_summary_Rmd[["InciProp"]]
+# Comparison of adverse event proportion table data
+array_inci_comp <- params$ae_summary_Rmd[["InciPropComp"]]
+# Adverse event incidence rate table data
+array_er <- params$ae_summary_Rmd[["EventRates"]]
+# Comparison of adverse event incidence rate table data
+array_er_comp <- params$ae_summary_Rmd[["EvenRatesComp"]]
+# list of all STUDYIDs of the treatment arm
+ID_trt_list <- params$ae_summary_Rmd[["ID_trt_list"]]
+# list of all STUDYIDs of the control arm
+ID_ctr_list <- params$ae_summary_Rmd[["ID_ctr_list"]]
+
+# list of all selected arms for the treatment arm
+cb_list_trt <- params$ae_summary_Rmd[["cb_list_trt"]]
+# list of all selected arms for the control arm
+cb_list_ctr <- params$ae_summary_Rmd[["cb_list_ctrl"]]
+# dynamic group variable for amount of comparisons chosen by the user //NUM_COMPARISONS in bsafe
+if (dim(array_inci)[4] == 1) {
+  groups <- 1
+} else {
+  groups <- dimnames(array_inci[, , , ])[[4]]
+}
+# initializing empty lists
+list_table_1_1 <- list()
+list_table_1_2 <- list()
+list_table_2_1 <- list()
+list_table_2_2 <- list()
+list_comparisons <- list()
+knitr::opts_chunk$set(eval = TRUE)
+```
+
+* **Seed used to generate this report:** `r sprintf("%i", params$seed)`
+* **teal.modules.bsafe version:** `r params$bsafe_version`
+* **bsafe version:** `r params$pwemap_version`
+* **date of report generation:** `r params$date`
+* **The report is not validated**
+
+\newpage
+```{r tables, results='asis', echo=FALSE, warning=FALSE, error=FALSE}
+# group as iterator
+for (g in groups) {
+  # pasting together the chosen arms of ARM A aka treatment arm and separating them
+  # by comma as well as removing the last comma
+  ARMS_ARM_A <- substr(
+    paste0(cb_list_trt[[paste0("grp", g)]],
+      ", ",
+      collapse = ""
+    ),
+    STRING_START,
+    nchar(paste0(cb_list_trt[[paste0("grp", g)]],
+      ", ",
+      collapse = ""
+    )) - COMMA_PLUS_ONE_SPACE
+  )
+  # pasting together the chosen arms of ARM B aka control arm and separating them
+  # by comma as well as removing the last comma
+  ARMS_ARM_B <- substr(
+    paste0(cb_list_ctr[[paste0("grp", g)]],
+      ", ",
+      collapse = ""
+    ),
+    STRING_START,
+    nchar(paste0(cb_list_ctr[[paste0("grp", g)]],
+      ", ",
+      collapse = ""
+    )) - COMMA_PLUS_ONE_SPACE
+  )
+  # list element as data frame for kableExtra
+  list_comparisons[[g]] <- as.data.frame(
+    cbind(
+      # pasting together the IDs of ARM A aka treatment arm and separating them by comma as well as removing the last comma
+      substr(
+        paste0(ID_trt_list[[paste0("grp", g)]],
+          ", ",
+          collapse = ""
+        ),
+        STRING_START,
+        nchar(paste0(ID_trt_list[[paste0("grp", g)]],
+          ", ",
+          collapse = ""
+        )) - COMMA_PLUS_ONE_SPACE
+      ),
+      # same with ARM B or control arm
+      substr(
+        paste0(ID_ctr_list[[paste0("grp", g)]],
+          ", ",
+          collapse = ""
+        ),
+        STRING_START,
+        nchar(paste0(ID_ctr_list[[paste0("grp", g)]],
+          ", ",
+          collapse = ""
+        )) - COMMA_PLUS_ONE_SPACE
+      )
+    )
+  )
+  table_comparisons <- kableExtra::kable(list_comparisons[[g]],
+    format = "latex",
+    # to enable a stable width of the table
+    booktabs = TRUE,
+    # to enable page breaks within the tables
+    longtable = TRUE,
+    # renaming the column names // could also be ARMS_ARM_A and ARMS_ARM_B if the real names should be displayed
+    col.names = c("Arm A", "Arm B"),
+    # giving the table a title
+    caption = paste0("Study IDs for Arm A and Arm B in comparison ", g)
+  ) %>%
+    kableExtra::kable_styling(font_size = 8) # manually adjusting the font size of the table
+  # explicit printing is needed in order to display the table in the pdf
+  print(table_comparisons)
+  table_caption_1 <- paste0(
+    "Adverse Event proportion for Arm A: ",
+    ARMS_ARM_A,
+    " vs. Arm B: ",
+    ARMS_ARM_B
+  )
+  # combining both ARM A and ARM B together into one list for proper display
+  list_table_1_1[[g]] <- as.data.frame(cbind(array_inci[, , 1, g], array_inci[, , 2, g]))
+  # list_table_1_1[[g]] <- list_table_1_1[[g]] %>% na.omit()
+  list_table_1_1[[g]][, c(3, 10)] <- round(list_table_1_1[[g]][, c(3, 10)] * 100, 1)
+  table_display_1 <- kableExtra::kable(list_table_1_1[[g]],
+    format = "latex",
+    booktabs = TRUE, digits = 3,
+    longtable = TRUE,
+    col.names = rep(c("r", "n", "%", "mean", "median", "CRI L", "CRI U"), 2),
+    caption = table_caption_1
+  ) %>%
+    kableExtra::kable_styling(font_size = 8) %>%
+    kableExtra::add_header_above( # adding extra separation layer of both Arms above the column names. They have to be equal to the names of the array/list
+      c(
+        "Arm A" = 8,
+        "Arm B" = 7
+      )
+    ) %>%
+    kableExtra::footnote(
+      general_title = " ",
+      footnote_as_chunk = TRUE,
+      threeparttable = TRUE,
+      general = paste0(
+        "Naive point estimates show the (pooled) number of patients with event r",
+        ", the (pooled) number of patients n and the",
+        " proportion (%). Posterior summary shows the posterior distribution mean,",
+        " median and 95% credible interval."
+      )
+    )
+  print(table_display_1)
+  table_caption_2 <- paste0(
+    "Comparison of adverse event proportion for Arm A: ",
+    ARMS_ARM_A,
+    " vs. Arm B: ",
+    ARMS_ARM_B
+  )
+  list_table_1_2[[g]] <- as.data.frame(cbind(array_inci_comp[, , 1, g], array_inci_comp[, , 2, g]))
+  # list_table_1_2[[g]] <- list_table_1_2[[g]] %>% na.omit()
+  table_display_2 <- kableExtra::kable(list_table_1_2[[g]][, -6],
+    format = "latex",
+    booktabs = TRUE, digits = 3,
+    longtable = TRUE,
+    col.names = c(rep(c("Naive", "mean", "median", "CRI L", "CRI U"), 2), "A>B%"),
+    caption = table_caption_2
+  ) %>%
+    kableExtra::kable_styling(font_size = 8) %>%
+    kableExtra::add_header_above(
+      c(
+        "Risk Difference" = 6,
+        "Risk Ratio" = 6
+      )
+    ) %>%
+    kableExtra::footnote(
+      general_title = " ",
+      footnote_as_chunk = TRUE,
+      threeparttable = TRUE,
+      general = paste0(
+        "Naive point estimates show the risk difference and ratio calculated from ",
+        "(pooled) number of patients with event r",
+        "and (pooled) number of patients. ",
+        "Posterior summary shows the posterior distribution mean ",
+        "median and 95% credible interval. ",
+        "Probability (Arm A > Arm B) ",
+        "shows the probability of the AE proportion being larger in the Arm A ",
+        "than in Arm B, estimated from the posterior distribution."
+      )
+    )
+
+  print(table_display_2)
+  table_caption_3 <- paste0(
+    "Adverse event incidence rate for Arm A: ",
+    ARMS_ARM_A,
+    " vs. Arm B: ",
+    ARMS_ARM_B
+  )
+  list_table_2_1[[g]] <- as.data.frame(cbind(array_er[, , 1, g], array_er[, , 2, g]))
+  # list_table_2_1[[g]] <- list_table_2_1[[g]] %>% na.omit()
+  table_display_3 <- kableExtra::kable(list_table_2_1[[g]],
+    format = "latex",
+    booktabs = TRUE, digits = 3,
+    longtable = TRUE,
+    col.names = rep(c("Naive", "mean", "median", "CRI L", "CRI U"), 2),
+    caption = table_caption_3
+  ) %>%
+    kableExtra::kable_styling(font_size = 8) %>%
+    kableExtra::add_header_above(
+      c(
+        "Arm A" = 6,
+        "Arm B" = 5
+      )
+    ) %>%
+    kableExtra::footnote(
+      general_title = " ",
+      footnote_as_chunk = TRUE,
+      threeparttable = TRUE,
+      general = paste0(
+        "Adverse event incidence rate is the exposure adjusted AE rate, the rate of patients with event per patient",
+        " year at risk.",
+        "Naive point estimates show the (pooled) number of patients with event r",
+        ", divided by the (pooled) total exposure time.",
+        "Posterior summary shows the posterior distribution mean, median and 95% credible interval. ",
+        "Probability (Arm A > control) shows the probability of the AE proportion being larger in the Arm B ",
+        "than on control, estimated from the posterior distribution."
+      )
+    )
+  print(table_display_3)
+  table_caption_4 <- paste0(
+    "Comparison of adverse event incidence rate for Arm A: ",
+    ARMS_ARM_A,
+    " vs. Arm B: ",
+    ARMS_ARM_B
+  )
+  list_table_2_2[[g]] <- as.data.frame(cbind(array_er_comp[, , 1, g], array_er_comp[, , 2, g]))
+  # list_table_2_2[[g]] <- list_table_2_2[[g]] %>% na.omit()
+  if (length(list_table_2_2[[g]]) == 0) {
+    print("Analysis is not applicable!")
+  } else {
+    table_display_4 <- kableExtra::kable(list_table_2_2[[g]][, -6],
+      format = "latex",
+      booktabs = TRUE, digits = 3,
+      longtable = TRUE,
+      col.names = c(rep(c("Naive", "mean", "median", "CRI L", "CRI U"), 2), "A>B%"),
+      caption = table_caption_4
+    ) %>%
+      kableExtra::kable_styling(font_size = 8) %>%
+      kableExtra::add_header_above(
+        c(
+          "Risk Difference" = 6,
+          "Risk Ratio" = 6
+        )
+      ) %>%
+      kableExtra::footnote(
+        general_title = " ",
+        footnote_as_chunk = TRUE,
+        threeparttable = TRUE,
+        general = paste0(
+          "Adverse event incidence rate is the exposure adjusted AE rate, the rate of patients",
+          " with event per patient year",
+          " at risk.Naive point estimates show the risk difference and ratio calculated from (pooled) number",
+          " of patients with event r and (pooled) number of patients.",
+          "Posterior summary shows the posterior distribution mean, median and 95% credible interval. ",
+          "Probability (Arm A > Arm B) shows the probability of the AE proportion being larger",
+          " in the Arm A",
+          " than in Arm B, estimated from the posterior distribution."
+        )
+      )
+    print(table_display_4)
+  }
+}
+# nolint end
+```
