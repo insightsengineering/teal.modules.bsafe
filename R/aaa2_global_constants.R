@@ -95,3 +95,16 @@ BSAFE_DEFAULTS <- pack_of_constants( # noLint
   SEL_ESS_METHOD = "elir",
   SEL_DIST = "Posterior"
 )
+
+
+REPORT_IDS <- pack_of_constants(
+  DEFAULT = pack_of_constants(
+    ADD = "add_report_card",
+    DOWNLOAD = "download_button",
+    RESET = "reset_button"
+  )
+)
+
+REPORT_IDS[["MAP"]] <- do.call(pack_of_constants, purrr::map(REPORT_IDS$DEFAULT, ~paste0("map_", .x)))
+REPORT_IDS[["ROBUST_MAP"]] <- do.call(pack_of_constants, purrr::map(REPORT_IDS$DEFAULT, ~paste0("robust_map_", .x)))
+
