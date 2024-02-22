@@ -1,3 +1,1 @@
-# teal.modules.bsafe
-
-Short description of the package
+# B-SAFE Shiny Module
