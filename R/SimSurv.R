@@ -37,12 +37,12 @@ sim_1_study <- function(n_pat = c(g1 = 100, g2 = 100),
     if (i == 1) {
       surv_times <- surv_times_g
     } else {
-      surv_times <- c(survTimes, surv_times_g)
+      surv_times <- c(surv_times, surv_times_g)
     }
   }
 
   # Eventtimes
-  res[, "EventTime"] <- res[, "Entry"] + survTimes
+  res[, "EventTime"] <- res[, "Entry"] + surv_times
 
   # get rate parameter for exponential distributed censoring times
   # if rate=0, no censoring is applied
@@ -135,11 +135,11 @@ sim_test_data <- function(n_stud = 5, tau = 0.05,
       }
 
       temp_study <- sim_1_study(
-        nPat = set_array[i, , "nPat"],
-        hz = tempHz,
+        n_pat = set_array[i, , "nPat"],
+        hz = temp_hz,
         dropout = dropout,
         accr = accr,
-        nObsEvt = n_obs_evt
+        n_obs_evt = n_obs_evt
       )
 
       g1_ind <- which(temp_study[, "gID"] == 1)
