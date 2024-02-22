@@ -1,4 +1,3 @@
-
 BSAFE_ID <- pack_of_constants( # nolint
   # Arm Creation Tab
   SEL_COLUMN = "input_column",
