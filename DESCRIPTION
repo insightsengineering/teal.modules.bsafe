@@ -1,7 +1,7 @@
 Package: teal.modules.bsafe
 Type: Package
 Title: Bayesian Safety R Shiny Module
-Version: 0.0.1-0
+Version: 0.1.0
 Authors@R: c(person('Lars', 'Andersen', role = c('aut', 'cre'),
                      email = 'lars.andersen@boehringer-ingelheim.com'),
              person("Luis", "Morís Fernández",
