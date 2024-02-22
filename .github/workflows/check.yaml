@@ -27,17 +27,8 @@ jobs:
     with:
       additional-env-vars: |
         _R_CHECK_CRAN_INCOMING_REMOTE_=false
-      additional-r-cmd-check-params: --as-cran
-  r-cmd-archive:
-    runs-on: ubuntu-latest
-    name: Archive check outputs
-    needs: r-cmd    
-    steps:
-      - name: Archive production artifacts
-      - uses: actions/upload-artifact@v4
-        with:
-          name: check-out
-          path: /__w/**/*install\.out
+      additional-r-cmd-check-params: --as-cran 
+      skip-r-cmd-install: true
   coverage:
     name: Coverage 📔
     uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
