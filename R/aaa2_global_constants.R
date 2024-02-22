@@ -76,14 +76,14 @@ BSAFE_ID <- pack_of_constants( # nolint
   OUT_EXCEL_PATH_TXT = "excel_path",
   OUT_COMP_DISPLAY = "comp_display",
   OUT_TXT_SELECTED_ANALYSIS = "selected_analysis"
-
-
 )
 
 BSAFE_CHOICES <- pack_of_constants( # noLint
   SEL_ANALYSIS = c("Incidence proportion", "Exposure-adjusted AE rate"),
-  SEL_HIST_BORROW = c("Small", "Moderate", "Substantial", "Large",
-                      "Very Large"),
+  SEL_HIST_BORROW = c(
+    "Small", "Moderate", "Substantial", "Large",
+    "Very Large"
+  ),
   SEL_TAU = c("Half-normal" = "HalfNormal"),
   SEL_ESS_METHOD = c("Expected Local Information Ratio" = "elir"),
   SEL_DIST = c("Likelihood", "MAP Prior", "Robust MAP Prior", "Posterior")
