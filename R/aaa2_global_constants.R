@@ -1,5 +1,5 @@
-# nolint start: object_name_linter
-BSAFE_ID <- pack_of_constants(
+
+BSAFE_ID <- pack_of_constants( # nolint
   # Arm Creation Tab
   SEL_COLUMN = "input_column",
   OUT_SEL_VAR = "input_var",
@@ -79,7 +79,7 @@ BSAFE_ID <- pack_of_constants(
   OUT_TXT_SELECTED_ANALYSIS = "selected_analysis"
 )
 
-BSAFE_CHOICES <- pack_of_constants( # noLint
+BSAFE_CHOICES <- pack_of_constants( # nolint
   SEL_ANALYSIS = c("Incidence proportion", "Exposure-adjusted AE rate"),
   SEL_HIST_BORROW = c(
     "Small", "Moderate", "Substantial", "Large",
@@ -90,7 +90,7 @@ BSAFE_CHOICES <- pack_of_constants( # noLint
   SEL_DIST = c("Likelihood", "MAP Prior", "Robust MAP Prior", "Posterior")
 )
 
-BSAFE_DEFAULTS <- pack_of_constants( # noLint
+BSAFE_DEFAULTS <- pack_of_constants( # nolint
   SEL_TAU = "HalfNormal",
   SEL_HIST_BORROW = "Large",
   SEL_ESS_METHOD = "elir",
@@ -98,7 +98,7 @@ BSAFE_DEFAULTS <- pack_of_constants( # noLint
 )
 
 
-REPORT_IDS <- pack_of_constants(
+REPORT_IDS <- pack_of_constants( # nolint
   DEFAULT = pack_of_constants(
     ADD = "add_report_card",
     DOWNLOAD = "download_button",
@@ -106,6 +106,5 @@ REPORT_IDS <- pack_of_constants(
   )
 )
 
-REPORT_IDS[["MAP"]] <- do.call(pack_of_constants, purrr::map(REPORT_IDS$DEFAULT, ~ paste0("map_", .x)))
-REPORT_IDS[["ROBUST_MAP"]] <- do.call(pack_of_constants, purrr::map(REPORT_IDS$DEFAULT, ~ paste0("robust_map_", .x)))
-# nolint end
+REPORT_IDS[["MAP"]] <- do.call(pack_of_constants, purrr::map(REPORT_IDS$DEFAULT, ~ paste0("map_", .x))) # nolint
+REPORT_IDS[["ROBUST_MAP"]] <- do.call(pack_of_constants, purrr::map(REPORT_IDS$DEFAULT, ~ paste0("robust_map_", .x))) # nolint

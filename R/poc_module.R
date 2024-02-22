@@ -7,7 +7,7 @@
 #'
 #' @return the UI
 #' @export
-poc_UI <- function(id) { # nolint: object_name_linter
+poc_UI <- function(id) { # nolint
   ns <- shiny::NS(id)
   shiny::tagList(
     shinyjs::useShinyjs(),
@@ -756,14 +756,14 @@ poc_server <- function(
 
     forest_plot_qenv <- shiny::reactive({
       message("forest")
-      x <- rlang::expr(
-        forest_plot <- bsafe::forest_plot_display(
+      x <- rlang::expr({
+        forest_plot <- bsafe::forest_plot_display( # nolint: object_usage_linter
           map_object = map_mcmc,
           select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
           saf_topic = !!input[[BSAFE_ID$SEL_SAF_TOPIC]],
           select_btrt = !!input[[BSAFE_ID$SEL_TRT]]
         )
-      )
+      })
 
       teal.code::eval_code(
         map_mcmc_qenv(),
@@ -797,7 +797,7 @@ poc_server <- function(
     map_mix_density_qenv <- shiny::reactive({
       message("param_approx")
       x <- rlang::expr(
-        mix_density_plot <- bsafe::param_mix_density_display(
+        mix_density_plot <- bsafe::param_mix_density_display( # nolint: object_usage_linter
           param_approx = param_approx,
           select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
           saf_topic = !!input[[BSAFE_ID$SEL_SAF_TOPIC]],
@@ -814,7 +814,7 @@ poc_server <- function(
     map_summary_table_qenv <- shiny::reactive({
       message("param_approx")
       x <- rlang::expr(
-        summary_table <- bsafe::model_summary_display(
+        summary_table <- bsafe::model_summary_display( # nolint: object_usage_linter
           map_object = map_mcmc,
           select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
           param_approx = param_approx,
@@ -909,7 +909,7 @@ poc_server <- function(
 
     robust_map_plot_qenv <- shiny::reactive({
       x <- rlang::expr(
-        robust_map_plot <- bsafe::robust_map_prior_plot(
+        robust_map_plot <- bsafe::robust_map_prior_plot( # nolint: object_usage_linter
           rob_comp = rob_comp,
           saf_topic = !!input[[BSAFE_ID$SEL_SAF_TOPIC]],
           select_btrt = !!input[[BSAFE_ID$SEL_TRT]],
@@ -931,7 +931,7 @@ poc_server <- function(
     robust_map_sum_tbl_qenv <- shiny::reactive({
       shiny::req(robust_map_mcmc_qenv()[["robust_map_mcmc"]])
       x <- rlang::expr(
-        robust_map_sum_tbl <- bsafe::summary_stats_robust_map_prior_display(
+        robust_map_sum_tbl <- bsafe::summary_stats_robust_map_prior_display( # nolint: object_usage_linter
           map_object = map_mcmc,
           select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
           param_approx = param_approx,
