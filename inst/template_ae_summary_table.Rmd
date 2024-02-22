@@ -16,7 +16,7 @@ params:
 
 ```{r setup, include=FALSE}
 # nolint start: object_name_linter
-COMMA_PLUS_ONE_SPACE <- 2 
+COMMA_PLUS_ONE_SPACE <- 2
 STRING_START <- 1
 # Adverse Event proportion table data
 array_inci <- params$ae_summary_Rmd[["InciProp"]]
