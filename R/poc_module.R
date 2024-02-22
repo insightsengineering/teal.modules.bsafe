@@ -1158,7 +1158,7 @@ poc_server <- function(
     }
 
     down_filtering <- function(data, column_names) {
-      for (i in seq_long(column_names)) {
+      for (i in seq_along(column_names)) {
         selector <- paste0("SEL_", i)
         elements <- input[[selector]]
         data <- data %>%
