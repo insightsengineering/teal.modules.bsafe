@@ -54,8 +54,7 @@ mock_teal <- function() {
       tm_dv_poc_example(
         label = "teal.modules.bsafe",
         dataset_name = "bsafe_data"
-      ),
-      teal.modules.general::tm_variable_browser()
+      )
     ),
     header = "DaVinci test of a bsafe as teal module"
   )
