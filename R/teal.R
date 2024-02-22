@@ -20,12 +20,12 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
     dataset <- shiny::reactive(data[[dataset_name]]())
 
     poc_server(
-         "bsafe",
-        dataset = dataset,
-        dataset_tdata = data,
-        reporter = reporter,
-        filter_panel_api = filter_panel_api
-      )
+      "bsafe",
+      dataset = dataset,
+      dataset_tdata = data,
+      reporter = reporter,
+      filter_panel_api = filter_panel_api
+    )
 
     teal.widgets::verbatim_popup_srv(
       id = "rcode",

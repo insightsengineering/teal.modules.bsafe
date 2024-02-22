@@ -105,6 +105,5 @@ REPORT_IDS <- pack_of_constants(
   )
 )
 
-REPORT_IDS[["MAP"]] <- do.call(pack_of_constants, purrr::map(REPORT_IDS$DEFAULT, ~paste0("map_", .x)))
-REPORT_IDS[["ROBUST_MAP"]] <- do.call(pack_of_constants, purrr::map(REPORT_IDS$DEFAULT, ~paste0("robust_map_", .x)))
-
+REPORT_IDS[["MAP"]] <- do.call(pack_of_constants, purrr::map(REPORT_IDS$DEFAULT, ~ paste0("map_", .x)))
+REPORT_IDS[["ROBUST_MAP"]] <- do.call(pack_of_constants, purrr::map(REPORT_IDS$DEFAULT, ~ paste0("robust_map_", .x)))

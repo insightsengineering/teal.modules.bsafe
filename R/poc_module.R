@@ -324,12 +324,11 @@ poc_UI <- function(id) {
 
 poc_server <- function(
     id,
-  dataset, # Must be reactive
-  dataset_tdata,
-  dataset_name, # Ignore for now
-  reporter,
-  filter_panel_api
-    ) {
+    dataset, # Must be reactive
+    dataset_tdata,
+    dataset_name, # Ignore for now
+    reporter,
+    filter_panel_api) {
   module <- function(input, output, session) {
     # global variables --------------------------------------------------------
 
@@ -341,13 +340,13 @@ poc_server <- function(
     # reactive Values Object
     rv <- shiny::reactiveValues(arm_list = list(), data = NULL)
 
-  receive_data_qenv <- shiny::reactive({
-    message("receive")
-    teal.code::new_qenv(
-      env = teal::tdata2env(dataset_tdata),
-      code = teal::get_code_tdata(dataset_tdata)
-    )
-  })
+    receive_data_qenv <- shiny::reactive({
+      message("receive")
+      teal.code::new_qenv(
+        env = teal::tdata2env(dataset_tdata),
+        code = teal::get_code_tdata(dataset_tdata)
+      )
+    })
     # data input/checks/transformation ----------------------------------------
     receive_data <- shiny::reactive({
       dataset()
@@ -577,7 +576,7 @@ poc_server <- function(
       )
     }
 
-   # Data table preparation
+    # Data table preparation
     my_data <- shiny::reactive({
       bsafe::data_table_prep(
         input_data = receive_data(),
@@ -588,23 +587,22 @@ poc_server <- function(
       )
     })
 
-      my_data_qenv <- shiny::reactive({
-
-    x <- rlang::expr(
+    my_data_qenv <- shiny::reactive({
+      x <- rlang::expr(
         d <- bsafe::data_table_prep(
-        input_data = bsafe_data,
-        select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
-        saf_topic = !!input[[BSAFE_ID$SEL_SAF_TOPIC]],
-        select_btrt = !!input[[BSAFE_ID$SEL_TRT]],
-        bool_pooled = !!input[[BSAFE_ID$CB_POOLED]]
-      )      
-    )
+          input_data = bsafe_data,
+          select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
+          saf_topic = !!input[[BSAFE_ID$SEL_SAF_TOPIC]],
+          select_btrt = !!input[[BSAFE_ID$SEL_TRT]],
+          bool_pooled = !!input[[BSAFE_ID$CB_POOLED]]
+        )
+      )
 
-    teal.code::eval_code(
-      receive_data_qenv(),
-      x
-    )    
-  })
+      teal.code::eval_code(
+        receive_data_qenv(),
+        x
+      )
+    })
 
 
     # Historical Borrowing
@@ -618,20 +616,17 @@ poc_server <- function(
     })
 
     adj_tau_qenv <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_MAP]], {
-
       x <- rlang::expr(
         adj_tau <- bsafe::tau_adjust(
-        select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
-        hist_borrow = !!input[[BSAFE_ID$SEL_HIST_BORROW]]
+          select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
+          hist_borrow = !!input[[BSAFE_ID$SEL_HIST_BORROW]]
+        )
       )
-    )
 
-    teal.code::eval_code(
-      teal.code::new_qenv(),
-      x
-    )  
-
-      
+      teal.code::eval_code(
+        teal.code::new_qenv(),
+        x
+      )
     })
 
     # MAP object
@@ -671,25 +666,22 @@ poc_server <- function(
       shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
       shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
 
-    x <- rlang::expr(
+      x <- rlang::expr(
         robust_map_mcmc <- bsafe::robust_map(
-        select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
-        param_approx = param_approx,
-        input_data = my_data_qenv()[["d"]],
-        robust_weight = !!input[[BSAFE_ID$SLDR_ROB_WEIGHT]],
-        robust_mean = !!input[[BSAFE_ID$SLDR_ROB_MEAN]],
-        adj_tau = adj_tau,
-        seed = !!input[[BSAFE_ID$SET_SEED]]
+          select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
+          param_approx = param_approx,
+          input_data = my_data_qenv()[["d"]],
+          robust_weight = !!input[[BSAFE_ID$SLDR_ROB_WEIGHT]],
+          robust_mean = !!input[[BSAFE_ID$SLDR_ROB_MEAN]],
+          adj_tau = adj_tau,
+          seed = !!input[[BSAFE_ID$SET_SEED]]
+        )
       )
-    )
 
-    teal.code::eval_code(
-      teal.code::join(my_data_qenv(), adj_tau_qenv()) |> teal.code::join(param_approx_qenv()),
-      x
-    )  
-   
-
-      
+      teal.code::eval_code(
+        teal.code::join(my_data_qenv(), adj_tau_qenv()) |> teal.code::join(param_approx_qenv()),
+        x
+      )
     })
 
     # Data from current trial
@@ -732,21 +724,18 @@ poc_server <- function(
     })
 
     rob_comp_qenv <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_ROB]], {
-
-    x <- rlang::expr(
+      x <- rlang::expr(
         rob_comp <- bsafe::robust_compare(
-        select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
-        robust_map_prior = robust_map_mcmc,
-        param_approx = param_approx
+          select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
+          robust_map_prior = robust_map_mcmc,
+          param_approx = param_approx
+        )
       )
-    )
 
-    teal.code::eval_code(
-      teal.code::join(robust_map_mcmc_qenv(), param_approx_qenv()),
-      x
-    )  
-
-
+      teal.code::eval_code(
+        teal.code::join(robust_map_mcmc_qenv(), param_approx_qenv()),
+        x
+      )
     })
 
     # New trial analysis
@@ -786,252 +775,249 @@ poc_server <- function(
     })
 
 
-  # MAP PRIOR ----
+    # MAP PRIOR ----
 
-  map_mcmc_qenv <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_MAP]], {    
-    shiny::req(input[[BSAFE_ID$SET_SEED]])
-    message("map_mcmc_qenv")
-    
-    x <- rlang::expr(
-       map_mcmc <- bsafe::map_prior_func(
-      input_data = d,
-      select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
-      tau_dist = !!input[[BSAFE_ID$SEL_TAU]],
-      adj_tau = bsafe::tau_adjust(
-        select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
-        hist_borrow = !!input[[BSAFE_ID$SEL_HIST_BORROW]]
-        ),
-      seed = !!input[[BSAFE_ID$SET_SEED]]
-    )
-    )
+    map_mcmc_qenv <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_MAP]], {
+      shiny::req(input[[BSAFE_ID$SET_SEED]])
+      message("map_mcmc_qenv")
 
-    teal.code::eval_code(
-      teal.code::join(my_data_qenv(), adj_tau_qenv()),
-      x
-    )   
-    
-  })
-
-  forest_plot_qenv <- shiny::reactive({
-    message("forest")
-    x <- rlang::expr(
-        forest_plot <- bsafe::forest_plot_display(
-        map_object = map_mcmc,
-        select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
-        saf_topic = !!input[[BSAFE_ID$SEL_SAF_TOPIC]],
-        select_btrt = !!input[[BSAFE_ID$SEL_TRT]]
+      x <- rlang::expr(
+        map_mcmc <- bsafe::map_prior_func(
+          input_data = d,
+          select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
+          tau_dist = !!input[[BSAFE_ID$SEL_TAU]],
+          adj_tau = bsafe::tau_adjust(
+            select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
+            hist_borrow = !!input[[BSAFE_ID$SEL_HIST_BORROW]]
+          ),
+          seed = !!input[[BSAFE_ID$SET_SEED]]
+        )
       )
-    )
 
-    teal.code::eval_code(
-      map_mcmc_qenv(),
-      x
-    )
-  })
+      teal.code::eval_code(
+        teal.code::join(my_data_qenv(), adj_tau_qenv()),
+        x
+      )
+    })
 
-  # Parametric approximation object
-  param_approx <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_MAP]], {
-    bsafe::parametric_approx(
-      select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-      map_prior = map_mcmc()
-    )
-  })
+    forest_plot_qenv <- shiny::reactive({
+      message("forest")
+      x <- rlang::expr(
+        forest_plot <- bsafe::forest_plot_display(
+          map_object = map_mcmc,
+          select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
+          saf_topic = !!input[[BSAFE_ID$SEL_SAF_TOPIC]],
+          select_btrt = !!input[[BSAFE_ID$SEL_TRT]]
+        )
+      )
 
-  param_approx_qenv <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_MAP]], {
-    message("param_approx")
-        x <- rlang::expr(
+      teal.code::eval_code(
+        map_mcmc_qenv(),
+        x
+      )
+    })
+
+    # Parametric approximation object
+    param_approx <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_MAP]], {
+      bsafe::parametric_approx(
+        select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
+        map_prior = map_mcmc()
+      )
+    })
+
+    param_approx_qenv <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_MAP]], {
+      message("param_approx")
+      x <- rlang::expr(
         param_approx <- bsafe::parametric_approx(
           select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
           map_prior = map_mcmc
         )
-    )
-
-    teal.code::eval_code(
-      map_mcmc_qenv(),
-      x
-    )    
-  })
-
-  map_mix_density_qenv <- shiny::reactive({
-    message("param_approx")
-    x <- rlang::expr(
-      mix_density_plot <-  bsafe::param_mix_density_display(
-        param_approx = param_approx,
-        select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
-        saf_topic = !!input[[BSAFE_ID$SEL_SAF_TOPIC]],
-        select_btrt = !!input[[BSAFE_ID$SEL_TRT]]
       )
-    )
 
-    teal.code::eval_code(
-      param_approx_qenv(),
-      x
-    )
-         
-  })
+      teal.code::eval_code(
+        map_mcmc_qenv(),
+        x
+      )
+    })
 
-  map_summary_table_qenv <- shiny::reactive({
-    message("param_approx")
-    x <- rlang::expr(
-      summary_table <-  bsafe::model_summary_display(
-        map_object = map_mcmc,
-        select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
-        param_approx = param_approx,
-        ess_method = !!input[[BSAFE_ID$SEL_ESS_METHOD]]
-    )
-    )
-
-    teal.code::eval_code(
-      param_approx_qenv(),
-      x
-    )
-         
-  })
-
-  # Display forest plot
-  output[[BSAFE_ID$OUT_FOREST_PLT]] <- shiny::renderPlot({
-    forest_plot_qenv()[["forest_plot"]]
-  })
-
-  # Preface the MAP prior distribution  
-  output[[BSAFE_ID$OUT_PREFACE_PRIOR_TXT]] <- shiny::renderUI({
-    shiny::h6(preface_prior_txt(input[[BSAFE_ID$SEL_ANALYSIS]]))
-  })
-
-  # Display parametric approximation mixture density function
-  # TODO: Cannot be included in the reporter MATHJAX not supported
-  output[[BSAFE_ID$OUT_DENSITY_FCT]] <- shiny::renderUI({    
-    bsafe::map_prior_function_display(
-      param_approx = param_approx(),
-      select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]]
-    )
-  })
-
-  # Display parametric mixture density
-  output[[BSAFE_ID$OUT_MIX_DENSITY_PLT]] <- shiny::renderPlot({
-    map_mix_density_qenv()[["mix_density_plot"]]
-  })
-
-  # Display model summary output
-  output[[BSAFE_ID$OUT_MAP_PRIOR_SUM_TBL]] <- function()({    
-    map_summary_table_qenv()[["summary_table"]] %>%
-      knitr::kable("html") %>%
-      kableExtra::kable_styling("striped")
-  })
-
-  ### REPORTER
-  map_card_fun <- function(card = teal.reporter::ReportCard$new(), comment) {
-    card$set_name("Forest Plot")
-    #card$append_text(filter_panel_api$get_filter_state(), "verbatim")    
-    card$append_text(paste(teal.code::get_code(forest_plot_qenv()), collapse = "\n"), "verbatim")
-    card$append_text(preface_prior_txt(input[[BSAFE_ID$SEL_ANALYSIS]]))
-    card$append_plot(forest_plot_qenv()[["forest_plot"]])
-    card$append_text(paste(teal.code::get_code(map_mix_density_qenv()), collapse = "\n"), "verbatim")
-    card$append_text("CANNOT INCLUDE DENSITY FUNCTION MATHJAX IS NOT SUPPORTED BY TEAL REPORTER")
-    card$append_plot(map_mix_density_qenv()[["mix_density_plot"]])
-    card$append_text(paste(teal.code::get_code(map_summary_table_qenv()), collapse = "\n"), "verbatim")
-    card$append_table(map_summary_table_qenv()[["summary_table"]])
-  }
-
-  teal.reporter::add_card_button_srv(REPORT_IDS$MAP$ADD, reporter = reporter, card_fun = map_card_fun)
-  teal.reporter::download_report_button_srv(REPORT_IDS$MAP$DOWNLOAD, reporter = reporter)
-  teal.reporter::reset_report_button_srv(REPORT_IDS$MAP$RESET, reporter)
-  ###
-
-  # ROBUST MAP PRIOR ----
-
-  # Preface robust MAP prior output
-  # UNREPORTABLE
-  output[[BSAFE_ID$OUT_PREFACE_ROB_TXT]] <- shiny::renderUI({
-    shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
-    shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
-    shiny::withMathJax(
-      shiny::h6(
-        preface_rob_txt(
-          sel_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-          rob_weight = input[[BSAFE_ID$SLDR_ROB_WEIGHT]],
-          rob_mean = input[[BSAFE_ID$SLDR_ROB_MEAN]]
+    map_mix_density_qenv <- shiny::reactive({
+      message("param_approx")
+      x <- rlang::expr(
+        mix_density_plot <- bsafe::param_mix_density_display(
+          param_approx = param_approx,
+          select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
+          saf_topic = !!input[[BSAFE_ID$SEL_SAF_TOPIC]],
+          select_btrt = !!input[[BSAFE_ID$SEL_TRT]]
         )
       )
-    )
-  })
 
-  # Display robust MAP prior mixture density function
-  # UNREPORTABLE
-  output[[BSAFE_ID$OUT_ROB_DENSITY_FCT]] <- shiny::renderUI({
-    bsafe::robust_map_prior_mix_dens_display(
-      robust_map_object = robust_map_mcmc(),
-      select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]]
-    )
-  })
-
-  robust_map_plot_qenv <- shiny::reactive({
-        x <- rlang::expr(
-        robust_map_plot <- bsafe::robust_map_prior_plot(
-      rob_comp = rob_comp,
-      saf_topic = !!input[[BSAFE_ID$SEL_SAF_TOPIC]],
-      select_btrt = !!input[[BSAFE_ID$SEL_TRT]],
-      select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]]
-    )
-    )
-
-    teal.code::eval_code(
-      rob_comp_qenv(),
-      x
-    )  
-
-  })
-
-  # Compare robust MAP prior to MAP prior
-  output[[BSAFE_ID$OUT_ROB_MAP_PLT]] <- shiny::renderPlot({
-    robust_map_plot_qenv()[["robust_map_plot"]]
-  })
-
-  robust_map_sum_tbl_qenv <- shiny::reactive({
-    shiny::req(robust_map_mcmc_qenv()[["robust_map_mcmc"]])
-          x <- rlang::expr(
-       robust_map_sum_tbl <- bsafe::summary_stats_robust_map_prior_display(
-        map_object = map_mcmc,
-        select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
-        param_approx = param_approx,
-        ess_method = !!input[[BSAFE_ID$SEL_ESS_METHOD]],
-        robust_map_object = robust_map_mcmc,
-        rob_ess_method = !!input[[BSAFE_ID$SEL_ROB_ESS_METHOD]],
-        download = FALSE
+      teal.code::eval_code(
+        param_approx_qenv(),
+        x
       )
-      )    
+    })
 
-    teal.code::eval_code(
-      teal.code::join(map_mcmc_qenv(), param_approx_qenv()) |> teal.code::join(robust_map_mcmc_qenv()),
-      x
-    )
+    map_summary_table_qenv <- shiny::reactive({
+      message("param_approx")
+      x <- rlang::expr(
+        summary_table <- bsafe::model_summary_display(
+          map_object = map_mcmc,
+          select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
+          param_approx = param_approx,
+          ess_method = !!input[[BSAFE_ID$SEL_ESS_METHOD]]
+        )
+      )
 
-  })
+      teal.code::eval_code(
+        param_approx_qenv(),
+        x
+      )
+    })
+
+    # Display forest plot
+    output[[BSAFE_ID$OUT_FOREST_PLT]] <- shiny::renderPlot({
+      forest_plot_qenv()[["forest_plot"]]
+    })
+
+    # Preface the MAP prior distribution
+    output[[BSAFE_ID$OUT_PREFACE_PRIOR_TXT]] <- shiny::renderUI({
+      shiny::h6(preface_prior_txt(input[[BSAFE_ID$SEL_ANALYSIS]]))
+    })
+
+    # Display parametric approximation mixture density function
+    # TODO: Cannot be included in the reporter MATHJAX not supported
+    output[[BSAFE_ID$OUT_DENSITY_FCT]] <- shiny::renderUI({
+      bsafe::map_prior_function_display(
+        param_approx = param_approx(),
+        select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]]
+      )
+    })
+
+    # Display parametric mixture density
+    output[[BSAFE_ID$OUT_MIX_DENSITY_PLT]] <- shiny::renderPlot({
+      map_mix_density_qenv()[["mix_density_plot"]]
+    })
+
+    # Display model summary output
+    output[[BSAFE_ID$OUT_MAP_PRIOR_SUM_TBL]] <- function() {
+      ({
+        map_summary_table_qenv()[["summary_table"]] %>%
+          knitr::kable("html") %>%
+          kableExtra::kable_styling("striped")
+      })
+    }
+
+    ### REPORTER
+    map_card_fun <- function(card = teal.reporter::ReportCard$new(), comment) {
+      card$set_name("Forest Plot")
+      # card$append_text(filter_panel_api$get_filter_state(), "verbatim")
+      card$append_text(paste(teal.code::get_code(forest_plot_qenv()), collapse = "\n"), "verbatim")
+      card$append_text(preface_prior_txt(input[[BSAFE_ID$SEL_ANALYSIS]]))
+      card$append_plot(forest_plot_qenv()[["forest_plot"]])
+      card$append_text(paste(teal.code::get_code(map_mix_density_qenv()), collapse = "\n"), "verbatim")
+      card$append_text("CANNOT INCLUDE DENSITY FUNCTION MATHJAX IS NOT SUPPORTED BY TEAL REPORTER")
+      card$append_plot(map_mix_density_qenv()[["mix_density_plot"]])
+      card$append_text(paste(teal.code::get_code(map_summary_table_qenv()), collapse = "\n"), "verbatim")
+      card$append_table(map_summary_table_qenv()[["summary_table"]])
+    }
+
+    teal.reporter::add_card_button_srv(REPORT_IDS$MAP$ADD, reporter = reporter, card_fun = map_card_fun)
+    teal.reporter::download_report_button_srv(REPORT_IDS$MAP$DOWNLOAD, reporter = reporter)
+    teal.reporter::reset_report_button_srv(REPORT_IDS$MAP$RESET, reporter)
+    ###
+
+    # ROBUST MAP PRIOR ----
+
+    # Preface robust MAP prior output
+    # UNREPORTABLE
+    output[[BSAFE_ID$OUT_PREFACE_ROB_TXT]] <- shiny::renderUI({
+      shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
+      shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
+      shiny::withMathJax(
+        shiny::h6(
+          preface_rob_txt(
+            sel_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
+            rob_weight = input[[BSAFE_ID$SLDR_ROB_WEIGHT]],
+            rob_mean = input[[BSAFE_ID$SLDR_ROB_MEAN]]
+          )
+        )
+      )
+    })
+
+    # Display robust MAP prior mixture density function
+    # UNREPORTABLE
+    output[[BSAFE_ID$OUT_ROB_DENSITY_FCT]] <- shiny::renderUI({
+      bsafe::robust_map_prior_mix_dens_display(
+        robust_map_object = robust_map_mcmc(),
+        select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]]
+      )
+    })
+
+    robust_map_plot_qenv <- shiny::reactive({
+      x <- rlang::expr(
+        robust_map_plot <- bsafe::robust_map_prior_plot(
+          rob_comp = rob_comp,
+          saf_topic = !!input[[BSAFE_ID$SEL_SAF_TOPIC]],
+          select_btrt = !!input[[BSAFE_ID$SEL_TRT]],
+          select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]]
+        )
+      )
+
+      teal.code::eval_code(
+        rob_comp_qenv(),
+        x
+      )
+    })
+
+    # Compare robust MAP prior to MAP prior
+    output[[BSAFE_ID$OUT_ROB_MAP_PLT]] <- shiny::renderPlot({
+      robust_map_plot_qenv()[["robust_map_plot"]]
+    })
+
+    robust_map_sum_tbl_qenv <- shiny::reactive({
+      shiny::req(robust_map_mcmc_qenv()[["robust_map_mcmc"]])
+      x <- rlang::expr(
+        robust_map_sum_tbl <- bsafe::summary_stats_robust_map_prior_display(
+          map_object = map_mcmc,
+          select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
+          param_approx = param_approx,
+          ess_method = !!input[[BSAFE_ID$SEL_ESS_METHOD]],
+          robust_map_object = robust_map_mcmc,
+          rob_ess_method = !!input[[BSAFE_ID$SEL_ROB_ESS_METHOD]],
+          download = FALSE
+        )
+      )
+
+      teal.code::eval_code(
+        teal.code::join(map_mcmc_qenv(), param_approx_qenv()) |> teal.code::join(robust_map_mcmc_qenv()),
+        x
+      )
+    })
 
     # Display summary stats of robust MAP prior and MAP prior
     output[[BSAFE_ID$OUT_ROB_SUM_TBL]] <- function() {
       robust_map_sum_tbl_qenv()[["robust_map_sum_tbl"]] %>%
-      knitr::kable("html") %>%
-      kableExtra::kable_styling("striped")
+        knitr::kable("html") %>%
+        kableExtra::kable_styling("striped")
     }
 
     ### REPORTER
-  robust_map_card_fun <- function(card = teal.reporter::ReportCard$new(), comment) {    
-    card$set_name("Robust Prior Map")
-    #card$append_text(filter_panel_api$get_filter_state(), "verbatim")
-    card$append_text("CANNOT INCLUDE FUNCTION MATHJAX IS NOT SUPPORTED BY TEAL REPORTER") 
-    card$append_text(paste(teal.code::get_code(robust_map_plot_qenv()), collapse = "\n"), "verbatim")    
-    card$append_plot(robust_map_plot_qenv()[["robust_map_plot"]])    
-    card$append_text(paste(teal.code::get_code(robust_map_sum_tbl_qenv()), collapse = "\n"), "verbatim")
-    card$append_table(robust_map_sum_tbl_qenv()[["robust_map_sum_tbl"]])
-  }
+    robust_map_card_fun <- function(card = teal.reporter::ReportCard$new(), comment) {
+      card$set_name("Robust Prior Map")
+      # card$append_text(filter_panel_api$get_filter_state(), "verbatim")
+      card$append_text("CANNOT INCLUDE FUNCTION MATHJAX IS NOT SUPPORTED BY TEAL REPORTER")
+      card$append_text(paste(teal.code::get_code(robust_map_plot_qenv()), collapse = "\n"), "verbatim")
+      card$append_plot(robust_map_plot_qenv()[["robust_map_plot"]])
+      card$append_text(paste(teal.code::get_code(robust_map_sum_tbl_qenv()), collapse = "\n"), "verbatim")
+      card$append_table(robust_map_sum_tbl_qenv()[["robust_map_sum_tbl"]])
+    }
 
-  teal.reporter::add_card_button_srv(REPORT_IDS$ROBUST_MAP$ADD, reporter = reporter, card_fun = robust_map_card_fun)
-  teal.reporter::download_report_button_srv(REPORT_IDS$ROBUST_MAP$DOWNLOAD, reporter = reporter)
-  teal.reporter::reset_report_button_srv(REPORT_IDS$ROBUST_MAP$RESET, reporter)
-  ###
+    teal.reporter::add_card_button_srv(REPORT_IDS$ROBUST_MAP$ADD, reporter = reporter, card_fun = robust_map_card_fun)
+    teal.reporter::download_report_button_srv(REPORT_IDS$ROBUST_MAP$DOWNLOAD, reporter = reporter)
+    teal.reporter::reset_report_button_srv(REPORT_IDS$ROBUST_MAP$RESET, reporter)
+    ###
 
-  # NEW TRIAL ANALYSIS ----
+    # NEW TRIAL ANALYSIS ----
 
     # Prior data conflict assessment - compare prior, likelihood, and posterior
     output[[BSAFE_ID$OUT_COMPARE_PLT]] <- shiny::renderPlot({
@@ -1079,7 +1065,7 @@ poc_server <- function(
         input[[BSAFE_ID$OUT_AE_PERC_SLDR]] / 100
       }
     })
-  # DECISION MAKING ----
+    # DECISION MAKING ----
     # Header text
     output[[BSAFE_ID$OUT_DM_HEADER_TXT]] <- shiny::renderUI({
       if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
@@ -1161,9 +1147,9 @@ poc_server <- function(
       )
     }
 
-  # REST OF MODULE ----
+    # REST OF MODULE ----
 
-  # shinyjs -----------------------------------------------------------------
+    # shinyjs -----------------------------------------------------------------
 
     # needs rework TODO
     shiny::observeEvent(input[[BSAFE_ID$SEL_ANALYSIS]], {
@@ -1258,7 +1244,7 @@ poc_server <- function(
       shiny::removeModal()
     })
 
-   
+
 
     # report generation/simulation --------------------------------------------
 
