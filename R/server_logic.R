@@ -51,7 +51,8 @@ preface_rob_txt <- function(sel_analysis, rob_weight, rob_mean) {
     return(paste0(
       "Based on a EX-NEX approach with non-exchangeable probability P(nex) =  ",
       rob_weight, " and mean ", rob_mean,
-      " on the log scale of the robust MAP prior is approximated as (1 - P(nex)) * (MAP Prior) + P(nex) * (weakly informative prior): "
+      " on the log scale of the robust MAP prior is approximated as",
+      " (1 - P(nex)) * (MAP Prior) + P(nex) * (weakly informative prior): "
     ))
   }
 }

@@ -15,8 +15,6 @@ ui_dv_poc_example <- function(id) {
 srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_name) {
   checkmate::assert_class(data, "tdata")
   shiny::moduleServer(id, function(input, output, session) {
-    # browser()
-
     dataset <- shiny::reactive(data[[dataset_name]]())
 
     poc_server(

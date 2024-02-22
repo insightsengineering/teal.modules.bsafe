@@ -1,4 +1,5 @@
-BSAFE_ID <- pack_of_constants( # nolint
+# nolint start: object_name_linter
+BSAFE_ID <- pack_of_constants(
   # Arm Creation Tab
   SEL_COLUMN = "input_column",
   OUT_SEL_VAR = "input_var",
@@ -107,3 +108,4 @@ REPORT_IDS <- pack_of_constants(
 
 REPORT_IDS[["MAP"]] <- do.call(pack_of_constants, purrr::map(REPORT_IDS$DEFAULT, ~ paste0("map_", .x)))
 REPORT_IDS[["ROBUST_MAP"]] <- do.call(pack_of_constants, purrr::map(REPORT_IDS$DEFAULT, ~ paste0("robust_map_", .x)))
+# nolint end

@@ -15,7 +15,8 @@ params:
 ---
 
 ```{r setup, include=FALSE}
-COMMA_PLUS_ONE_SPACE <- 2
+# nolint start: object_name_linter
+COMMA_PLUS_ONE_SPACE <- 2 
 STRING_START <- 1
 # Adverse Event proportion table data
 array_inci <- params$ae_summary_Rmd[["InciProp"]]
@@ -29,6 +30,7 @@ array_er_comp <- params$ae_summary_Rmd[["EvenRatesComp"]]
 ID_trt_list <- params$ae_summary_Rmd[["ID_trt_list"]]
 # list of all STUDYIDs of the control arm
 ID_ctr_list <- params$ae_summary_Rmd[["ID_ctr_list"]]
+
 # list of all selected arms for the treatment arm
 cb_list_trt <- params$ae_summary_Rmd[["cb_list_trt"]]
 # list of all selected arms for the control arm
@@ -58,7 +60,8 @@ knitr::opts_chunk$set(eval = TRUE)
 ```{r tables, results='asis', echo=FALSE, warning=FALSE, error=FALSE}
 # group as iterator
 for (g in groups) {
-  # pasting together the chosen arms of ARM A aka treatment arm and separating them by comma as well as removing the last comma
+  # pasting together the chosen arms of ARM A aka treatment arm and separating them
+  # by comma as well as removing the last comma
   ARMS_ARM_A <- substr(
     paste0(cb_list_trt[[paste0("grp", g)]],
       ", ",
@@ -70,7 +73,8 @@ for (g in groups) {
       collapse = ""
     )) - COMMA_PLUS_ONE_SPACE
   )
-  # pasting together the chosen arms of ARM B aka control arm and separating them by comma as well as removing the last comma
+  # pasting together the chosen arms of ARM B aka control arm and separating them
+  # by comma as well as removing the last comma
   ARMS_ARM_B <- substr(
     paste0(cb_list_ctr[[paste0("grp", g)]],
       ", ",
@@ -280,4 +284,5 @@ for (g in groups) {
     print(table_display_4)
   }
 }
+# nolint end
 ```

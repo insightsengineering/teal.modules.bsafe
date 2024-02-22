@@ -7,7 +7,7 @@
 #'
 #' @return the UI
 #' @export
-poc_UI <- function(id) {
+poc_UI <- function(id) { # nolint: object_name_linter
   ns <- shiny::NS(id)
   shiny::tagList(
     shinyjs::useShinyjs(),
@@ -19,7 +19,6 @@ poc_UI <- function(id) {
           mustWork = TRUE
         )),
         shiny::h5("User Manual:"),
-        # shiny::a("open manual", href = "bsafe_manual.pdf")
       ),
       shiny::tabPanel(
         "Data preparation",
@@ -106,26 +105,20 @@ poc_UI <- function(id) {
             shiny::actionButton(ns(BSAFE_ID$BUT_UPDATE_MAP), "Update")
           ),
           shiny::mainPanel(
-            # shinyjs::hidden(
-            #   shiny::div(
-            #     id = BSAFE_ID$DIV_INCI,
             shiny::h2("Model Estimates"),
-            shiny::h6("Displayed are the point estimates for the mean (dots) and their respective 95% frequentistic confidence intervals.
-                      For a stratified (dashed light blue line) and meta (solid dark blue line) analysis.
-                      The blue highlighted part displays the 95% credible interval (CrI) for the mean and the MAP Prior."),
+            # nolint start: line_length_linter
+            shiny::h6(
+              "Displayed are the point estimates for the mean (dots) and their respective 95% frequentistic confidence intervals.
+               For a stratified (dashed light blue line) and meta (solid dark blue line) analysis.
+               The blue highlighted part displays the 95% credible interval (CrI) for the mean and the MAP Prior."
+            ),
+            # nolint end
             shiny::plotOutput(ns(BSAFE_ID$OUT_FOREST_PLT)),
-            #   )
-            # ),
-            # shinyjs::hidden(
-            #   shiny::div(
-            #     id = BSAFE_ID$DIV_AE,
             shiny::h2("MAP Prior"),
             shiny::uiOutput(ns(BSAFE_ID$OUT_PREFACE_PRIOR_TXT)),
             shiny::uiOutput(ns(BSAFE_ID$OUT_DENSITY_FCT)),
             shiny::plotOutput(ns(BSAFE_ID$OUT_MIX_DENSITY_PLT)), # spinner MAP prior distribution
             shiny::tableOutput(ns(BSAFE_ID$OUT_MAP_PRIOR_SUM_TBL)) # MAP prior distribution summary table
-            #   )
-            # )
           )
         )
       ),
@@ -173,7 +166,6 @@ poc_UI <- function(id) {
       ),
       shiny::tabPanel(
         "New Trial Analysis",
-        # shinyjs::hidden(
         shiny::div(
           shiny::sidebarLayout(
             shiny::sidebarPanel(
@@ -219,14 +211,14 @@ poc_UI <- function(id) {
               shinyjs::hidden(shiny::div(
                 id = ns(BSAFE_ID$DIV_NTA_INCI_MAIN),
                 shiny::h2("Prior Data Conflict Assessment"),
-                "To assess prior data conflict, compare the prior and posterior probability density function, and the likelihood of the observed data.",
+                "To assess prior data conflict, compare the prior and posterior probability density function, and the likelihood of the observed data.", # nolint: line_length_linter
               )),
               shinyjs::hidden(shiny::div(
                 id = ns(BSAFE_ID$DIV_NTA_AE_MAIN),
                 shiny::h2("Prior Data Conflict Assessment"),
-                "To assess prior data conflict, compare the prior and posterior probability density function, and the log likelihood of the observed data on the log scale.",
+                "To assess prior data conflict, compare the prior and posterior probability density function, and the log likelihood of the observed data on the log scale.", # nolint: line_length_linter
               )),
-              shiny::plotOutput(ns(BSAFE_ID$OUT_COMPARE_PLT)), # spinner %>% shinycssloaders::withSpinner(color = "#0dc5c1"), test
+              shiny::plotOutput(ns(BSAFE_ID$OUT_COMPARE_PLT)),
               shiny::tableOutput(ns(BSAFE_ID$OUT_COMPARE_SUM_TBL))
             )
           )
@@ -367,43 +359,6 @@ poc_server <- function(
       return(choices_ae)
     }
 
-    # # needs rework TODO
-    # # Read input data
-    # input_data <- shiny::reactive({
-    #   # shiny::req(input[[BSAFE_ID$FILE_IN]])
-    #   # data <- data_reader(filename = input[[BSAFE_ID$FILE_IN]])
-    #   # shiny::validate(
-    #   #  shiny::need(
-    #   #    is.character(unlist(data[, "STUDYID"])),
-    #   #    "STUDYID needs to be a character"),
-    #   #  shiny::need(
-    #   #    is.numeric(unlist(data[, "N"])),
-    #   #    "N needs to be a number"),
-    #   #  shiny::need(
-    #   #    is.numeric(unlist(data[, "N_WITH_AE"])),
-    #   #    "N_with_AE needs to be a number"),
-    #   #  shiny::need(
-    #   #    is.numeric(unlist(data[, "TOT_EXP"])),
-    #   #    "TOT_EXP needs to be a number"),
-    #   #  shiny::need(
-    #   #    is.character(unlist(data[, "SAF_TOPIC"])),
-    #   #    "SAF_TOPIC needs to be a character"),
-    #   #  shiny::need(
-    #   #    is.character(unlist(data[, "ARM"])),
-    #   #    "ARM needs to be a character"),
-    #   #  shiny::need(
-    #   #    is.numeric(unlist(data[, "HIST"])),
-    #   #    "HIST needs to be a number")
-    #   # )
-    #   # data <- data_saf_topic_char_limiter(data)
-    #   # data
-    #   dataset
-    # })
-
-    # input_data <- shiny::reactive
-
-
-
 
     # ui element updates ------------------------------------------------------
 
@@ -512,7 +467,7 @@ poc_server <- function(
 
     output[[BSAFE_ID$OUT_SEL_VAR]] <- shiny::renderUI({
       shiny::req(input[[BSAFE_ID$SEL_COLUMN]])
-      lapply(1:length(input[[BSAFE_ID$SEL_COLUMN]]), function(i) {
+      lapply(seq_along(input[[BSAFE_ID$SEL_COLUMN]]), function(i) {
         shiny::selectInput(ns(paste0("SEL_", i)),
           label = paste0(
             "Select the forms of ",
@@ -606,8 +561,7 @@ poc_server <- function(
 
 
     # Historical Borrowing
-    # sigma set to 2, so adjust tau to change amount of historical borrowing
-    # Formula: tau/2
+    # sigma set to 2, so adjust tau to change amount of historical borrowing -> Formula: tau/2
     adj_tau <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_MAP]], {
       bsafe::tau_adjust(
         select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
@@ -910,7 +864,7 @@ poc_server <- function(
     ### REPORTER
     map_card_fun <- function(card = teal.reporter::ReportCard$new(), comment) {
       card$set_name("Forest Plot")
-      # card$append_text(filter_panel_api$get_filter_state(), "verbatim")
+      # card$append_text(filter_panel_api$get_filter_state(), "verbatim") # nolint
       card$append_text(paste(teal.code::get_code(forest_plot_qenv()), collapse = "\n"), "verbatim")
       card$append_text(preface_prior_txt(input[[BSAFE_ID$SEL_ANALYSIS]]))
       card$append_plot(forest_plot_qenv()[["forest_plot"]])
@@ -1004,7 +958,7 @@ poc_server <- function(
     ### REPORTER
     robust_map_card_fun <- function(card = teal.reporter::ReportCard$new(), comment) {
       card$set_name("Robust Prior Map")
-      # card$append_text(filter_panel_api$get_filter_state(), "verbatim")
+      # card$append_text(filter_panel_api$get_filter_state(), "verbatim")  # nolint
       card$append_text("CANNOT INCLUDE FUNCTION MATHJAX IS NOT SUPPORTED BY TEAL REPORTER")
       card$append_text(paste(teal.code::get_code(robust_map_plot_qenv()), collapse = "\n"), "verbatim")
       card$append_plot(robust_map_plot_qenv()[["robust_map_plot"]])
@@ -1093,7 +1047,8 @@ poc_server <- function(
           "Posterior" = paste0(
             "The posterior distribution represents information about the proportion of patients with ",
             input[[BSAFE_ID$SEL_SAF_TOPIC]],
-            " in the population of the new trial after combining the prior (historical data) and the likelihood (new trial)."
+            " in the population of the new trial after combining the prior (historical data)",
+            " and the likelihood (new trial)."
           )
         )
       } else if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
@@ -1105,14 +1060,14 @@ poc_server <- function(
           ),
           "MAP Prior" = paste0(""),
           "Robust MAP Prior" = paste0(
-            "The log scale of the robust MAP prior distribution is our prediction of the true, underlying proportion of patients with ",
+            "The log scale of the robust MAP prior distribution is our prediction of the true, underlying proportion of patients with ", # nolint: line_length_linter
             input[[BSAFE_ID$SEL_SAF_TOPIC]],
             " in the population of the new trial if they were to receive placebo."
           ),
           "Posterior" = paste0(
             "The log scale of the posterior distribution represents information about the proportion of patients with ",
             input[[BSAFE_ID$SEL_SAF_TOPIC]],
-            " in the population of the new trial after combining the prior (historical data) and the likelihood (new trial)."
+            " in the population of the new trial after combining the prior (historical data) and the likelihood (new trial)." # nolint: line_length_linter
           )
         )
       }
@@ -1194,7 +1149,7 @@ poc_server <- function(
 
 
 
-    getNames <- function(name, length) {
+    get_names <- function(name, length) {
       helper <- paste0(name, 1)
       for (i in 2:length) {
         helper <- c(helper, paste0(name, i))
@@ -1202,10 +1157,8 @@ poc_server <- function(
       return(helper)
     }
 
-    # column_names = input[[BSAFE_ID$SEL_COLUMN]]
     down_filtering <- function(data, column_names) {
-      # name <- input$MODAL_INPUT
-      for (i in 1:length(column_names)) {
+      for (i in seq_long(column_names)) {
         selector <- paste0("SEL_", i)
         elements <- input[[selector]]
         data <- data %>%
@@ -1219,7 +1172,7 @@ poc_server <- function(
 
     shiny::observeEvent(input[["MODAL_ARM_CREATION"]], {
       name <- input$MODAL_INPUT
-      selectors <- getNames("SEL_", length(input[[BSAFE_ID$SEL_COLUMN]]))
+      selectors <- get_names("SEL_", length(input[[BSAFE_ID$SEL_COLUMN]]))
       param_list <- purrr::map(selectors, function(x) {
         return(input[[x]])
       })
@@ -1249,12 +1202,12 @@ poc_server <- function(
     # report generation/simulation --------------------------------------------
 
     shiny::observeEvent(input[[BSAFE_ID$BUT_COMP_SUBMIT]], {
-      DOWNLOAD_BOOL <- TRUE
+      DOWNLOAD_BOOL <- TRUE # nolint: object_name_linter
 
       lapply(1:input[[BSAFE_ID$SLDR_NUM_COMP]], function(i) {
         # checking whether at least one treatment AND control arm checkbox is ticked in the corresponding comparison
         if (length(input[[paste0("download_boxes_trt_", i)]]) == 0 |
-          length(input[[paste0("download_boxes_ctrl_", i)]]) == 0) {
+          length(input[[paste0("download_boxes_ctrl_", i)]]) == 0) { # nolint: indentation_linter
           shinyjs::alert(
             paste0(
               "You have to enter both a Treatment arm as well as a Control arm in Table ",
@@ -1264,10 +1217,11 @@ poc_server <- function(
         }
       })
       for (i in 1:input[[BSAFE_ID$SLDR_NUM_COMP]]) {
-        # disabling download functionality if not both treatment AND control arm checkboxes at least contain one ticked box each in the corresponding comparison
+        # disabling download functionality if not both treatment AND control arm checkboxes at least
+        # contain one ticked box each in the corresponding comparison
         if (length(input[[paste0("download_boxes_trt_", i)]]) == 0 |
-          length(input[[paste0("download_boxes_ctrl_", i)]]) == 0) {
-          DOWNLOAD_BOOL <- FALSE
+          length(input[[paste0("download_boxes_ctrl_", i)]]) == 0) { # nolint: indentation_linter
+          DOWNLOAD_BOOL <- FALSE # nolint: object_name_linter
         }
       }
       # needs rework TODO
@@ -1284,7 +1238,8 @@ poc_server <- function(
           )
 
           output[[paste0("comparison_", i)]] <- shiny::renderText(
-            # pasting together the displayed comparisons from the corresponding checkbox variables containing the values of the ticked boxes
+            # pasting together the displayed comparisons from the corresponding checkbox variables
+            # containing the values of the ticked boxes
             paste0(
               paste(unlist(get(paste0("selected_trt_boxes_", i))),
                 collapse = ", "
