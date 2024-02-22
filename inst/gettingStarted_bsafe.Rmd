@@ -1,0 +1,99 @@
+---
+title: "BSafe - Getting started."
+output:
+  html_document:
+    toc: true
+---
+
+
+## **Getting started**
+
+Welcome to the landing page of the BSAFE application.  
+This landing page provides you a quick guide through this app,  
+for further information please download the manual below.  
+
+BSAFE has two main uses.  
+1) A deep dive into a Bayesian MAP prior analysis of a selected adverse event endpoint.  
+2) A posterior probability analysis to compare adverse events between two treatment arms.  
+
+Analyses are available for incidence proportions as well as for exposure adjusted incidence rates.  
+
+First, you have to upload a dataset.  
+You can now either jump directly to the Download tab for a summary table or explore the MAP priors in the app in more depth.  
+
+To explore the priors, you have to enter the information subsequently in every tab.  
+To a complete analysis with default values, you may directly jump to **Download Results** after uploading your data.  
+
+### **Upload Data**
+
+In this tab you have to provide the data you want to analyze with the app.  
+This is necessary to explore a single MAP Prior in the app,
+or to download the results.
+
+The data applicable for a MAP prior are also displayed after uploading some data.
+
+Here you can also ensure the replicability of your results.
+
+#### Upload CSV File
+
+It is expected to upload the data as .csv file.
+Click on **Browse** to choose the data you want to upload.  
+You can only upload one file and it needs to combine your datasets, if necessary.  
+The columns of your data has to include the following variables:
+
+
+Variable       | Data type       | Description                                                                                              |                
+-------------- | --------------- | ---------------------------------------------------------------------------------------------------------|
+STUDYID        | character       | Study number or name                                                                                     |
+HIST           | boolean         | Current (0) or historical (1) trial                                                                      |
+ARM            | character       | Defines the group of comparison                                                                          |            
+N              | integer         | Total number of patients                                                                                 |
+SAF_TOPIC      | character       | Safety topic                                                                                             |
+N_WITH_AE      | integer         | Total number of patients with at least 1 adverse event                                                   |
+TOT_EXP        | numeric         | Total exposure time until occurrence of the first event (if no event occurs, complete observation time). |
+
+
+<!-- For further use of the app some historical data have to be included.   -->
+<!-- For the posterior analysis, only current data is mandatory.   -->
+
+<!-- TOT_EXP is also only needed for the exposure adjusted incidence rate analysis.   -->
+
+<!-- ### Select patients with the respective treatment -->
+
+<!-- This selection is only needed to explore the MAP Prior.   -->
+<!-- Here the data will be filtered to the according grouping variable "ARM".   -->
+<!-- The analysis of the complete data set is not altered by this choice.   -->
+
+<!-- ### Select safety analysis -->
+
+<!-- Here you re given the choices between *Incidence Proportion* and *Exposure-adjusted AE rate*.   -->
+<!-- Depending on your choice the user interface for the following tabs is different.   -->
+<!-- The analysis of the complete data set is not altered by this choice.   -->
+
+<!-- ### Select safety topic  -->
+
+<!-- According to the available safety topic for the chosen treatment and analysis the applicable safety topics are displayed here.   -->
+
+<!-- ### Used Seed -->
+
+<!-- Generates automatically a different seed when you start a new session -->
+
+<!-- ## **MAP Prior** -->
+
+
+
+
+<!-- ## **Robust MAP Prior** -->
+
+
+<!-- ## **New Trial Analysis** -->
+
+
+<!-- ## **Decision Making** -->
+
+
+<!-- ## **Download Results** -->
+
+
+<!-- ## **More** -->
+
