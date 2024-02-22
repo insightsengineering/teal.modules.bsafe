@@ -29,10 +29,10 @@ sim1Study <- function(nPat = c(g1 = 100, g2 = 100),
   )
   res[, "ID"] <- 1:N
   res[, "gID"] <- c(rep(1, nPat["g1"]), rep(2, nPat["g2"]))
-  res[, "Entry"] <- runif(N, 0, accr)
+  res[, "Entry"] <- stats::runif(N, 0, accr)
 
   for (i in 1:length(nPat)) {
-    survTimesG <- rexp(nPat[i], hz[i])
+    survTimesG <- stats::rexp(nPat[i], hz[i])
 
     if (i == 1) {
       survTimes <- survTimesG
@@ -54,7 +54,7 @@ sim1Study <- function(nPat = c(g1 = 100, g2 = 100),
 
   # censoring times for all individuals, infinity if no censoring is applied
   censTime <- if (dropout["rate"] > 0) {
-    rexp(N, censRate)
+    stats::rexp(N, censRate)
   } else {
     rep(Inf, N)
   }
@@ -126,7 +126,7 @@ simTestData <- function(nStud = 5, tau = 0.05,
 
     for (h in 1:nStud) {
       if (noise > 0) {
-        tempHz <- exp(log(setArray[i, , "hz"]) + rnorm(2, 0, tau))
+        tempHz <- exp(log(setArray[i, , "hz"]) + stats::rnorm(2, 0, tau))
       } else {
         tempHz <- exp(log(setArray[i, , "hz"]))
       }

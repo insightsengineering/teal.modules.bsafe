@@ -3,4 +3,5 @@
 export("%>%")
 export(mock_poc_bsafe_app)
 export(poc_UI)
+importFrom(dplyr,.data)
 importFrom(magrittr,"%>%")

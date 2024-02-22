@@ -30,7 +30,12 @@ Imports:
     htmltools,
     teal,
     teal.modules.general,
-    teal.widgets
+    teal.widgets,
+    teal.reporter,
+    kableExtra,
+    knitr,
+    rlang,
+    teal.code
 Suggests:
     testthat (>= 3.0.4)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1

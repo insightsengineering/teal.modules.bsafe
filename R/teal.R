@@ -51,7 +51,7 @@ tm_dv_poc_example <- function(label = "BSAFE", dataset_name) {
 
 mock_teal <- function() {
   app <- teal::init(
-    data = list(bsafe_data = bsafe_data),
+    data = list(bsafe_data = teal.modules.bsafe::bsafe_data),
     modules = list(
       tm_dv_poc_example(
         label = "teal.modules.bsafe",

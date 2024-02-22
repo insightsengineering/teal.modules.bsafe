@@ -590,7 +590,7 @@ poc_server <- function(
     my_data_qenv <- shiny::reactive({
       x <- rlang::expr(
         d <- bsafe::data_table_prep(
-          input_data = bsafe_data,
+          input_data = teal.modules.bsafe::bsafe_data,
           select_analysis = !!input[[BSAFE_ID$SEL_ANALYSIS]],
           saf_topic = !!input[[BSAFE_ID$SEL_SAF_TOPIC]],
           select_btrt = !!input[[BSAFE_ID$SEL_TRT]],
