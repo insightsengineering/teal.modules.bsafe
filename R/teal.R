@@ -13,16 +13,16 @@ ui_dv_poc_example <- function(id) {
 # histogram_var is a teal.transform::data_extract_spec object
 # specifying which columns of which datasets users can choose
 srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_name) {
-  checkmate::assert_class(data, "tdata")
+
   shiny::moduleServer(id, function(input, output, session) {
-    dataset <- shiny::reactive(data[[dataset_name]]())
+    dataset <- shiny::reactive({data()[[dataset_name]]})
 
     poc_server(
       "bsafe",
       dataset = dataset,
       dataset_tdata = data,
-      reporter = reporter,
-      filter_panel_api = filter_panel_api
+      filter_panel_api = filter_panel_api,
+      reporter = reporter
     )
 
     teal.widgets::verbatim_popup_srv(
@@ -37,19 +37,20 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
 tm_dv_poc_example <- function(label = "BSAFE", dataset_name) {
   checkmate::assert_character(label)
 
+
   teal::module(
     label = label,
     server = srv_dv_poc_example,
     server_args = list(dataset_name = dataset_name),
     ui = ui_dv_poc_example,
-    filters = "all"
+    datanames = "all"
   )
 }
 
 
 mock_teal <- function() {
   app <- teal::init(
-    data = list(bsafe_data = teal.modules.bsafe::bsafe_data),
+    data = teal.data::teal_data(bsafe_data = teal.modules.bsafe::bsafe_data),
     modules = list(
       tm_dv_poc_example(
         label = "teal.modules.bsafe",
