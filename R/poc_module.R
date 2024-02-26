@@ -705,8 +705,8 @@ poc_server <- function(
       shiny::isolate({
         shinymeta::metaExpr({
           bsafe::parametric_approx(
-            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-            map_prior = map_mcmc()
+            select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+            map_prior = ..(map_mcmc())
           )
         })
       })
@@ -722,12 +722,12 @@ poc_server <- function(
         )
     })
 
-    map_summary_table <- shiny::reactive({      
-        summary_table <- bsafe::model_summary_display( # nolint: object_usage_linter
-          map_object = map_mcmc(),
-          select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-          param_approx = param_approx(),
-          ess_method = input[[BSAFE_ID$SEL_ESS_METHOD]]
+    map_summary_table <- shinymeta::metaReactive({
+        bsafe::model_summary_display( # nolint: object_usage_linter
+          map_object = ..(map_mcmc()),
+          select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+          param_approx = ..(param_approx()),
+          ess_method = ..(input[[BSAFE_ID$SEL_ESS_METHOD]])
         )      
     })
 
@@ -768,7 +768,7 @@ poc_server <- function(
       list(
         name = "MAP Prior",
         forest = list(          
-          code = shinymeta::expandChain(forest_plot()) |>
+          code = shinymeta::expandChain(forest_plot(), .expansionContext = ec) |>
             as.character() |>
             paste(collapse = "\n") |>
             styler::style_text() |>
@@ -777,15 +777,15 @@ poc_server <- function(
           prior_txt = preface_prior_txt(input[[BSAFE_ID$SEL_ANALYSIS]])
         ),
         map = list(
-            code = shinymeta::expandChain(map_mix_density()()) |>
+            code = shinymeta::expandChain(map_mix_density(), .expansionContext = ec) |>
             as.character() |>
             paste(collapse = "\n") |>
             styler::style_text() |>
             paste(collapse = "\n"),
-          plot = map_mix_density()()
+          plot = map_mix_density()
         ),
         summary = list(
-          code = shinymeta::expandChain(map_summary_table()) |>
+          code = shinymeta::expandChain(map_summary_table(), .expansionContext = ec) |>
             as.character() |>
             paste(collapse = "\n") |>
             styler::style_text() |>

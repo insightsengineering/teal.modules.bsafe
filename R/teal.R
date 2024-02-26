@@ -45,7 +45,34 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
       card$append_plot(to_report[["map"]]()[["summary"]][["plot"]])
     }
 
-    teal.reporter::add_card_button_srv("add", reporter = reporter, card_fun = map_card_fun)
+    generic_card_function <- function(card = teal.reporter::ReportCard$new()) {
+
+      report_creators <- list(
+        map = function(card, contents) {
+
+          browser()
+          card$set_name(contents[["name"]])
+
+          card$append_text("Forest", "header2")
+          card$append_text(contents[["forest"]][["code"]], "verbatim")
+          card$append_text(contents[["forest"]][["prior_txt"]], "verbatim")
+          card$append_plot(contents[["forest"]][["plot"]])
+
+          card$append_text("MAP Prior", "header2")
+          card$append_text(contents[["map"]][["code"]], "verbatim")
+          card$append_plot(contents[["map"]][["plot"]])
+
+          card$append_text("Summary Table", "header2")
+          card$append_text(contents[["summary"]][["code"]], "verbatim")
+          card$append_table(contents[["summary"]][["table"]])
+        }
+      )
+
+      if (to_report[["active_tab"]]() == "MAP Prior") return(report_creators[["map"]](card, to_report[["map"]]()))
+
+    }
+
+    teal.reporter::add_card_button_srv("add", reporter = reporter, card_fun = generic_card_function)
     teal.reporter::download_report_button_srv("download", reporter = reporter)
     teal.reporter::reset_report_button_srv("reset", reporter)
 
