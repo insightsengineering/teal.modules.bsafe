@@ -52,12 +52,16 @@ pack_of_constants <- function(...) {
 #' This function differs from the base list extraction method in that it avoids partial matching of keys and throws
 #' an error if the looked-for constant is not contained within the pack.
 #' @keywords internal
+#' @export
 #'
 `$.pack_of_constants` <- function(pack, name) {
   checkmate::assert_true(name %in% names(pack), .var.name = paste0(deparse(substitute(pack)), "$", name))
   NextMethod()
 }
+
+#' @export
 `[[.pack_of_constants` <- `$.pack_of_constants`
+#' @export
 `[.pack_of_constants` <- function(pack, name) {
   stop("Invalid pack_of_constants method")
 }
