@@ -18,7 +18,11 @@ ui_dv_poc_example <- function(id) {
 srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_name) {
 
   shiny::moduleServer(id, function(input, output, session) {
-    dataset <- shiny::reactive({data()[[dataset_name]]})
+    dataset <- shiny::reactive({
+      d <- data()[[dataset_name]]
+      attr(d, "code") <- teal.data::get_code(data(), datanames = dataset_name)
+      d
+    })
 
     to_report <- poc_server(
       "bsafe",
@@ -28,8 +32,7 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
     )
 
     map_card_fun <- function(card = teal.reporter::ReportCard$new(), comment) {
-      card$set_name(to_report[["map"]]()[["name"]])
-      #   # card$append_text(filter_panel_api$get_filter_state(), "verbatim") # nolint
+      card$set_name(to_report[["map"]]()[["name"]])      
 
       card$append_text("Forest", "header")
       card$append_text(to_report[["map"]]()[["forest"]][["code"]], "verbatim")
@@ -46,11 +49,10 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
     }
 
     generic_card_function <- function(card = teal.reporter::ReportCard$new()) {
-
+      
       report_creators <- list(
         map = function(card, contents) {
 
-          browser()
           card$set_name(contents[["name"]])
 
           card$append_text("Forest", "header2")
@@ -65,6 +67,7 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
           card$append_text("Summary Table", "header2")
           card$append_text(contents[["summary"]][["code"]], "verbatim")
           card$append_table(contents[["summary"]][["table"]])
+          card
         }
       )
 
@@ -95,8 +98,16 @@ tm_dv_poc_example <- function(label = "BSAFE", dataset_name) {
 
 
 mock_teal <- function() {
+
+
+  data <- teal.data::teal_data(
+    bsafe_data = teal.modules.bsafe::bsafe_data,
+    code = expression(bsafe_data <- teal.modules.bsafe::bsafe_data)
+  ) |>
+  teal.data::verify()
+
   app <- teal::init(
-    data = teal.data::teal_data(bsafe_data = teal.modules.bsafe::bsafe_data),
+    data = data,
     modules = list(
       tm_dv_poc_example(
         label = "teal.modules.bsafe",

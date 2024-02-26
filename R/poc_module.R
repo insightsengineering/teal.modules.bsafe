@@ -764,31 +764,46 @@ poc_server <- function(
       })
     }
 
-    to_report[["map"]] <- shiny::reactive({      
+    to_report[["map"]] <- shiny::reactive({
+
+      ec <- shinymeta::newExpansionContext()
+
+      if (!is.null(attr(receive_data(), "code"))) {
+        shinymeta::expandChain(
+          "# teal.data::get_code returns some library calls and assignments that are not required in our case",
+          "# that is why this call seems a bit unsual",
+          .expansionContext = ec
+        )
+        data_receive_code <- rlang::parse_expr(paste0("{", attr(receive_data(), "code"), "}"))
+     ec$substituteMetaReactive(
+        receive_data,
+          function() {
+      shinymeta::metaExpr(..(data_receive_code))
+    }
+        )
+      }
+
       list(
         name = "MAP Prior",
         forest = list(          
           code = shinymeta::expandChain(forest_plot(), .expansionContext = ec) |>
+            shinymeta::formatCode() |>
             as.character() |>
-            paste(collapse = "\n") |>
-            styler::style_text() |>
             paste(collapse = "\n"),
           plot = forest_plot(),
           prior_txt = preface_prior_txt(input[[BSAFE_ID$SEL_ANALYSIS]])
         ),
         map = list(
             code = shinymeta::expandChain(map_mix_density(), .expansionContext = ec) |>
+            shinymeta::formatCode() |>
             as.character() |>
-            paste(collapse = "\n") |>
-            styler::style_text() |>
             paste(collapse = "\n"),
           plot = map_mix_density()
         ),
         summary = list(
           code = shinymeta::expandChain(map_summary_table(), .expansionContext = ec) |>
+            shinymeta::formatCode() |>
             as.character() |>
-            paste(collapse = "\n") |>
-            styler::style_text() |>
             paste(collapse = "\n"),
           table = map_summary_table()
         )
