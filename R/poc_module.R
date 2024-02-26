@@ -7,11 +7,13 @@
 #'
 #' @return the UI
 #' @export
-poc_UI <- function(id) { # nolint
+poc_UI <- function(id, header = NULL) { # nolint
   ns <- shiny::NS(id)
   shiny::tagList(
     shinyjs::useShinyjs(),
     shiny::tabsetPanel(
+      id = ns("tab_panel"),
+      header = header,
       shiny::tabPanel(
         "Getting started",
         shiny::includeMarkdown(system.file("gettingStarted_bsafe.Rmd",
@@ -75,10 +77,7 @@ poc_UI <- function(id) { # nolint
       shiny::tabPanel(
         "MAP Prior",
         shiny::sidebarLayout(
-          shiny::sidebarPanel(
-            teal.reporter::add_card_button_ui(ns(REPORT_IDS$MAP$ADD)),
-            teal.reporter::download_report_button_ui(ns(REPORT_IDS$MAP$DOWNLOAD)),
-            teal.reporter::reset_report_button_ui(ns(REPORT_IDS$MAP$RESET)),
+          shiny::sidebarPanel(            
             shiny::selectInput(ns(BSAFE_ID$SEL_TAU),
               "Between-Trial Heterogeneity Prior Distribution",
               choices = BSAFE_CHOICES$SEL_TAU,
@@ -126,9 +125,7 @@ poc_UI <- function(id) { # nolint
         "Robust MAP Prior",
         shiny::sidebarLayout(
           shiny::sidebarPanel(
-            teal.reporter::add_card_button_ui(ns(REPORT_IDS$ROBUST_MAP$ADD)),
-            teal.reporter::download_report_button_ui(ns(REPORT_IDS$ROBUST_MAP$DOWNLOAD)),
-            teal.reporter::reset_report_button_ui(ns(REPORT_IDS$ROBUST_MAP$RESET)),
+            
             shiny::sliderInput(ns(BSAFE_ID$SLDR_ROB_WEIGHT),
               "Weakly-informative Prior Weight (recommended to be between 0.1 and 0.5)",
               value = 0.2,
@@ -317,8 +314,6 @@ poc_UI <- function(id) { # nolint
 poc_server <- function(
     id,
     dataset, # Must be reactive
-    dataset_tdata,
-    dataset_name, # Ignore for now
     reporter,
     filter_panel_api) {
   module <- function(input, output, session) {
@@ -332,11 +327,15 @@ poc_server <- function(
     # reactive Values Object
     rv <- shiny::reactiveValues(arm_list = list(), data = NULL)
 
+    # return
+
+    to_report <- list()
+
     
     # data input/checks/transformation ----------------------------------------
     receive_data <- shinymeta::metaReactive({
       # Here is where we should include the dataset calculation steps
-      shinymeta::..(dataset())
+      ..(dataset())
     })
 
     full_join_data <- function() {
@@ -529,11 +528,11 @@ poc_server <- function(
     # Data table preparation
     my_data <- shinymeta::metaReactive({
       bsafe::data_table_prep(
-        input_data = shinymeta::..(receive_data()),
-        select_analysis = shinymeta::..(input[[BSAFE_ID$SEL_ANALYSIS]]),
-        saf_topic = shinymeta::..(input[[BSAFE_ID$SEL_SAF_TOPIC]]),
-        select_btrt = shinymeta::..(input[[BSAFE_ID$SEL_TRT]]),
-        bool_pooled = shinymeta::..(input[[BSAFE_ID$CB_POOLED]])
+        input_data = ..(receive_data()),
+        select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+        saf_topic = ..(input[[BSAFE_ID$SEL_SAF_TOPIC]]),
+        select_btrt = ..(input[[BSAFE_ID$SEL_TRT]]),
+        bool_pooled = ..(input[[BSAFE_ID$CB_POOLED]])
       )
     })
 
@@ -544,8 +543,8 @@ poc_server <- function(
       shiny::req(input[[BSAFE_ID$BUT_UPDATE_MAP]])
       shiny::isolate(shinymeta::metaExpr({
       bsafe::tau_adjust(
-        select_analysis = shinymeta::..(input[[BSAFE_ID$SEL_ANALYSIS]]),
-        hist_borrow = shinymeta::..(input[[BSAFE_ID$SEL_HIST_BORROW]])
+        select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+        hist_borrow = ..(input[[BSAFE_ID$SEL_HIST_BORROW]])
       )
       }))
     })
@@ -553,21 +552,43 @@ poc_server <- function(
 
     # MAP object
     ## All shinymeta scaffolding is just to imitate an eventReactive
+    
+
+    
+    map_memo <- function(...) {
+      cache_file <- file.path(tempdir(), "cache.rds")
+      if (file.exists(cache_file)) {
+        x <- readRDS(cache_file)
+      } else {
+        x <- bsafe::map_prior_func(...)
+        saveRDS(x, cache_file)
+      }
+      return(x)      
+    }
+    warning("############### MEMOISED #########################")
+    
     map_mcmc <- shinymeta::metaReactive2({
   shiny::req(input[[BSAFE_ID$BUT_UPDATE_MAP]])
   shiny::req(input[[BSAFE_ID$SET_SEED]])
   shiny::isolate(
     shinymeta::metaExpr({
     
-      bsafe::map_prior_func(
-        input_data = shinymeta::..(my_data()),
-        select_analysis = shinymeta::..(input[[BSAFE_ID$SEL_ANALYSIS]]),
-        tau_dist = shinymeta::..(input[[BSAFE_ID$SEL_TAU]]),
-        adj_tau = shinymeta::..(adj_tau()),
-        seed = shinymeta::..(input[[BSAFE_ID$SET_SEED]])
+      bsafe::map_prior_func
+      
+      map_memo(
+        input_data = ..(my_data()),
+        select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+        tau_dist = ..(input[[BSAFE_ID$SEL_TAU]]),
+        adj_tau = ..(adj_tau()),
+        seed = ..(input[[BSAFE_ID$SET_SEED]])
       )
+
+      
+
+
   }))
 })
+
 
     # Robust MAP prior
     robust_map_mcmc <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_ROB]], {
@@ -670,29 +691,34 @@ poc_server <- function(
 
     forest_plot <- shinymeta::metaReactive({
       bsafe::forest_plot_display( # nolint: object_usage_linter
-          map_object = shinymeta::..(map_mcmc()),
-          select_analysis = shinymeta::..(input[[BSAFE_ID$SEL_ANALYSIS]]),
-          saf_topic = shinymeta::..(input[[BSAFE_ID$SEL_SAF_TOPIC]]),
-          select_btrt = shinymeta::..(input[[BSAFE_ID$SEL_TRT]])
+          map_object = ..(map_mcmc()),
+          select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+          saf_topic = ..(input[[BSAFE_ID$SEL_SAF_TOPIC]]),
+          select_btrt = ..(input[[BSAFE_ID$SEL_TRT]])
         )
       
     })
 
     # Parametric approximation object
-    param_approx <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_MAP]], {
-      bsafe::parametric_approx(
-        select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-        map_prior = map_mcmc()
-      )
+    param_approx <- shinymeta::metaReactive2({
+      shiny::req(input[[BSAFE_ID$BUT_UPDATE_MAP]])
+      shiny::isolate({
+        shinymeta::metaExpr({
+          bsafe::parametric_approx(
+            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
+            map_prior = map_mcmc()
+          )
+        })
+      })
     })
 
     
-    map_mix_density <- shiny::reactive({
+    map_mix_density <- shinymeta::metaReactive({
       bsafe::param_mix_density_display( # nolint: object_usage_linter
-          param_approx = param_approx(),
-          select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-          saf_topic = input[[BSAFE_ID$SEL_SAF_TOPIC]],
-          select_btrt = input[[BSAFE_ID$SEL_TRT]]
+          param_approx = ..(param_approx()),
+          select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+          saf_topic = ..(input[[BSAFE_ID$SEL_SAF_TOPIC]]),
+          select_btrt = ..(input[[BSAFE_ID$SEL_TRT]])
         )
     })
 
@@ -738,30 +764,39 @@ poc_server <- function(
       })
     }
 
-    ### REPORTER
-    map_card_fun <- function(card = teal.reporter::ReportCard$new(), comment) {
-      card$set_name("Forest Plot")
-    #   # card$append_text(filter_panel_api$get_filter_state(), "verbatim") # nolint
-      txt <- shinymeta::expandChain(forest_plot()) |>
-        as.character() |>
-        paste(collapse = "\n") |>
-        styler::style_text() |>
-        paste(collapse = "\n") |>
-        card$append_text("verbatim")
+    to_report[["map"]] <- shiny::reactive({      
+      list(
+        name = "MAP Prior",
+        forest = list(          
+          code = shinymeta::expandChain(forest_plot()) |>
+            as.character() |>
+            paste(collapse = "\n") |>
+            styler::style_text() |>
+            paste(collapse = "\n"),
+          plot = forest_plot(),
+          prior_txt = preface_prior_txt(input[[BSAFE_ID$SEL_ANALYSIS]])
+        ),
+        map = list(
+            code = shinymeta::expandChain(map_mix_density()()) |>
+            as.character() |>
+            paste(collapse = "\n") |>
+            styler::style_text() |>
+            paste(collapse = "\n"),
+          plot = map_mix_density()()
+        ),
+        summary = list(
+          code = shinymeta::expandChain(map_summary_table()) |>
+            as.character() |>
+            paste(collapse = "\n") |>
+            styler::style_text() |>
+            paste(collapse = "\n"),
+          table = map_summary_table()
+        )
+      )
+    })
 
-      card$append_text(preface_prior_txt(input[[BSAFE_ID$SEL_ANALYSIS]]))
-      card$append_plot(forest_plot())
-    #   card$append_text(paste(teal.code::get_code(map_mix_density_qenv()), collapse = "\n"), "verbatim")
-    #   card$append_text("CANNOT INCLUDE DENSITY FUNCTION MATHJAX IS NOT SUPPORTED BY TEAL REPORTER")
-    #   card$append_plot(map_mix_density_qenv()[["mix_density_plot"]])
-    #   card$append_text(paste(teal.code::get_code(map_summary_table_qenv()), collapse = "\n"), "verbatim")
-    #   card$append_table(map_summary_table_qenv()[["summary_table"]])
-    }
 
-    teal.reporter::add_card_button_srv(REPORT_IDS$MAP$ADD, reporter = reporter, card_fun = map_card_fun)
-    teal.reporter::download_report_button_srv(REPORT_IDS$MAP$DOWNLOAD, reporter = reporter)
-    teal.reporter::reset_report_button_srv(REPORT_IDS$MAP$RESET, reporter)
-    ###
+
 
     # ROBUST MAP PRIOR ----
 
@@ -1227,6 +1262,13 @@ poc_server <- function(
         )
       }
     )
+
+    # return ----
+    
+    to_report[["active_tab"]] <- shiny::reactive({
+      input[["tab_panel"]]
+    })
+    return(to_report)
   }
 
   shiny::moduleServer(

@@ -8,15 +8,20 @@ mock_poc_bsafe_app <- function() {
     shiny::fluidPage(
       poc_UI(
         id = "bsafe"
-      )
+      ),
+      shiny::verbatimTextOutput("out")
     )
   }
 
   server <- function(input, output, session) {
-    poc_server(
+    x <- poc_server(
       id = "bsafe",
       dataset = shiny::reactive(as.data.frame(teal.modules.bsafe::bsafe_data))
     )
+
+    output[["out"]] <- shiny::renderPrint({
+      str(x[["map"]]())
+    })
   }
 
   shiny::shinyApp(
