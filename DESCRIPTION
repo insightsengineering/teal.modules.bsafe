@@ -28,13 +28,13 @@ Imports:
     magrittr,
     bsafe,
     htmltools,
-    teal,    
+    teal,
     teal.widgets,
     teal.reporter,
     kableExtra,
     knitr,
     rlang,
-    teal.code
+    shinymeta
 Suggests:
     testthat (>= 3.0.4)
 RoxygenNote: 7.3.1
