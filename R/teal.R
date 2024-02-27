@@ -16,7 +16,6 @@ ui_dv_poc_example <- function(id) {
 # histogram_var is a teal.transform::data_extract_spec object
 # specifying which columns of which datasets users can choose
 srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_name) {
-
   shiny::moduleServer(id, function(input, output, session) {
     dataset <- shiny::reactive({
       d <- data()[[dataset_name]]
@@ -32,7 +31,7 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
     )
 
     map_card_fun <- function(card = teal.reporter::ReportCard$new(), comment) {
-      card$set_name(to_report[["map"]]()[["name"]])      
+      card$set_name(to_report[["map"]]()[["name"]])
 
       card$append_text("Forest", "header")
       card$append_text(to_report[["map"]]()[["forest"]][["code"]], "verbatim")
@@ -49,10 +48,8 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
     }
 
     generic_card_function <- function(card = teal.reporter::ReportCard$new()) {
-      
       report_creators <- list(
         map = function(card, contents) {
-
           card$set_name(contents[["name"]])
 
           card$append_text("Forest", "header2")
@@ -71,14 +68,14 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
         }
       )
 
-      if (to_report[["active_tab"]]() == "MAP Prior") return(report_creators[["map"]](card, to_report[["map"]]()))
-
+      if (to_report[["active_tab"]]() == "MAP Prior") {
+        return(report_creators[["map"]](card, to_report[["map"]]()))
+      }
     }
 
     teal.reporter::add_card_button_srv("add", reporter = reporter, card_fun = generic_card_function)
     teal.reporter::download_report_button_srv("download", reporter = reporter)
     teal.reporter::reset_report_button_srv("reset", reporter)
-
   })
 }
 
@@ -98,13 +95,11 @@ tm_dv_poc_example <- function(label = "BSAFE", dataset_name) {
 
 
 mock_teal <- function() {
-
-
   data <- teal.data::teal_data(
     bsafe_data = teal.modules.bsafe::bsafe_data,
     code = expression(bsafe_data <- teal.modules.bsafe::bsafe_data)
   ) |>
-  teal.data::verify()
+    teal.data::verify()
 
   app <- teal::init(
     data = data,
