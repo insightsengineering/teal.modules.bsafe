@@ -610,19 +610,24 @@ poc_server <- function(
 
 
     # Data from current trial
-    current_trial_data <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_PRIOR]], {
-      shiny::req(input[[BSAFE_ID$SEL_ANALYSIS]])
-      if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
-        list(
-          new_v1 = input[[BSAFE_ID$SLDR_N_PAT]],
-          new_v2 = input[[BSAFE_ID$SLDR_N_AE]]
-        )
-      } else if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
-        list(
-          new_v1 = input[[BSAFE_ID$SLDR_AE_FIRST_OCCURENCE]],
-          new_v2 = input[[BSAFE_ID$SLDR_CUMM_TIME_FIRST_AE]]
-        )
-      }
+    current_trial_data <- shinymeta::metaReactive2({
+      shiny::req(input[[BSAFE_ID$BUT_UPDATE_PRIOR]])
+      shiny::isolate({
+        shiny::metaExpr({
+          shiny::req(input[[BSAFE_ID$SEL_ANALYSIS]])
+          if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
+            list(
+              new_v1 = input[[BSAFE_ID$SLDR_N_PAT]],
+              new_v2 = input[[BSAFE_ID$SLDR_N_AE]]
+            )
+          } else if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
+            list(
+              new_v1 = input[[BSAFE_ID$SLDR_AE_FIRST_OCCURENCE]],
+              new_v2 = input[[BSAFE_ID$SLDR_CUMM_TIME_FIRST_AE]]
+            )
+          }
+        })
+      })
     })
 
 
