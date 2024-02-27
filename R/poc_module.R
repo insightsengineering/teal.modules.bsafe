@@ -815,10 +815,14 @@ poc_server <- function(
 
     # Preface robust MAP prior output
     # UNREPORTABLE
-    output[[BSAFE_ID$OUT_PREFACE_ROB_TXT]] <- shiny::renderUI({
+    robust_reactives <- list()
+    robust_reactives[[BSAFE_ID$OUT_PREFACE_ROB_TXT]] <- shinymeta::metaReactive2({
+      shiny::req(input[[BSAFE_ID$BUT_UPDATE_ROB]])
+      shiny::isolate({
       shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
       shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
-      shiny::withMathJax(
+      shinymeta::metaExpr({
+        shiny::withMathJax(
         shiny::h6(
           preface_rob_txt(
             sel_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
@@ -827,6 +831,12 @@ poc_server <- function(
           )
         )
       )
+      })
+      })      
+    })
+
+    output[[BSAFE_ID$OUT_PREFACE_ROB_TXT]] <- shiny::renderUI({
+      robust_reactives[[BSAFE_ID$OUT_PREFACE_ROB_TXT]]()
     })
 
     # Display robust MAP prior mixture density function
