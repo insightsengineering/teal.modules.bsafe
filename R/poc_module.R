@@ -586,22 +586,26 @@ poc_server <- function(
 
 
     # Robust MAP prior
-    robust_map_mcmc <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_ROB]], {
+    robust_map_mcmc <- shinymeta::metaReactive2({
       # rob weight in function and return that
+      shiny::req(input[[BSAFE_ID$BUT_UPDATE_ROB]])
 
-      shiny::req(input[[BSAFE_ID$SEL_ANALYSIS]])
-      shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
-      shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
-
-      bsafe::robust_map(
-        select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-        param_approx = param_approx(),
-        input_data = my_data(),
-        robust_weight = input[[BSAFE_ID$SLDR_ROB_WEIGHT]],
-        robust_mean = input[[BSAFE_ID$SLDR_ROB_MEAN]],
-        adj_tau = adj_tau(),
-        seed = input[[BSAFE_ID$SET_SEED]]
-      )
+      shiny::isolate({
+        shiny::req(input[[BSAFE_ID$SEL_ANALYSIS]])
+        shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
+        shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
+        shinymeta::metaExpr({
+          bsafe::robust_map(
+            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
+            param_approx = param_approx(),
+            input_data = my_data(),
+            robust_weight = input[[BSAFE_ID$SLDR_ROB_WEIGHT]],
+            robust_mean = input[[BSAFE_ID$SLDR_ROB_MEAN]],
+            adj_tau = adj_tau(),
+            seed = input[[BSAFE_ID$SET_SEED]]
+          )
+        })
+      })
     })
 
 
