@@ -30,23 +30,6 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
       reporter = reporter
     )
 
-    map_card_fun <- function(card = teal.reporter::ReportCard$new(), comment) {
-      card$set_name(to_report[["map"]]()[["name"]])
-
-      card$append_text("Forest", "header")
-      card$append_text(to_report[["map"]]()[["forest"]][["code"]], "verbatim")
-      card$append_text(to_report[["map"]]()[["forest"]][["prior_txt"]], "verbatim")
-      card$append_plot(to_report[["map"]]()[["forest"]][["plot"]])
-
-      card$append_text("MAP Prior", "header")
-      card$append_text(to_report[["map"]]()[["map"]][["code"]], "verbatim")
-      card$append_plot(to_report[["map"]]()[["map"]][["plot"]])
-
-      card$append_text("Summary Table", "header")
-      card$append_text(to_report[["map"]]()[["summary"]][["code"]], "verbatim")
-      card$append_plot(to_report[["map"]]()[["summary"]][["plot"]])
-    }
-
     generic_card_function <- function(card = teal.reporter::ReportCard$new()) {
       report_creators <- list(
         map = function(card, contents) {
@@ -65,11 +48,30 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
           card$append_text(contents[["summary"]][["code"]], "verbatim")
           card$append_table(contents[["summary"]][["table"]])
           card
+        },
+        robust = function(card, contents) {
+          card$set_name(contents[["name"]])
+
+          card$append_text("Robust", "header2")
+          card$append_text(contents[["plot"]][["code"]], "verbatim")
+          # Mathjax is not supported by card reporter
+          # card$append_text(contents[["plot"]][["prior_txt"]], "verbatim")
+          # Mathjax is not supported by card reporter
+          # card$append_text(contents[["plot"]][["formula"]], "verbatim")
+          card$append_plot(contents[["plot"]][["plot"]])
+
+          card$append_text("Summary Table", "header2")
+          card$append_text(contents[["summary"]][["code"]], "verbatim")
+          card$append_table(contents[["summary"]][["table"]])
+          card
         }
       )
 
       if (to_report[["active_tab"]]() == "MAP Prior") {
         return(report_creators[["map"]](card, to_report[["map"]]()))
+      }
+      if (to_report[["active_tab"]]() == "Robust MAP Prior") {
+        return(report_creators[["robust"]](card, to_report[["robust"]]()))
       }
     }
 

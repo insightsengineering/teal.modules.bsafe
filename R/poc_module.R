@@ -596,13 +596,13 @@ poc_server <- function(
         shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
         shinymeta::metaExpr({
           bsafe::robust_map(
-            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-            param_approx = param_approx(),
-            input_data = my_data(),
-            robust_weight = input[[BSAFE_ID$SLDR_ROB_WEIGHT]],
-            robust_mean = input[[BSAFE_ID$SLDR_ROB_MEAN]],
-            adj_tau = adj_tau(),
-            seed = input[[BSAFE_ID$SET_SEED]]
+            select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+            param_approx = ..(param_approx()),
+            input_data = ..(my_data()),
+            robust_weight = ..(input[[BSAFE_ID$SLDR_ROB_WEIGHT]]),
+            robust_mean = ..(input[[BSAFE_ID$SLDR_ROB_MEAN]]),
+            adj_tau = ..(adj_tau()),
+            seed = ..(input[[BSAFE_ID$SET_SEED]])
           )
         })
       })
@@ -614,21 +614,24 @@ poc_server <- function(
       shiny::req(input[[BSAFE_ID$BUT_UPDATE_PRIOR]])
       shiny::isolate({
         shiny::req(input[[BSAFE_ID$SEL_ANALYSIS]])
-        shinymeta::metaExpr({
-          if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
+        if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
+          shinymeta::metaExpr({
             list(
-              new_v1 = input[[BSAFE_ID$SLDR_N_PAT]],
-              new_v2 = input[[BSAFE_ID$SLDR_N_AE]]
+              new_v1 = ..(input[[BSAFE_ID$SLDR_N_PAT]]),
+              new_v2 = ..(input[[BSAFE_ID$SLDR_N_AE]])
             )
-          } else if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
+          })
+        } else if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
+          shinymeta::metaExpr({
             list(
-              new_v1 = input[[BSAFE_ID$SLDR_AE_FIRST_OCCURENCE]],
-              new_v2 = input[[BSAFE_ID$SLDR_CUMM_TIME_FIRST_AE]]
+              new_v1 = ..(input[[BSAFE_ID$SLDR_AE_FIRST_OCCURENCE]]),
+              new_v2 = ..(input[[BSAFE_ID$SLDR_CUMM_TIME_FIRST_AE]])
             )
-          }
-        })
+          })
+        }
       })
     })
+
 
 
     # Posterior distribution
@@ -637,13 +640,13 @@ poc_server <- function(
       shiny::isolate(
         shinymeta::metaExpr(
           bsafe::posterior_dist(
-            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-            input_data = my_data(),
-            robust_map_prior = robust_map_mcmc(),
+            select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+            input_data = ..(my_data()),
+            robust_map_prior = ..(robust_map_mcmc()),
             explore = TRUE,
-            new_v1 = current_trial_data()[["new_v1"]],
-            new_v2 = current_trial_data()[["new_v2"]],
-            seed = input[[BSAFE_ID$SET_SEED]]
+            new_v1 = ..(current_trial_data())[["new_v1"]],
+            new_v2 = ..(current_trial_data())[["new_v2"]],
+            seed = ..(input[[BSAFE_ID$SET_SEED]])
           )
         )
       )
@@ -655,9 +658,9 @@ poc_server <- function(
       shiny::isolate({
         shinymeta::metaExpr(
           bsafe::robust_compare(
-            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-            robust_map_prior = robust_map_mcmc(),
-            param_approx = param_approx()
+            select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+            robust_map_prior = ..(robust_map_mcmc()),
+            param_approx = ..(param_approx())
           )
         )
       })
@@ -667,13 +670,13 @@ poc_server <- function(
     new_trial_analysis <- shinymeta::metaReactive2({
       shiny::req(input[[BSAFE_ID$BUT_UPDATE_PRIOR]])
       shiny::isolate({
-        shiny::metaExpr(
+        shinymeta::metaExpr(
           bsafe::new_trial_compare(
-            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-            robust_map_prior = robust_map_mcmc(),
-            new_v1 = current_trial_data()[["new_v1"]],
-            new_v2 = current_trial_data()[["new_v2"]],
-            post_dist = post_dist()
+            select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+            robust_map_prior = ..(robust_map_mcmc()),
+            new_v1 = ..(current_trial_data())[["new_v1"]],
+            new_v2 = ..(current_trial_data())[["new_v2"]],
+            post_dist = ..(post_dist())
           )
         )
       })
@@ -687,22 +690,23 @@ poc_server <- function(
         if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
           shiny::req(input[[BSAFE_ID$SEL_DIST]])
           shinymeta::metaExpr(bsafe::mix_distribution_all(
-            current_trial_data = current_trial_data(),
-            select_dist = input[[BSAFE_ID$SEL_DIST]],
-            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-            param_approx = param_approx(),
-            robust_map_object = robust_map_mcmc(),
-            post_dist = post_dist()
+            current_trial_data = ..(current_trial_data(),
+              select_dist = ..(input[[BSAFE_ID$SEL_DIST]]),
+              select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+              param_approx = ..(param_approx()),
+              robust_map_object = ..(robust_map_mcmc()),
+              post_dist = ..(post_dist())
+            )
           ))
         } else if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
           shiny::req(input[[BSAFE_ID$SEL_DIST_AE]])
           shinymeta::metaExpr(bsafe::mix_distribution_all(
-            current_trial_data = current_trial_data(),
-            select_dist = input[[BSAFE_ID$SEL_DIST_AE]],
-            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-            param_approx = param_approx(),
-            robust_map_object = robust_map_mcmc(),
-            post_dist = post_dist()
+            current_trial_data = ..(current_trial_data()),
+            select_dist = ..(input[[BSAFE_ID$SEL_DIST_AE]]),
+            select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+            param_approx = ..(param_approx()),
+            robust_map_object = ..(robust_map_mcmc()),
+            post_dist = ..(post_dist())
           ))
         }
       })
@@ -842,73 +846,127 @@ poc_server <- function(
     # ROBUST MAP PRIOR ----
 
     # Preface robust MAP prior output
-    # UNREPORTABLE
-    robust_reactives <- list()
-    robust_reactives[[BSAFE_ID$OUT_PREFACE_ROB_TXT]] <- shinymeta::metaReactive2({
+    robust_txt <- shinymeta::metaReactive2({
       shiny::req(input[[BSAFE_ID$BUT_UPDATE_ROB]])
       shiny::isolate({
-      shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
-      shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
-      shinymeta::metaExpr({
-        shiny::withMathJax(
-        shiny::h6(
-          preface_rob_txt(
-            sel_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-            rob_weight = input[[BSAFE_ID$SLDR_ROB_WEIGHT]],
-            rob_mean = input[[BSAFE_ID$SLDR_ROB_MEAN]]
+        shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
+        shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
+        shinymeta::metaExpr({
+          shiny::withMathJax(
+            shiny::h6(
+              preface_rob_txt(
+                sel_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+                rob_weight = ..(input[[BSAFE_ID$SLDR_ROB_WEIGHT]]),
+                rob_mean = ..(input[[BSAFE_ID$SLDR_ROB_MEAN]])
+              )
+            )
           )
-        )
-      )
+        })
       })
-      })      
     })
 
     output[[BSAFE_ID$OUT_PREFACE_ROB_TXT]] <- shiny::renderUI({
-      robust_reactives[[BSAFE_ID$OUT_PREFACE_ROB_TXT]]()
+      robust_txt()
+    })
+
+    robust_formula <- shinymeta::metaReactive2({
+      shiny::req(input[[BSAFE_ID$BUT_UPDATE_ROB]])
+      shiny::isolate({
+        shinymeta::metaExpr({
+          bsafe::robust_map_prior_mix_dens_display(
+            robust_map_object = ..(robust_map_mcmc()),
+            select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]])
+          )
+        })
+      })
     })
 
     # Display robust MAP prior mixture density function
-    # UNREPORTABLE
     output[[BSAFE_ID$OUT_ROB_DENSITY_FCT]] <- shiny::renderUI({
-      bsafe::robust_map_prior_mix_dens_display(
-        robust_map_object = robust_map_mcmc(),
-        select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]]
-      )
+      robust_formula()
     })
 
-    robust_map_plot <- shiny::reactive({
+    robust_plot <- shinymeta::metaReactive({
       bsafe::robust_map_prior_plot( # nolint: object_usage_linter
-        rob_comp = rob_comp(),
-        saf_topic = input[[BSAFE_ID$SEL_SAF_TOPIC]],
-        select_btrt = input[[BSAFE_ID$SEL_TRT]],
-        select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]]
+        rob_comp = ..(rob_comp()),
+        saf_topic = ..(input[[BSAFE_ID$SEL_SAF_TOPIC]]),
+        select_btrt = ..(input[[BSAFE_ID$SEL_TRT]]),
+        select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]])
       )
     })
 
     # Compare robust MAP prior to MAP prior
     output[[BSAFE_ID$OUT_ROB_MAP_PLT]] <- shiny::renderPlot({
-      robust_map_plot()
+      robust_plot()
     })
 
-    robust_map_sum_tbl <- shiny::reactive({
+    robust_summary <- shinymeta::metaReactive2({
       shiny::req(robust_map_mcmc())
-      bsafe::summary_stats_robust_map_prior_display( # nolint: object_usage_linter
-        map_object = map_mcmc(),
-        select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-        param_approx = param_approx(),
-        ess_method = input[[BSAFE_ID$SEL_ESS_METHOD]],
-        robust_map_object = robust_map_mcmc(),
-        rob_ess_method = input[[BSAFE_ID$SEL_ROB_ESS_METHOD]],
-        download = FALSE
+      shinymeta::metaExpr(
+        bsafe::summary_stats_robust_map_prior_display( # nolint: object_usage_linter
+          map_object = ..(map_mcmc()),
+          select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+          param_approx = ..(param_approx()),
+          ess_method = ..(input[[BSAFE_ID$SEL_ESS_METHOD]]),
+          robust_map_object = ..(robust_map_mcmc()),
+          rob_ess_method = ..(input[[BSAFE_ID$SEL_ROB_ESS_METHOD]]),
+          download = FALSE
+        )
       )
     })
 
     # Display summary stats of robust MAP prior and MAP prior
     output[[BSAFE_ID$OUT_ROB_SUM_TBL]] <- function() {
-      robust_map_sum_tbl() %>%
+      robust_summary() %>%
         knitr::kable("html") %>%
         kableExtra::kable_styling("striped")
     }
+
+    to_report[["robust"]] <- reactive_snapshot({
+      ec <- shinymeta::newExpansionContext()
+
+      data <- shiny::isolate({
+        receive_data()
+      }) # Block reactivity due to data changes only for final plots
+
+      if (!is.null(attr(data, "code"))) {
+        shinymeta::expandChain(
+          "# teal.data::get_code returns some library calls and assignments that are not required in our case",
+          "# that is why this call seems a bit unsual",
+          .expansionContext = ec
+        )
+        data_receive_code <- rlang::parse_expr(paste0("{", attr(data, "code"), "}"))
+        ec$substituteMetaReactive(
+          receive_data,
+          function() {
+            shinymeta::metaExpr(..(data_receive_code))
+          }
+        )
+      }
+
+
+      list(
+        name = "Robust",
+        plot = list(
+          code = shinymeta::expandChain(robust_plot(), .expansionContext = ec) |>
+            shinymeta::formatCode() |>
+            as.character() |>
+            paste(collapse = "\n"),
+          plot = robust_plot(),
+          prior_txt = robust_txt(),
+          formula = robust_formula()
+        ),
+        summary = list(
+          code = shinymeta::expandChain(robust_summary(), .expansionContext = ec) |>
+            shinymeta::formatCode() |>
+            as.character() |>
+            paste(collapse = "\n"),
+          table = robust_summary()
+        )
+      )
+    })
+
+
 
     ### REPORTER
     # robust_map_card_fun <- function(card = teal.reporter::ReportCard$new(), comment) {
