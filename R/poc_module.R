@@ -613,8 +613,8 @@ poc_server <- function(
     current_trial_data <- shinymeta::metaReactive2({
       shiny::req(input[[BSAFE_ID$BUT_UPDATE_PRIOR]])
       shiny::isolate({
-        shiny::metaExpr({
-          shiny::req(input[[BSAFE_ID$SEL_ANALYSIS]])
+        shiny::req(input[[BSAFE_ID$SEL_ANALYSIS]])
+        shinymeta::metaExpr({
           if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
             list(
               new_v1 = input[[BSAFE_ID$SLDR_N_PAT]],
@@ -632,61 +632,80 @@ poc_server <- function(
 
 
     # Posterior distribution
-    post_dist <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_PRIOR]], {
-      bsafe::posterior_dist(
-        select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-        input_data = my_data(),
-        robust_map_prior = robust_map_mcmc(),
-        explore = TRUE,
-        new_v1 = current_trial_data()[["new_v1"]],
-        new_v2 = current_trial_data()[["new_v2"]],
-        seed = input[[BSAFE_ID$SET_SEED]]
+    post_dist <- shinymeta::metaReactive2({
+      shiny::req(input[[BSAFE_ID$BUT_UPDATE_PRIOR]])
+      shiny::isolate(
+        shinymeta::metaExpr(
+          bsafe::posterior_dist(
+            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
+            input_data = my_data(),
+            robust_map_prior = robust_map_mcmc(),
+            explore = TRUE,
+            new_v1 = current_trial_data()[["new_v1"]],
+            new_v2 = current_trial_data()[["new_v2"]],
+            seed = input[[BSAFE_ID$SET_SEED]]
+          )
+        )
       )
     })
 
     # Compare robust MAP prior to MAP prior
-    rob_comp <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_ROB]], {
-      bsafe::robust_compare(
-        select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-        robust_map_prior = robust_map_mcmc(),
-        param_approx = param_approx()
-      )
+    rob_comp <- shinymeta::metaReactive2({
+      shiny::req(input[[BSAFE_ID$BUT_UPDATE_ROB]])
+      shiny::isolate({
+        shinymeta::metaExpr(
+          bsafe::robust_compare(
+            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
+            robust_map_prior = robust_map_mcmc(),
+            param_approx = param_approx()
+          )
+        )
+      })
     })
 
     # New trial analysis
-    new_trial_analysis <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_PRIOR]], {
-      bsafe::new_trial_compare(
-        select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-        robust_map_prior = robust_map_mcmc(),
-        new_v1 = current_trial_data()[["new_v1"]],
-        new_v2 = current_trial_data()[["new_v2"]],
-        post_dist = post_dist()
-      )
+    new_trial_analysis <- shinymeta::metaReactive2({
+      shiny::req(input[[BSAFE_ID$BUT_UPDATE_PRIOR]])
+      shiny::isolate({
+        shiny::metaExpr(
+          bsafe::new_trial_compare(
+            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
+            robust_map_prior = robust_map_mcmc(),
+            new_v1 = current_trial_data()[["new_v1"]],
+            new_v2 = current_trial_data()[["new_v2"]],
+            post_dist = post_dist()
+          )
+        )
+      })
     })
 
     # Mixture distributions for MAP Prior, Robust MAP Prior, Likelihood, or Posterior Distribution
-    mix <- shiny::eventReactive(input[[BSAFE_ID$BUT_UPDATE_STAT_INF]], {
-      if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
-        shiny::req(input[[BSAFE_ID$SEL_DIST]])
-        bsafe::mix_distribution_all(
-          current_trial_data = current_trial_data(),
-          select_dist = input[[BSAFE_ID$SEL_DIST]],
-          select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-          param_approx = param_approx(),
-          robust_map_object = robust_map_mcmc(),
-          post_dist = post_dist()
-        )
-      } else if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
-        shiny::req(input[[BSAFE_ID$SEL_DIST_AE]])
-        bsafe::mix_distribution_all(
-          current_trial_data = current_trial_data(),
-          select_dist = input[[BSAFE_ID$SEL_DIST_AE]],
-          select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-          param_approx = param_approx(),
-          robust_map_object = robust_map_mcmc(),
-          post_dist = post_dist()
-        )
-      }
+    mix <- shinymeta::metaReactive2({
+      shiny::req(input[[BSAFE_ID$BUT_UPDATE_STAT_INF]])
+
+      shiny::isolate({
+        if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
+          shiny::req(input[[BSAFE_ID$SEL_DIST]])
+          shinymeta::metaExpr(bsafe::mix_distribution_all(
+            current_trial_data = current_trial_data(),
+            select_dist = input[[BSAFE_ID$SEL_DIST]],
+            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
+            param_approx = param_approx(),
+            robust_map_object = robust_map_mcmc(),
+            post_dist = post_dist()
+          ))
+        } else if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
+          shiny::req(input[[BSAFE_ID$SEL_DIST_AE]])
+          shinymeta::metaExpr(bsafe::mix_distribution_all(
+            current_trial_data = current_trial_data(),
+            select_dist = input[[BSAFE_ID$SEL_DIST_AE]],
+            select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
+            param_approx = param_approx(),
+            robust_map_object = robust_map_mcmc(),
+            post_dist = post_dist()
+          ))
+        }
+      })
     })
 
 
