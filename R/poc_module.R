@@ -764,17 +764,21 @@ poc_server <- function(
       })
     }
 
-    to_report[["map"]] <- shiny::reactive({
+    # This reactive works under the assumption that the three events are activated by the same button and, therefore,
+    # the same data correspond to the three of them.
+    to_report[["map"]] <- reactive_snapshot({
 
       ec <- shinymeta::newExpansionContext()
 
-      if (!is.null(attr(receive_data(), "code"))) {
+      data <- shiny::isolate({receive_data()}) # Block reactivity due to data changes only for final plots
+
+      if (!is.null(attr(data, "code"))) {
         shinymeta::expandChain(
           "# teal.data::get_code returns some library calls and assignments that are not required in our case",
           "# that is why this call seems a bit unsual",
           .expansionContext = ec
         )
-        data_receive_code <- rlang::parse_expr(paste0("{", attr(receive_data(), "code"), "}"))
+        data_receive_code <- rlang::parse_expr(paste0("{", attr(data, "code"), "}"))
      ec$substituteMetaReactive(
         receive_data,
           function() {
@@ -782,6 +786,7 @@ poc_server <- function(
     }
         )
       }
+
 
       list(
         name = "MAP Prior",
