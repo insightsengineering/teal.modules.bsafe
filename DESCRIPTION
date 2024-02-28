@@ -29,12 +29,12 @@ Imports:
     bsafe,
     htmltools,
     teal,
-    teal.widgets,
     teal.reporter,
     kableExtra,
     knitr,
     rlang,
-    shinymeta
+    shinymeta,
+    teal.data
 Suggests:
     testthat (>= 3.0.4)
 RoxygenNote: 7.3.1

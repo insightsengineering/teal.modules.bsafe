@@ -4,10 +4,12 @@
 \alias{poc_UI}
 \title{quic.bsafe's ui function}
 \usage{
-poc_UI(id)
+poc_UI(id, header = NULL)
 }
 \arguments{
 \item{id}{the id}
+
+\item{header}{elements to be included in the header of the tabset of the module}
 }
 \value{
 the UI

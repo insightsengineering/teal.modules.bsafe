@@ -4,6 +4,7 @@
 #' @description  implements the UI for the quic.bsafe shiny app
 #'
 #' @param id the id
+#' @param header elements to be included in the header of the tabset of the module
 #'
 #' @return the UI
 #' @export
@@ -689,15 +690,16 @@ poc_server <- function(
       shiny::isolate({
         if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
           shiny::req(input[[BSAFE_ID$SEL_DIST]])
-          shinymeta::metaExpr(bsafe::mix_distribution_all(
-            current_trial_data = ..(current_trial_data(),
+          shinymeta::metaExpr(
+            bsafe::mix_distribution_all(
+            current_trial_data = ..(current_trial_data()),
               select_dist = ..(input[[BSAFE_ID$SEL_DIST]]),
               select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
               param_approx = ..(param_approx()),
               robust_map_object = ..(robust_map_mcmc()),
               post_dist = ..(post_dist())
             )
-          ))
+          )
         } else if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
           shiny::req(input[[BSAFE_ID$SEL_DIST_AE]])
           shinymeta::metaExpr(bsafe::mix_distribution_all(
