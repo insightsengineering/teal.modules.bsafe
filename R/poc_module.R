@@ -559,6 +559,7 @@ poc_server <- function(
       cache_file <- file.path(tempdir(), "cache.rds")
       if (file.exists(cache_file)) {
         x <- readRDS(cache_file)
+        x <- bsafe::map_prior_func(...)
       } else {
         x <- bsafe::map_prior_func(...)
         saveRDS(x, cache_file)
@@ -570,18 +571,25 @@ poc_server <- function(
     map_mcmc <- shinymeta::metaReactive2({
       shiny::req(input[[BSAFE_ID$BUT_UPDATE_MAP]])
       shiny::req(input[[BSAFE_ID$SET_SEED]])
-      shiny::isolate(
-        shinymeta::metaExpr({
-          bsafe::map_prior_func
-
-          map_memo(
-            input_data = ..(my_data()),
-            select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
-            tau_dist = ..(input[[BSAFE_ID$SEL_TAU]]),
-            adj_tau = ..(adj_tau()),
-            seed = ..(input[[BSAFE_ID$SET_SEED]])
+      # At this moment the origin of the error Argument eta must be a nonempty numeric vector is pervasive
+      # We have opted for a catch all approach while we forward this error to the bsafe package developers
+      tryCatch(
+        {
+          shiny::isolate(
+            shinymeta::metaExpr({
+              bsafe::map_prior_func(
+                input_data = ..(my_data()),
+                select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+                tau_dist = ..(input[[BSAFE_ID$SEL_TAU]]),
+                adj_tau = ..(adj_tau()),
+                seed = ..(input[[BSAFE_ID$SET_SEED]])
+              )
+            })
           )
-        })
+        },
+        error = function(e) {
+          shiny::validate(FALSE, paste("Error calculating::map_prior_func:", e[["message"]]))
+        }
       )
     })
 
@@ -692,7 +700,7 @@ poc_server <- function(
           shiny::req(input[[BSAFE_ID$SEL_DIST]])
           shinymeta::metaExpr(
             bsafe::mix_distribution_all(
-            current_trial_data = ..(current_trial_data()),
+              current_trial_data = ..(current_trial_data()),
               select_dist = ..(input[[BSAFE_ID$SEL_DIST]]),
               select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
               param_approx = ..(param_approx()),
@@ -793,6 +801,10 @@ poc_server <- function(
     # This reactive works under the assumption that the three events are activated by the same button and, therefore,
     # the same data correspond to the three of them.
     to_report[["map"]] <- reactive_snapshot({
+      shiny::req(forest_plot())
+      shiny::req(map_mix_density())
+      shiny::req(map_summary_table())
+
       ec <- shinymeta::newExpansionContext()
 
       data <- shiny::isolate({
