@@ -46,81 +46,11 @@ poc_UI <- function(id, header = NULL) { # nolint
       ),
       shiny::tabPanel(
         "Select Analysis",
-        shiny::sidebarLayout(
-          shiny::sidebarPanel(
-            shiny::tags$hr(),
-            shiny::selectInput(ns(BSAFE_ID$SEL_TRT),
-              "Select patients with the respective treatment",
-              choices = c(""),
-              multiple = FALSE
-            ),
-            shiny::selectInput(ns(BSAFE_ID$SEL_ANALYSIS),
-              "Select safety analysis",
-              choices = BSAFE_CHOICES$SEL_ANALYSIS
-            ),
-            shiny::selectInput(ns(BSAFE_ID$SEL_SAF_TOPIC),
-              "Select safety topic",
-              choices = c(
-                ""
-              )
-            ),
-            shiny::numericInput(ns(BSAFE_ID$SET_SEED), "Used seed:",
-              min = 0,
-              value = round(as.numeric(Sys.time()), 0)
-            ),
-            shiny::checkboxInput(ns(BSAFE_ID$CB_POOLED), "Pool by study", value = TRUE)
-          ),
-          shiny::mainPanel(
-            shiny::htmlOutput(ns(BSAFE_ID$OUT_FILE_TABLE)), # historical trial table
-          ),
-        )
+        mod_select_analysis_ui("sel_analysis")
       ),
       shiny::tabPanel(
         "MAP Prior",
-        shiny::sidebarLayout(
-          shiny::sidebarPanel(
-            shiny::selectInput(ns(BSAFE_ID$SEL_TAU),
-              "Between-Trial Heterogeneity Prior Distribution",
-              choices = BSAFE_CHOICES$SEL_TAU,
-              selected = BSAFE_DEFAULTS$SEL_TAU
-            ),
-            shiny::selectInput(
-              inputId = ns(BSAFE_ID$SEL_HIST_BORROW),
-              label = shiny::withMathJax(
-                paste(
-                  "\\(\\frac{\\tau}{\\sigma}\\)",
-                  "controls the amount of historical borrowing",
-                  "and is a ratio of the between-trial heterogeneity \\(\\tau\\)",
-                  "and standard deviation \\(\\sigma\\):"
-                )
-              ),
-              choices = BSAFE_CHOICES$SEL_HIST_BORROW,
-              selected = BSAFE_DEFAULTS$SEL_HIST_BORROW
-            ),
-            shiny::selectInput(BSAFE_ID$SEL_ESS_METHOD,
-              "Effective Sample Size Method",
-              choices = BSAFE_CHOICES$SEL_ESS_METHOD,
-              selected = BSAFE_DEFAULTS$SEL_ESS_METHOD
-            ),
-            shiny::actionButton(ns(BSAFE_ID$BUT_UPDATE_MAP), "Update")
-          ),
-          shiny::mainPanel(
-            shiny::h2("Model Estimates"),
-            # nolint start: line_length_linter
-            shiny::h6(
-              "Displayed are the point estimates for the mean (dots) and their respective 95% frequentistic confidence intervals.
-               For a stratified (dashed light blue line) and meta (solid dark blue line) analysis.
-               The blue highlighted part displays the 95% credible interval (CrI) for the mean and the MAP Prior."
-            ),
-            # nolint end
-            shiny::plotOutput(ns(BSAFE_ID$OUT_FOREST_PLT)),
-            shiny::h2("MAP Prior"),
-            shiny::uiOutput(ns(BSAFE_ID$OUT_PREFACE_PRIOR_TXT)),
-            shiny::uiOutput(ns(BSAFE_ID$OUT_DENSITY_FCT)),
-            shiny::plotOutput(ns(BSAFE_ID$OUT_MIX_DENSITY_PLT)), # spinner MAP prior distribution
-            shiny::tableOutput(ns(BSAFE_ID$OUT_MAP_PRIOR_SUM_TBL)) # MAP prior distribution summary table
-          )
-        )
+        map_prior_ui("map_prior")
       ),
       shiny::tabPanel(
         "Robust MAP Prior",
@@ -342,16 +272,9 @@ poc_server <- function(
       rv[["data"]] <- dplyr::full_join(rv[["data"]], receive_data())
     }
 
-    trt_data_wrangler <- function(input_data) {
-      choices_trt <- unique(input_data[, "ARM"])
-      return(choices_trt)
-    }
 
-    ae_events_wrangler <- function(input_data, selected_trt) {
-      safety_topics <- as.character(unlist(input_data[, "SAF_TOPIC"]))
-      choices_ae <- safety_topics[as.character(unlist(input_data[, "ARM"])) == selected_trt]
-      return(choices_ae)
-    }
+
+ 
 
 
     # ui element updates ------------------------------------------------------
@@ -439,15 +362,6 @@ poc_server <- function(
       input[[BSAFE_ID$SEL_ANALYSIS]]
     })
 
-
-    shiny::observe({
-      shiny::updateSelectInput(
-        session,
-        inputId = BSAFE_ID$SEL_TRT,
-        choices = trt_data_wrangler(receive_data())
-      )
-    })
-
     shiny::observe({
       choices_helper <- main_sel_arm_creation_update(
         data = receive_data(),
@@ -503,19 +417,7 @@ poc_server <- function(
       )
     })
 
-    selected_arm <- shiny::eventReactive(input[[BSAFE_ID$SEL_TRT]], {
-      selected_arm <- input[[BSAFE_ID$SEL_TRT]]
-    })
-
-    shiny::observe({
-      shiny::updateSelectInput(
-        session,
-        inputId = BSAFE_ID$SEL_SAF_TOPIC,
-        choices = ae_events_wrangler(receive_data(), selected_arm())
-      )
-    })
-
-
+    
     # Display input data
     output[[BSAFE_ID$OUT_FILE_TABLE]] <- function() {
       bsafe::input_data_display(
@@ -526,16 +428,7 @@ poc_server <- function(
     }
 
     # Data table preparation
-    my_data <- shinymeta::metaReactive({
-      bsafe::data_table_prep(
-        input_data = ..(receive_data()),
-        select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
-        saf_topic = ..(input[[BSAFE_ID$SEL_SAF_TOPIC]]),
-        select_btrt = ..(input[[BSAFE_ID$SEL_TRT]]),
-        bool_pooled = ..(input[[BSAFE_ID$CB_POOLED]])
-      )
-    })
-
+    my_data <- mod_select_analysis_server("sel_analysis", data)
 
     # Historical Borrowing
     # sigma set to 2, so adjust tau to change amount of historical borrowing -> Formula: tau/2
