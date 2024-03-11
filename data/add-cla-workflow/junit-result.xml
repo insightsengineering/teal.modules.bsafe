@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="dummy" timestamp="2024-03-11T14:02:03Z" hostname="52234c2235c5" tests="1" skipped="0" failures="0" errors="0" time="0.009">
+    <testcase time="0.00900000000000001" classname="dummy" name="multiplication_works"/>
+  </testsuite>
+</testsuites>
