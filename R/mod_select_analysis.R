@@ -35,21 +35,44 @@ mod_select_analysis_server <- function(id, data) {
   module <- function(input, output, session) {
 
     shiny::observe({
+      choices <- unique(data()[, "ARM"])
+      if (length(choices) > 0) {
+        if(!identical(input[[BSAFE_ID$SEL_TRT]], "")){
+          selected <- shiny::isolate(input[[BSAFE_ID$SEL_TRT]])
+        } else {
+          selected <- choices[[1]]
+        }        
+      } else {
+        selected <- NULL
+      }
+
       shiny::updateSelectInput(
         session,
         inputId = BSAFE_ID$SEL_TRT,
-        choices = unique(data()[, "ARM"])
+        choices = choices,
+        selected = selected
       )
     })
 
     shiny::observe({
       safety_topics <- as.character(unlist(data()[, "SAF_TOPIC"]))
-      choices_ae <- safety_topics[as.character(unlist(data()[, "ARM"])) == input[[BSAFE_ID$SEL_TRT]]]
+      choices <- safety_topics[as.character(unlist(data()[, "ARM"])) == input[[BSAFE_ID$SEL_TRT]]]
+
+      if (length(choices) > 0) {
+        if(!identical(input[[BSAFE_ID$SEL_SAF_TOPIC]], "")){
+          selected <- shiny::isolate(input[[BSAFE_ID$SEL_SAF_TOPIC]])
+        } else {
+          selected <- choices[[1]]
+        }        
+      } else {
+        selected <- NULL
+      }
 
       shiny::updateSelectInput(
         session,
         inputId = BSAFE_ID$SEL_SAF_TOPIC,
-        choices = choices_ae
+        choices = choices,
+        selected = selected
       )
     })
 
@@ -64,7 +87,15 @@ mod_select_analysis_server <- function(id, data) {
       )
     })
 
-    return(prepared_data)
+    return(
+      list(
+        data = prepared_data,
+        analysis_type = shiny::reactive(input[[BSAFE_ID$SEL_ANALYSIS]]),
+        safety_topic = shiny::reactive(input[[BSAFE_ID$SEL_SAF_TOPIC]]),
+        treatment = shiny::reactive(input[[BSAFE_ID$SEL_TRT]]),
+        seed = shiny::reactive(input[[BSAFE_ID$SET_SEED]])
+      )
+    )
   }
 
   shiny::moduleServer(id, module)
@@ -87,7 +118,8 @@ mock_select_analysis_mod <- function() {
     )
 
     output[["out"]] <- shiny::renderPrint({
-      utils::str(x())
+      x[["data"]]()
+      utils::str(x)
     })
   }
 
