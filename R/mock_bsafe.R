@@ -20,7 +20,7 @@ mock_poc_bsafe_app <- function() {
     )
 
     output[["out"]] <- shiny::renderPrint({
-      # utils::str(x[["map"]]())
+      x()
     })
   }
 

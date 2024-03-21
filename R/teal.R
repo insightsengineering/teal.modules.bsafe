@@ -31,48 +31,25 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
     )
 
     generic_card_function <- function(card = teal.reporter::ReportCard$new()) {
-      report_creators <- list(
-        map = function(card, contents) {
-          card$set_name(contents[["name"]])
-
-          card$append_text("Forest", "header2")
-          card$append_text(contents[["forest"]][["code"]], "verbatim")
-          card$append_text(contents[["forest"]][["prior_txt"]], "verbatim")
-          card$append_plot(contents[["forest"]][["plot"]])
-
-          card$append_text("MAP Prior", "header2")
-          card$append_text(contents[["map"]][["code"]], "verbatim")
-          card$append_plot(contents[["map"]][["plot"]])
-
-          card$append_text("Summary Table", "header2")
-          card$append_text(contents[["summary"]][["code"]], "verbatim")
-          card$append_table(contents[["summary"]][["table"]])
-          card
-        },
-        robust = function(card, contents) {
-          card$set_name(contents[["name"]])
-
-          card$append_text("Robust", "header2")
-          card$append_text(contents[["plot"]][["code"]], "verbatim")
-          # Mathjax is not supported by card reporter
-          # card$append_text(contents[["plot"]][["prior_txt"]], "verbatim")
-          # Mathjax is not supported by card reporter
-          # card$append_text(contents[["plot"]][["formula"]], "verbatim")
-          card$append_plot(contents[["plot"]][["plot"]])
-
-          card$append_text("Summary Table", "header2")
-          card$append_text(contents[["summary"]][["code"]], "verbatim")
-          card$append_table(contents[["summary"]][["table"]])
-          card
-        }
-      )
-
-      if (to_report[["active_tab"]]() == "MAP Prior") {
-        return(report_creators[["map"]](card, to_report[["map"]]()))
-      }
-      if (to_report[["active_tab"]]() == "Robust MAP Prior") {
-        return(report_creators[["robust"]](card, to_report[["robust"]]()))
-      }
+      card$append_text("Code", "header2")
+      code <- shinymeta::deparseCode(to_report()[["code"]]) |> shinymeta::formatCode(, formatter = styler::style_text) |> paste(collapse = "\n")
+      card$append_text(code, "verbatim")
+      card$append_text("MAP prior", "header2")
+      card$append_text("Forest plot", "header3")
+      card$append_plot(to_report()[["forest_plot"]])
+      card$append_text("Map Summary table", "header3")
+      card$append_table(to_report()[["map_summary_table"]])
+      card$append_text("Robust MAP", "header2")
+      card$append_text("Robust plot", "header3")
+      card$append_plot(to_report()[["robust_plot"]])
+      card$append_text("Robust Summary table", "header3")
+      card$append_table(to_report()[["robust_summary"]])
+      card$append_text("New trial analysis", "header2")
+      card$append_text("Compare plot", "header3")
+      card$append_plot(to_report()[["compare_plot"]])
+      card$append_text("Compare Summary table", "header3")
+      card$append_table(to_report()[["compare_summary_table"]])
+      card
     }
 
     teal.reporter::add_card_button_srv("add", reporter = reporter, card_fun = generic_card_function)

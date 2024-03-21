@@ -59,7 +59,7 @@ mod_new_trial_analysis_UI <- function(id) {
   )
 }
 
-mod_new_trial_analysis_server <- function(id, data, robust_map_mcmc, analysis_type, safety_topic, ess_method, treatment, sel_dist, sel_dist_ae, seed) {
+mod_new_trial_analysis_server <- function(id, data, robust_map_mcmc, analysis_type, safety_topic, ess_method, treatment, seed) {
   mod <- function(input, output, session) {
 
     current_trial_data <- shinymeta::metaReactive2({
@@ -121,29 +121,38 @@ mod_new_trial_analysis_server <- function(id, data, robust_map_mcmc, analysis_ty
       }
     })
 
-    output[[BSAFE_ID$OUT_COMPARE_PLT]] <- shiny::renderPlot({
+    compare_plot <- shinymeta::metaReactive({
       bsafe::nta_data_conflict_assassment_plot(
-        select_analysis = analysis_type(),
-        new_trial_analysis = new_trial_analysis(),
-        saf_topic = safety_topic(),
-        select_btrt = treatment()
+        select_analysis = ..(analysis_type()),
+        new_trial_analysis = ..(new_trial_analysis()),
+        saf_topic = ..(safety_topic()),
+        select_btrt = ..(treatment())
       )
-    
-    
     })
 
-    output[[BSAFE_ID$OUT_COMPARE_SUM_TBL]] <- shiny::renderTable ({
+    output[[BSAFE_ID$OUT_COMPARE_PLT]] <- shiny::renderPlot({
+      compare_plot()
+    })
+
+    compare_summary_table <- shinymeta::metaReactive({
       bsafe::summary_stat_all_display(
-        select_analysis = analysis_type(),
-        robust_map_object = robust_map_mcmc(),
-        ess_method = ess_method(),
-        current_trial_data = current_trial_data(),
-        post_dist = post_dist(),
+        select_analysis = ..(analysis_type()),
+        robust_map_object = ..(robust_map_mcmc()),
+        ess_method = ..(ess_method()),
+        current_trial_data = ..(current_trial_data()),
+        post_dist = ..(post_dist()),
         download = FALSE
       )
     })
 
+    output[[BSAFE_ID$OUT_COMPARE_SUM_TBL]] <- shiny::renderTable({
+      compare_summary_table()
+    })
 
+    list(
+      compare_plot = compare_plot,
+      compare_summary_table = compare_summary_table
+    )
   }
 
   shiny::moduleServer(
@@ -164,6 +173,7 @@ mock_new_trial_analysis_mod <- function() {
 
   server <- function(input, output, session) {
     trial_in <- readRDS("new_trial_in.rds")
+    trial_in <- readRDS("new_trial_in.rds") |> purrr::discard_at(c("sel_dist", "sel_dist_ae"))
     trial_in_react <- purrr::map(trial_in, ~local({shiny::reactive({.x})}))
     x <- do.call(mod_new_trial_analysis_server, c(list(id = "mock"), trial_in_react))
     output[["out"]] <- shiny::renderPrint({

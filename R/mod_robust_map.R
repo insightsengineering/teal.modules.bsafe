@@ -155,49 +155,11 @@ mod_robust_map_server <- function(id, data, map_mcmc, param_approx, adj_tau, ana
         kableExtra::kable_styling("striped")
     }
 
-    # to_report[["robust"]] <- reactive_snapshot({
-    #   ec <- shinymeta::newExpansionContext()
-
-    #   data <- shiny::isolate({
-    #     receive_data()
-    #   }) # Block reactivity due to data changes only for final plots
-
-    #   if (!is.null(attr(data, "code"))) {
-    #     shinymeta::expandChain(
-    #       "# teal.data::get_code returns some library calls and assignments that are not required in our case",
-    #       "# that is why this call seems a bit unsual",
-    #       .expansionContext = ec
-    #     )
-    #     data_receive_code <- rlang::parse_expr(paste0("{", attr(data, "code"), "}"))
-    #     ec$substituteMetaReactive(
-    #       receive_data,
-    #       function() {
-    #         shinymeta::metaExpr(..(data_receive_code))
-    #       }
-    #     )
-    #   }
-
-
-    #   list(
-    #     name = "Robust",
-    #     plot = list(
-    #       code = shinymeta::expandChain(robust_plot(), .expansionContext = ec) |>
-    #         shinymeta::formatCode() |>
-    #         as.character() |>
-    #         paste(collapse = "\n"),
-    #       plot = robust_plot(),
-    #       prior_txt = robust_txt(),
-    #       formula = robust_formula()
-    #     ),
-    #     summary = list(
-    #       code = shinymeta::expandChain(robust_summary(), .expansionContext = ec) |>
-    #         shinymeta::formatCode() |>
-    #         as.character() |>
-    #         paste(collapse = "\n"),
-    #       table = robust_summary()
-    #     )
-    #   )
-    # })
+    list(
+      robust_map_mcmc = robust_map_mcmc,
+      robust_plot = robust_plot,
+      robust_summary = robust_summary
+    )
   }
 
   shiny::moduleServer(id, mod)

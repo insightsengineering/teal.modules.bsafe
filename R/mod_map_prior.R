@@ -221,7 +221,9 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
             map_mcmc = map_mcmc,
             param_approx = param_approx,
             adj_tau = adj_tau,
-            ess_method = shiny::reactive(input[[BSAFE_ID$SEL_ESS_METHOD]])
+            ess_method = shiny::reactive(input[[BSAFE_ID$SEL_ESS_METHOD]]),
+            forest_plot = forest_plot,
+            map_summary_table = map_summary_table
         )
     )
 

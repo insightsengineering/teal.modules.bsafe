@@ -46,19 +46,19 @@ poc_UI <- function(id, header = NULL) { # nolint
       ),
       shiny::tabPanel(
         "Select Analysis",
-        mod_select_analysis_ui("sel_analysis")
+        mod_select_analysis_ui(ns("sel_analysis"))
       ),
       shiny::tabPanel(
         "MAP Prior",
-        mod_map_prior_ui("map_prior")
+        mod_map_prior_ui(ns("map_prior"))
       ),
       shiny::tabPanel(
         "Robust MAP Prior",
-        mod_robust_map_ui("robust_map")
+        mod_robust_map_ui(ns("robust_map"))
       ),
       shiny::tabPanel(
         "New Trial Analysis",
-        mod_new_trial_analysis_UI("new_trial")        
+        mod_new_trial_analysis_UI(ns("new_trial"))
       ),
       shiny::tabPanel(
         "Decision Making",
@@ -337,14 +337,13 @@ poc_server <- function(
     }
 
     # Data table preparation
-    sel_analysis <- mod_select_analysis_server("sel_analysis", data)
-    data <- sel_analysis[["data"]] # TODO: Careful with reactive overlap once poc is ready
+    sel_analysis <- mod_select_analysis_server("sel_analysis", receive_data)
+    selected_data <- sel_analysis[["data"]] # TODO: Careful with reactive overlap once poc is ready
     seed <- sel_analysis[["seed"]]
-    analysis_type
 
     map_prior <- mod_map_prior_server(
       "map_prior",
-      data = data,
+      data = selected_data,
       analysis_type = sel_analysis[["analysis_type"]],
       safety_topic = sel_analysis[["safety_topic"]],
       treatment = sel_analysis[["treatment"]],
@@ -353,15 +352,28 @@ poc_server <- function(
 
     robust_map <- mod_robust_map_server(
       "robust_map",
-      data = data,
+      data = selected_data,
       map_mcmc = map_prior[["map_mcmc"]],
       param_approx = map_prior[["param_approx"]],
       adj_tau = map_prior[["adj_tau"]],
       analysis_type = sel_analysis[["analysis_type"]],
       safety_topic = sel_analysis[["safety_topic"]],
+      ess_method = map_prior[["ess_method"]],
       treatment = sel_analysis[["treatment"]],
       seed = sel_analysis[["seed"]]
     )
+
+    new_trial <- mod_new_trial_analysis_server(
+      "new_trial",
+      data = selected_data,
+      robust_map_mcmc = robust_map[["robust_map_mcmc"]],
+      analysis_type = sel_analysis[["analysis_type"]],
+      safety_topic = sel_analysis[["safety_topic"]],
+      ess_method = map_prior[["ess_method"]],
+      treatment = sel_analysis[["treatment"]],
+      seed = sel_analysis[["seed"]]
+    )
+      
 
  
    
@@ -756,8 +768,41 @@ poc_server <- function(
 
     # return ----
 
-    to_report[["active_tab"]] <- shiny::reactive({
-      input[["tab_panel"]]
+    to_report <- shiny::reactive({
+
+      code <- local({
+        ec <- shinymeta::newExpansionContext()
+      shinymeta::expandChain(
+        "# Data selection",
+        sel_analysis[["data"]](),
+        "# Map prior",
+        "## Forest Plot",
+        map_prior[["forest_plot"]](),
+        "## Map Summary table",
+        map_prior[["map_summary_table"]](),
+        "# Robust Map Prior",
+        "## Robust plot",
+        robust_map[["robust_plot"]](),
+        "## Robust summary",
+        robust_map[["robust_summary"]](),
+        "# New trial",
+        "## Compare plot",
+        new_trial[["compare_plot"]](),
+        "## Compare table summary",
+        new_trial[["compare_summary_table"]]()
+      )
+      })
+
+      list(
+        code = code,
+        forest_plot = map_prior[["forest_plot"]](),
+        map_summary_table = map_prior[["map_summary_table"]](),
+        robust_plot = robust_map[["robust_plot"]](),
+        robust_summary = robust_map[["robust_summary"]](),
+        compare_plot = new_trial[["compare_plot"]](),
+        compare_summary_table = new_trial[["compare_summary_table"]]()
+      )
+      
     })
     return(to_report)
   }
@@ -767,3 +812,4 @@ poc_server <- function(
     module = module
   )
 }
+
