@@ -150,6 +150,9 @@ mod_new_trial_analysis_server <- function(id, data, robust_map_mcmc, analysis_ty
     })
 
     list(
+      new_trial_analysis = new_trial_analysis,
+      post_dist = post_dist,
+      current_trial_data = current_trial_data,
       compare_plot = compare_plot,
       compare_summary_table = compare_summary_table
     )
