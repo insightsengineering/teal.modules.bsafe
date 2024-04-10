@@ -48,7 +48,7 @@ poc_UI <- function(id, header = NULL) { # nolint
       ),
       shiny::tabPanel(
         "Decision Making",
-        mod_decision_making_ui(ns("decision_making"))
+        mod_decision_making_ui(ns("decision_making")) |> as_sb_layout()
       ),
       # shiny::tabPanel(
       #   "Download Results",

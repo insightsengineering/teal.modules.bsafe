@@ -1,10 +1,8 @@
 mod_decision_making_ui <- function(id) {
   ns <- shiny::NS(id)
-  shiny::tagList(
-    shinyjs::useShinyjs(),
-    shiny::sidebarLayout(
-      shiny::sidebarPanel(
-        shinyjs::hidden(shiny::div(
+
+  side  <- list(
+    shinyjs::hidden(shiny::div(
           id = ns(BSAFE_ID$DIV_DM_INCI),
           shiny::selectInput(ns(BSAFE_ID$SEL_DIST),
             "Make statistical inference about the",
@@ -28,16 +26,20 @@ mod_decision_making_ui <- function(id) {
             shiny::uiOutput(ns(BSAFE_ID$OUT_AE_PERC_SLDR))
           )
         )
-      ),
-      shiny::mainPanel(
+  )
+
+  main <- list(
         shiny::uiOutput(ns(BSAFE_ID$OUT_DM_HEADER_TXT)),
         shiny::uiOutput(ns(BSAFE_ID$OUT_DM_PREFACE_TXT)),
         shiny::plotOutput(ns(BSAFE_ID$OUT_STAT_INF_DENSITY_PLT)), # spinner
         shiny::textOutput(ns(BSAFE_ID$OUT_AREA_UNDER_CURVE)),
         shiny::h2("Inference"),
         shiny::tableOutput(ns(BSAFE_ID$OUT_DM_PRESET_STATEMENTS_TBL))
-      )
-    )
+  )
+
+  list(
+    side = side,
+    main = main
   )
 }
 
