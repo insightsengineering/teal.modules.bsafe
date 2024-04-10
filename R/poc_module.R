@@ -10,51 +10,122 @@
 #' @export
 poc_UI <- function(id, header = NULL) { # nolint
 
-  as_sb_layout <- function(l){shiny::sidebarLayout(sidebarPanel = shiny::sidebarPanel(l[["side"]]), mainPanel = shiny::mainPanel(l[["main"]]))}
+  bs3_panel <- function(...){
+    shiny::div(
+      class = "panel panel-default",      
+      shiny::div(
+        class = "panel-body",
+        ...
+      )
+    )
+  }
+  
+
+
+  bars_check <- function(id, label, value = TRUE){
+    bc <- shiny::checkboxInput(id, shiny::tagList(shiny::span(class = "chevron"), label), value = value)
+    bc[["attribs"]][["style"]] <- "margin-bottom: 0px"
+    bc[["children"]][[1]][["attribs"]][["style"]] <- "margin-bottom: 0px; margin-top: 0px"
+    bc[["children"]][[1]][["attribs"]][["class"]] <- c(bc[["children"]][[1]][["attribs"]][["class"]], "collapse_menu")
+    bc
+  }
+
+  collapsible_panel <- function(id, label,..., open = TRUE){
+    bs3_panel(
+      bars_check(id, label, value = open),
+      shiny::conditionalPanel(
+        condition = paste0("input['", id, "']"),
+        shiny::hr(style = "margin-top: 5px"),
+        ...      
+      )
+    )    
+  }
 
   ns <- shiny::NS(id)
+
+  ui_list <- list(
+    a_sel = list(mod_select_analysis_ui(ns("sel_analysis")), "Analysis selection"),
+    mp = list(mod_map_prior_ui(ns("map_prior")), "Map Prior"),
+    rmp = list(mod_robust_map_ui(ns("robust_map")), "Robust Map Prior"),
+    nta = list(mod_new_trial_analysis_ui(ns("new_trial")), "New Trial Analysis"),
+    dm = list(mod_decision_making_ui(ns("decision_making")), "Decision Making")
+  )
+ 
+  side <- shiny::sidebarPanel(
+    header,
+    purrr::imap(
+      ui_list,
+      function(v, n) {
+        collapsible_panel(
+          id = ns(paste0(n, "_side_check")),
+          label = v[[2]],
+          v[[1]][["side"]]
+      )
+    })
+  )
+
+  main <- shiny::mainPanel(
+    purrr::imap(
+      ui_list,
+      function(v, n) {
+        collapsible_panel(
+          id = ns(paste0(n, "_main_check")),
+          label = v[[2]],
+          v[[1]][["main"]]
+      )
+    })
+  )
+
+
+
   shiny::tagList(
     shinyjs::useShinyjs(),
-    shiny::tabsetPanel(
-      id = ns("tab_panel"),
-      header = header,
-      shiny::tabPanel(
-        "Getting started",
-        shiny::includeMarkdown(system.file("gettingStarted_bsafe.Rmd",
-          package = "teal.modules.bsafe",
-          mustWork = TRUE
-        )),
-        shiny::h5("User Manual:"),
-      ),
-      # shiny::tabPanel(
-      #   "Data preparation",
-      #   mod_data_preparation_ui(ns("data_preparation"))
-      # ),
-      shiny::tabPanel(
-        "Select Analysis",
-        mod_select_analysis_ui(ns("sel_analysis")) |> as_sb_layout()
-      ),
-      shiny::tabPanel(
-        "MAP Prior",
-        mod_map_prior_ui(ns("map_prior")) |> as_sb_layout()
-      ),
-      shiny::tabPanel(
-        "Robust MAP Prior",
-        mod_robust_map_ui(ns("robust_map")) |> as_sb_layout()
-      ),
-      shiny::tabPanel(
-        "New Trial Analysis",
-        mod_new_trial_analysis_ui(ns("new_trial")) |> as_sb_layout()
-      ),
-      shiny::tabPanel(
-        "Decision Making",
-        mod_decision_making_ui(ns("decision_making")) |> as_sb_layout()
-      ),
-      # shiny::tabPanel(
-      #   "Download Results",
-      #   mod_simulation_ui(ns("simulation"))
-      # )
+    includeCSS(system.file("www/bsafe.css", mustWork = TRUE, package = "teal.modules.bsafe")),
+    shiny::sidebarLayout(
+      sidebarPanel = side,
+      mainPanel = main
     )
+    # ,
+    # shiny::tabsetPanel(
+    #   id = ns("tab_panel"),
+    #   header = header,
+    #   shiny::tabPanel(
+    #     "Getting started",
+    #     shiny::includeMarkdown(system.file("gettingStarted_bsafe.Rmd",
+    #       package = "teal.modules.bsafe",
+    #       mustWork = TRUE
+    #     )),
+    #     shiny::h5("User Manual:"),
+    #   ),
+    #   # shiny::tabPanel(
+    #   #   "Data preparation",
+    #   #   mod_data_preparation_ui(ns("data_preparation"))
+    #   # ),
+    #   shiny::tabPanel(
+    #     "Select Analysis",
+    #     ui_list[["asel"]] |> as_sb_layout()
+    #   ),
+    #   shiny::tabPanel(
+    #     "MAP Prior",
+    #     ui_list[["mp"]] |> as_sb_layout()
+    #   ),
+    #   shiny::tabPanel(
+    #     "Robust MAP Prior",
+    #     ui_list[["rmp"]] |> as_sb_layout()
+    #   ),
+    #   shiny::tabPanel(
+    #     "New Trial Analysis",
+    #     ui_list[["nta"]] |> as_sb_layout()
+    #   ),
+    #   shiny::tabPanel(
+    #     "Decision Making",
+    #     ui_list[["dm"]] |> as_sb_layout()
+    #   ),
+    #   # shiny::tabPanel(
+    #   #   "Download Results",
+    #   #   mod_simulation_ui(ns("simulation"))
+    #   # )
+    # )
   )
 }
 
@@ -81,14 +152,6 @@ poc_server <- function(
       ..(dataset())
     })
     
-    # Display input data
-    output[[BSAFE_ID$OUT_FILE_TABLE]] <- function() {
-      bsafe::input_data_display(
-        data = my_data(),
-        select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-        saf_topic = input[[BSAFE_ID$SEL_SAF_TOPIC]]
-      )
-    }
 
     # Data table preparation
     sel_analysis <- mod_select_analysis_server("sel_analysis", receive_data)

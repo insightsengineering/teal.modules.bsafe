@@ -1,8 +1,7 @@
 mod_select_analysis_ui <- function(id) {
   ns <- shiny::NS(id)
 
-    side <- list(
-      shiny::tags$hr(),
+    side <- list(      
       shiny::selectInput(ns(BSAFE_ID$SEL_TRT),
         "Select patients with the respective treatment",
         choices = c(""),
@@ -25,7 +24,7 @@ mod_select_analysis_ui <- function(id) {
       shiny::checkboxInput(ns(BSAFE_ID$CB_POOLED), "Pool by study", value = TRUE)
     )
 
-    main <- shiny::htmlOutput(ns(BSAFE_ID$OUT_FILE_TABLE))  
+    main <- shiny::tableOutput(ns(BSAFE_ID$OUT_FILE_TABLE))  
   list(side = side, main = main)
 }
 
@@ -82,6 +81,14 @@ mod_select_analysis_server <- function(id, data) {
         saf_topic = ..(input[[BSAFE_ID$SEL_SAF_TOPIC]]),
         select_btrt = ..(input[[BSAFE_ID$SEL_TRT]]),
         bool_pooled = ..(input[[BSAFE_ID$CB_POOLED]])
+      )
+    })
+    
+    output[[BSAFE_ID$OUT_FILE_TABLE]] <- shiny::renderTable({
+      bsafe::input_data_display(
+        data = data(),
+        select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
+        saf_topic = input[[BSAFE_ID$SEL_SAF_TOPIC]]
       )
     })
 
