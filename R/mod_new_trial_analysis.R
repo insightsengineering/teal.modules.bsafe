@@ -39,8 +39,7 @@ mod_new_trial_analysis_UI <- function(id) {
           value = 200,
           step = 1
         )
-      )),
-      shiny::actionButton(ns(BSAFE_ID$BUT_UPDATE_PRIOR), "Update"),
+      ))
     ),
     shiny::mainPanel(
       shinyjs::hidden(shiny::div(
@@ -104,6 +103,20 @@ mod_new_trial_analysis_server <- function(id, data, robust_map_mcmc, analysis_ty
           new_v2 = ..(current_trial_data())[["new_v2"]],
           post_dist = ..(post_dist())
         )
+      )
+    })
+
+    shiny::observe({
+      shiny::updateSliderInput(session,
+        BSAFE_ID$SLDR_N_AE,
+        label = paste0(
+          "Number of Patients with AE ",
+          safety_topic()
+        ),
+        min = 0,
+        max = input[[BSAFE_ID$SLDR_N_PAT]],
+        value = 0,
+        step = 1
       )
     })
 
