@@ -1,10 +1,8 @@
 mod_robust_map_ui <- function(id) {
   ns <- shiny::NS(id)
-  shiny::tagList(
-    shinyjs::useShinyjs(),
-    shiny::sidebarLayout(
-      shiny::sidebarPanel(
-        shiny::sliderInput(ns(BSAFE_ID$SLDR_ROB_WEIGHT),
+
+  side <- list(
+    shiny::sliderInput(ns(BSAFE_ID$SLDR_ROB_WEIGHT),
           "Weakly-informative Prior Weight (recommended to be between 0.1 and 0.5)",
           value = 0.2,
           min = 0.01,
@@ -27,18 +25,18 @@ mod_robust_map_ui <- function(id) {
           "Effective Sample Size Method",
           choices = BSAFE_CHOICES$SEL_ESS_METHOD,
           selected = BSAFE_DEFAULTS$SEL_ESS_METHOD
-        ),
-        shiny::actionButton(ns(BSAFE_ID$BUT_UPDATE_ROB), "Update")
-      ),
-      shiny::mainPanel(
-        shiny::h2("Robust MAP Prior"),
+        )
+  )
+
+  main <- list(
+      shiny::h2("Robust MAP Prior"),
         shiny::uiOutput(ns(BSAFE_ID$OUT_PREFACE_ROB_TXT)),
         shiny::uiOutput(ns(BSAFE_ID$OUT_ROB_DENSITY_FCT)),
         shiny::plotOutput(ns(BSAFE_ID$OUT_ROB_MAP_PLT)), # spinner
         shiny::tableOutput(ns(BSAFE_ID$OUT_ROB_SUM_TBL))
-      )
-    )
   )
+
+  list(side = side, main = main)
 }
 
 mod_robust_map_server <- function(id, data, map_mcmc, param_approx, adj_tau, analysis_type, safety_topic, ess_method, treatment, seed) {

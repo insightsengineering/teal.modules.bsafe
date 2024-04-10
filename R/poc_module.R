@@ -36,11 +36,11 @@ poc_UI <- function(id, header = NULL) { # nolint
       ),
       shiny::tabPanel(
         "MAP Prior",
-        mod_map_prior_ui(ns("map_prior"))
+        mod_map_prior_ui(ns("map_prior")) |> as_sb_layout()
       ),
       shiny::tabPanel(
         "Robust MAP Prior",
-        mod_robust_map_ui(ns("robust_map"))
+        mod_robust_map_ui(ns("robust_map")) |> as_sb_layout()
       ),
       shiny::tabPanel(
         "New Trial Analysis",
