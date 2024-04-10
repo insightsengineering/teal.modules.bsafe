@@ -44,7 +44,7 @@ poc_UI <- function(id, header = NULL) { # nolint
       ),
       shiny::tabPanel(
         "New Trial Analysis",
-        mod_new_trial_analysis_UI(ns("new_trial"))
+        mod_new_trial_analysis_ui(ns("new_trial")) |> as_sb_layout()
       ),
       shiny::tabPanel(
         "Decision Making",

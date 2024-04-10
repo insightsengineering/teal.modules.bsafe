@@ -1,8 +1,7 @@
-mod_new_trial_analysis_UI <- function(id) {
+mod_new_trial_analysis_ui <- function(id) {
   ns <- shiny::NS(id)
 
-  shiny::sidebarLayout(
-    shiny::sidebarPanel(
+  side <- list(
       shinyjs::useShinyjs(),
       "Input data from the new trial",
       shiny::tags$hr(),
@@ -40,9 +39,10 @@ mod_new_trial_analysis_UI <- function(id) {
           step = 1
         )
       ))
-    ),
-    shiny::mainPanel(
-      shinyjs::hidden(shiny::div(
+  )
+
+  main  <- list(
+    shinyjs::hidden(shiny::div(
         id = ns(BSAFE_ID$DIV_NTA_INCI_MAIN),
         shiny::h2("Prior Data Conflict Assessment"),
         "To assess prior data conflict, compare the prior and posterior probability density function, and the likelihood of the observed data.", # nolint: line_length_linter
@@ -54,7 +54,11 @@ mod_new_trial_analysis_UI <- function(id) {
       )),
       shiny::plotOutput(ns(BSAFE_ID$OUT_COMPARE_PLT)),
       shiny::tableOutput(ns(BSAFE_ID$OUT_COMPARE_SUM_TBL))
-    )
+  )
+
+  list(
+    side = side,
+    main = main
   )
 }
 
@@ -180,7 +184,7 @@ mod_new_trial_analysis_server <- function(id, data, robust_map_mcmc, analysis_ty
 mock_new_trial_analysis_mod <- function() {
   ui <- function(request) {
     shiny::fluidPage(
-      mod_new_trial_analysis_UI(
+      mod_new_trial_analysis_ui(
         id = "mock"
       ),
       shiny::verbatimTextOutput("out")
