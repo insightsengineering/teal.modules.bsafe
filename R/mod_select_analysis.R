@@ -1,8 +1,7 @@
 mod_select_analysis_ui <- function(id) {
   ns <- shiny::NS(id)
 
-  shiny::sidebarLayout(
-    shiny::sidebarPanel(
+    side <- list(
       shiny::tags$hr(),
       shiny::selectInput(ns(BSAFE_ID$SEL_TRT),
         "Select patients with the respective treatment",
@@ -24,11 +23,10 @@ mod_select_analysis_ui <- function(id) {
         value = round(as.numeric(Sys.time()), 0)
       ),
       shiny::checkboxInput(ns(BSAFE_ID$CB_POOLED), "Pool by study", value = TRUE)
-    ),
-    shiny::mainPanel(
-      shiny::htmlOutput(ns(BSAFE_ID$OUT_FILE_TABLE)), # historical trial table
-    ),
-  )
+    )
+
+    main <- shiny::htmlOutput(ns(BSAFE_ID$OUT_FILE_TABLE))  
+  list(side = side, main = main)
 }
 
 mod_select_analysis_server <- function(id, data) {

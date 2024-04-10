@@ -9,6 +9,9 @@
 #' @return the UI
 #' @export
 poc_UI <- function(id, header = NULL) { # nolint
+
+  as_sb_layout <- function(l){shiny::sidebarLayout(sidebarPanel = shiny::sidebarPanel(l[["side"]]), mainPanel = shiny::mainPanel(l[["main"]]))}
+
   ns <- shiny::NS(id)
   shiny::tagList(
     shinyjs::useShinyjs(),
@@ -29,7 +32,7 @@ poc_UI <- function(id, header = NULL) { # nolint
       # ),
       shiny::tabPanel(
         "Select Analysis",
-        mod_select_analysis_ui(ns("sel_analysis"))
+        mod_select_analysis_ui(ns("sel_analysis")) |> as_sb_layout()
       ),
       shiny::tabPanel(
         "MAP Prior",
