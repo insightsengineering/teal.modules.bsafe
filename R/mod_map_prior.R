@@ -1,9 +1,8 @@
 mod_map_prior_ui <- function(id){
     ns <- shiny::NS(id)
-    shiny::tagList(
-        shiny::sidebarLayout(
-          shiny::sidebarPanel(
-            shiny::selectInput(ns(BSAFE_ID$SEL_TAU),
+
+    side <- list(
+      shiny::selectInput(ns(BSAFE_ID$SEL_TAU),
               "Between-Trial Heterogeneity Prior Distribution",
               choices = BSAFE_CHOICES$SEL_TAU,
               selected = BSAFE_DEFAULTS$SEL_TAU
@@ -25,11 +24,11 @@ mod_map_prior_ui <- function(id){
               "Effective Sample Size Method",
               choices = BSAFE_CHOICES$SEL_ESS_METHOD,
               selected = BSAFE_DEFAULTS$SEL_ESS_METHOD
-            ),
-            shiny::actionButton(ns(BSAFE_ID$BUT_UPDATE_MAP), "Update")
-          ),
-          shiny::mainPanel(
-            shiny::h2("Model Estimates"),
+            )
+    )
+
+    main <- list(
+      shiny::h2("Model Estimates"),
             # nolint start: line_length_linter
             shiny::h6(
               "Displayed are the point estimates for the mean (dots) and their respective 95% frequentistic confidence intervals.
@@ -42,10 +41,14 @@ mod_map_prior_ui <- function(id){
             shiny::uiOutput(ns(BSAFE_ID$OUT_PREFACE_PRIOR_TXT)),
             shiny::uiOutput(ns(BSAFE_ID$OUT_DENSITY_FCT)),
             shiny::plotOutput(ns(BSAFE_ID$OUT_MIX_DENSITY_PLT)), # spinner MAP prior distribution
-            shiny::tableOutput(ns(BSAFE_ID$OUT_MAP_PRIOR_SUM_TBL)) # MAP prior distribution summary table
-          )
-        )
+            shiny::htmlOutput(ns(BSAFE_ID$OUT_MAP_PRIOR_SUM_TBL)) # MAP prior distribution summary table
     )
+
+    list(
+      side = side,
+      main = main
+    )
+
 } 
 
 prior_func <- bsafe::map_prior_func
@@ -151,7 +154,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
     })
 
     # Display model summary output
-    output[[BSAFE_ID$OUT_MAP_PRIOR_SUM_TBL]] <- shiny::renderTable({
+    output[[BSAFE_ID$OUT_MAP_PRIOR_SUM_TBL]] <- shiny::renderText({
         map_summary_table() %>%
           knitr::kable("html") %>%
           kableExtra::kable_styling("striped")
@@ -159,8 +162,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
 
     # This reactive works under the assumption that the three events are activated by the same button and, therefore,
     # the same data correspond to the three of them.
-    to_report <- list()
-    to_report[["map"]] <- 1
+    
     
     # reactive_snapshot({
     # #   shiny::req(forest_plot())
