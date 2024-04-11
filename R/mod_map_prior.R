@@ -24,7 +24,8 @@ mod_map_prior_ui <- function(id) {
       "Effective Sample Size Method",
       choices = BSAFE_CHOICES$SEL_ESS_METHOD,
       selected = BSAFE_DEFAULTS$SEL_ESS_METHOD
-    )
+    ),
+    shiny::actionButton(ns("submit"), "Update Map Priors")
   )
 
   main <- list(
@@ -56,7 +57,29 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
   mod <- function(input, output, session) {
     # Reactives
 
+
+    updated_map_priors <- shiny::reactiveVal(FALSE)
+
+    shiny::observeEvent(input[["submit"]], {
+      shiny::req(input[["submit"]]>0)
+      updated_map_priors(TRUE)
+    })
+
+    shiny::observe({
+      # try are required so it depends on changes on any of the elements. We want to set it to false regardless of them
+      # being an error or not
+      try(data())
+      try(analysis_type())
+      try(input[[BSAFE_ID$SEL_HIST_BORROW]])
+      try(input[[BSAFE_ID$SEL_TAU]])
+      try(seed())
+      updated_map_priors(FALSE)
+    })
+
+
+
     adj_tau <- shinymeta::metaReactive2({
+      shiny::validate(shiny::need(updated_map_priors(), "Selection or data has changed please update Map Prior"))
       shinymeta::metaExpr({
         bsafe::tau_adjust(
           select_analysis = ..(analysis_type()),
@@ -66,6 +89,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
     })
 
     map_mcmc <- shinymeta::metaReactive2({
+      shiny::validate(shiny::need(updated_map_priors(), "Selection or data has changed please update Map Prior"))
       shiny::req(seed())
       # At this moment the origin of the error Argument eta must be a nonempty numeric vector is pervasive
       # We have opted for a catch all approach while we forward this error to the bsafe package developers
@@ -89,6 +113,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
 
     # Parametric approximation object
     param_approx <- shinymeta::metaReactive2({
+      shiny::validate(shiny::need(updated_map_priors(), "Selection or data has changed please update Map Prior"))
       shinymeta::metaExpr({
         bsafe::parametric_approx(
           select_analysis = ..(analysis_type()),
