@@ -48,37 +48,37 @@ poc_UI <- function(id, header = NULL) { # nolint
     mp = list(mod_map_prior_ui(ns("map_prior")), "Map Prior", FALSE),
     rmp = list(mod_robust_map_ui(ns("robust_map")), "Robust Map Prior", FALSE),
     nta = list(mod_new_trial_analysis_ui(ns("new_trial")), "New Trial Analysis", FALSE),
-    dm = list(mod_decision_making_ui(ns("decision_making")), "Decision Making", TRUE)
+    dm = list(mod_decision_making_ui(ns("decision_making")), "Decision Making", FALSE)
   )
 
   ui_list[["mp"]][[1]][["main"]] <- shiny::div(
-    style = "display: grid; grid-template-columns: 1fr 1fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%;  box-sizing: content-box",
-    shiny::div(ui_list[["mp"]][[1]][["main"]][1:3], style = "grid-column: 1; grid-row:1"),
-    shiny::div(ui_list[["mp"]][[1]][["main"]][4:7], style = "grid-column: 2; grid-row:1"),
-    shiny::div(ui_list[["mp"]][[1]][["main"]][8], style = "grid-column: 1 / span 2; grid-row:2")
+    style = "display: grid; grid-template-columns: 1fr 1fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0",
+    shiny::div(ui_list[["mp"]][[1]][["main"]][1:3], style = "grid-column: 1; grid-row:1; max-width: 100%; min-width: 0"),
+    shiny::div(ui_list[["mp"]][[1]][["main"]][4:7], style = "grid-column: 2; grid-row:1; max-width: 100%; min-width: 0"),
+    shiny::div(ui_list[["mp"]][[1]][["main"]][8], style = "grid-column: 1 / span 2; grid-row:2; max-width: 100%; min-width: 0")
   )
 
   ui_list[["rmp"]][[1]][["main"]] <- shiny::div(    
-    style = "display: grid; grid-template-columns: 1fr auto; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%;  box-sizing: content-box",
-    shiny::div(ui_list[["rmp"]][[1]][["main"]][1], style = "grid-column: 1 / span 2; grid-row:1"),
-    shiny::div(ui_list[["rmp"]][[1]][["main"]][2:3], style = "grid-column: 1; grid-row:2"),
-    shiny::div(ui_list[["rmp"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2")
+    style = "display: grid; grid-template-columns: 1.2fr 0.8fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0",
+    shiny::div(ui_list[["rmp"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1;max-width: 100%; min-width: 0"),
+    shiny::div(ui_list[["rmp"]][[1]][["main"]][3], style = "grid-column: 1; grid-row:2;max-width: 100%; min-width: 0"),
+    shiny::div(ui_list[["rmp"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2;max-width: 100%; min-width: 0")
     
   )
 
   ui_list[["nta"]][[1]][["main"]] <- shiny::div(    
-    style = "display: grid; grid-template-columns: 1fr auto; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%;  box-sizing: content-box",
-    shiny::div(ui_list[["nta"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1"),
-    shiny::div(ui_list[["nta"]][[1]][["main"]][3], style = "grid-column: 1; grid-row:2"),
-    shiny::div(ui_list[["nta"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2")
+    style = "display: grid; grid-template-columns: 1.2fr 0.8fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%",
+    shiny::div(ui_list[["nta"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1;max-width: 100%; min-width: 0"),
+    shiny::div(ui_list[["nta"]][[1]][["main"]][3], style = "grid-column: 1; grid-row:2;max-width: 100%; min-width: 0"),
+    shiny::div(ui_list[["nta"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2;max-width: 100%; min-width: 0")
     
   )
 
     ui_list[["dm"]][[1]][["main"]] <- shiny::div(    
-    style = "display: grid; grid-template-columns: 1fr auto; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%;  box-sizing: content-box",
-    shiny::div(ui_list[["dm"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1"),
-    shiny::div(ui_list[["dm"]][[1]][["main"]][3:4], style = "grid-column: 1; grid-row:2"),
-    shiny::div(ui_list[["dm"]][[1]][["main"]][5], style = "grid-column: 2; grid-row:2")
+    style = "display: grid; grid-template-columns: 1fr 1fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0",
+    shiny::div(ui_list[["dm"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1; min-width: 0"),
+    shiny::div(ui_list[["dm"]][[1]][["main"]][3:4], style = "grid-column: 1; grid-row:2; min-width: 0"),
+    shiny::div(ui_list[["dm"]][[1]][["main"]][5], style = "grid-column: 2; grid-row:2; min-width: 0")
     
   )
  
@@ -108,8 +108,6 @@ poc_UI <- function(id, header = NULL) { # nolint
     })
   )
 
-
-
   shiny::tagList(
     shinyjs::useShinyjs(),
     includeCSS(system.file("www/bsafe.css", mustWork = TRUE, package = "teal.modules.bsafe")),
@@ -117,47 +115,6 @@ poc_UI <- function(id, header = NULL) { # nolint
       sidebarPanel = side,
       mainPanel = main
     )
-    # ,
-    # shiny::tabsetPanel(
-    #   id = ns("tab_panel"),
-    #   header = header,
-    #   shiny::tabPanel(
-    #     "Getting started",
-    #     shiny::includeMarkdown(system.file("gettingStarted_bsafe.Rmd",
-    #       package = "teal.modules.bsafe",
-    #       mustWork = TRUE
-    #     )),
-    #     shiny::h5("User Manual:"),
-    #   ),
-    #   # shiny::tabPanel(
-    #   #   "Data preparation",
-    #   #   mod_data_preparation_ui(ns("data_preparation"))
-    #   # ),
-    #   shiny::tabPanel(
-    #     "Select Analysis",
-    #     ui_list[["asel"]] |> as_sb_layout()
-    #   ),
-    #   shiny::tabPanel(
-    #     "MAP Prior",
-    #     ui_list[["mp"]] |> as_sb_layout()
-    #   ),
-    #   shiny::tabPanel(
-    #     "Robust MAP Prior",
-    #     ui_list[["rmp"]] |> as_sb_layout()
-    #   ),
-    #   shiny::tabPanel(
-    #     "New Trial Analysis",
-    #     ui_list[["nta"]] |> as_sb_layout()
-    #   ),
-    #   shiny::tabPanel(
-    #     "Decision Making",
-    #     ui_list[["dm"]] |> as_sb_layout()
-    #   ),
-    #   # shiny::tabPanel(
-    #   #   "Download Results",
-    #   #   mod_simulation_ui(ns("simulation"))
-    #   # )
-    # )
   )
 }
 
@@ -172,11 +129,9 @@ poc_server <- function(
   module <- function(input, output, session) {
     # global variables --------------------------------------------------------
 
-
     ns <- session[["ns"]]
 
     ae_summary_data <- NULL
-
 
     # data input/checks/transformation ----------------------------------------
     receive_data <- shinymeta::metaReactive({
@@ -258,24 +213,6 @@ poc_server <- function(
     #   "simulation",
     #   data = receive_data
     # )
-
-#    shiny::observe({
-#    new_trial[["current_trial_data"]]()
-#    browser()
-#  })
-
-#   nt <- list(
-#       data = selected_data(),
-#         analysis_type = sel_analysis[["analysis_type"]](),
-#         safety_topic = sel_analysis[["safety_topic"]](),
-#         treatment = sel_analysis[["treatment"]](),
-#         robust_map_mcmc = robust_map[["robust_map_mcmc"]](),
-#         param_approx = map_prior[["param_approx"]](),
-#         current_trial_data = new_trial[["current_trial_data"]](),
-#         post_dist = new_trial[["post_dist"]](),
-#         new_trial_analysis = new_trial[["new_trial_analysis"]]()
-#     )
-#   saveRDS(nt, "nt.rds")
 
     # return ----
 
