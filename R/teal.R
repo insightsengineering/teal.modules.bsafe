@@ -32,7 +32,9 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
 
     generic_card_function <- function(card = teal.reporter::ReportCard$new()) {
       card$append_text("Code", "header2")
-      code <- shinymeta::deparseCode(to_report()[["code"]]) |> shinymeta::formatCode(, formatter = styler::style_text) |> paste(collapse = "\n")      
+      code <- shinymeta::deparseCode(to_report()[["code"]]) |>
+        shinymeta::formatCode(, formatter = styler::style_text) |>
+        paste(collapse = "\n")
       card$append_text(code, "verbatim")
       card$append_text("MAP prior", "header2")
       card$append_text("Forest plot", "header3")

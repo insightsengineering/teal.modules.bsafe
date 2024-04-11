@@ -2,23 +2,23 @@ mod_data_preparation_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
     shiny::sidebarLayout(
-          shiny::sidebarPanel(
-            shiny::selectInput(ns(BSAFE_ID$SEL_COLUMN),
-              "Select the columns",
-              choices = "",
-              selected = "",
-              multiple = TRUE
-            ),
-            shiny::uiOutput(ns(BSAFE_ID$OUT_SEL_VAR)),
-            shiny::actionButton(
-              ns(BSAFE_ID$BUT_ADD_ARM),
-              "add arm"
-            )
-          ),
-          shiny::mainPanel(
-            shiny::tableOutput(ns(BSAFE_ID$OUT_ARM_SEL))
-          ),
-        )    
+      shiny::sidebarPanel(
+        shiny::selectInput(ns(BSAFE_ID$SEL_COLUMN),
+          "Select the columns",
+          choices = "",
+          selected = "",
+          multiple = TRUE
+        ),
+        shiny::uiOutput(ns(BSAFE_ID$OUT_SEL_VAR)),
+        shiny::actionButton(
+          ns(BSAFE_ID$BUT_ADD_ARM),
+          "add arm"
+        )
+      ),
+      shiny::mainPanel(
+        shiny::tableOutput(ns(BSAFE_ID$OUT_ARM_SEL))
+      ),
+    )
   )
 }
 
@@ -92,7 +92,7 @@ mod_data_preparation_server <- function(id, data) {
     # Update label of Number of Patients with AE
 
 
-    
+
 
     shiny::observe({
       choices_helper <- setdiff(names(data()), c("STUDYID", "DOSE", "FREQ", "LENGTH", "TREAT"))
@@ -167,8 +167,8 @@ mock_data_preparation_mod <- function() {
     )
 
     output[["out"]] <- shiny::renderPrint({
-      # x[["data"]]()
-      # utils::str(x)
+      x[["data"]]()
+      utils::str(x)
     })
   }
 

@@ -1,39 +1,39 @@
 mod_decision_making_ui <- function(id) {
   ns <- shiny::NS(id)
 
-  side  <- list(
+  side <- list(
     shinyjs::hidden(shiny::div(
-          id = ns(BSAFE_ID$DIV_DM_INCI),
-          shiny::selectInput(ns(BSAFE_ID$SEL_DIST),
-            "Make statistical inference about the",
-            choices = BSAFE_CHOICES$SEL_DIST,
-            selected = BSAFE_DEFAULTS$SEL_DIST
-          ),
-          shiny::withMathJax("Adjust sliders for \\(P(LB_{AE} < p_{AE} < UB_{AE})\\),"),
-          htmltools::HTML("<br/>"),
-          shiny::uiOutput(ns(BSAFE_ID$OUT_PERC_SLDR)),
-        )),
-        shinyjs::hidden(
-          shiny::div(
-            id = ns(BSAFE_ID$DIV_DM_AE),
-            shiny::selectInput(ns(BSAFE_ID$SEL_DIST_AE),
-              "Make statistical inference about the",
-              choices = BSAFE_CHOICES$SEL_DIST,
-              selected = BSAFE_DEFAULTS$SEL_DIST
-            ),
-            shiny::withMathJax("Adjust sliders for \\(P(LB_{AE} < p_{AE} < UB_{AE})\\),"),
-            htmltools::HTML("<br/>"),
-            shiny::uiOutput(ns(BSAFE_ID$OUT_AE_PERC_SLDR))
-          )
-        )
+      id = ns(BSAFE_ID$DIV_DM_INCI),
+      shiny::selectInput(ns(BSAFE_ID$SEL_DIST),
+        "Make statistical inference about the",
+        choices = BSAFE_CHOICES$SEL_DIST,
+        selected = BSAFE_DEFAULTS$SEL_DIST
+      ),
+      shiny::withMathJax("Adjust sliders for \\(P(LB_{AE} < p_{AE} < UB_{AE})\\),"),
+      htmltools::HTML("<br/>"),
+      shiny::uiOutput(ns(BSAFE_ID$OUT_PERC_SLDR)),
+    )),
+    shinyjs::hidden(
+      shiny::div(
+        id = ns(BSAFE_ID$DIV_DM_AE),
+        shiny::selectInput(ns(BSAFE_ID$SEL_DIST_AE),
+          "Make statistical inference about the",
+          choices = BSAFE_CHOICES$SEL_DIST,
+          selected = BSAFE_DEFAULTS$SEL_DIST
+        ),
+        shiny::withMathJax("Adjust sliders for \\(P(LB_{AE} < p_{AE} < UB_{AE})\\),"),
+        htmltools::HTML("<br/>"),
+        shiny::uiOutput(ns(BSAFE_ID$OUT_AE_PERC_SLDR))
+      )
+    )
   )
 
   main <- list(
-        shiny::uiOutput(ns(BSAFE_ID$OUT_DM_HEADER_TXT)),
-        shiny::uiOutput(ns(BSAFE_ID$OUT_DM_PREFACE_TXT)),
-        shiny::plotOutput(ns(BSAFE_ID$OUT_STAT_INF_DENSITY_PLT)), # spinner
-        shiny::textOutput(ns(BSAFE_ID$OUT_AREA_UNDER_CURVE)),
-        shiny::tableOutput(ns(BSAFE_ID$OUT_DM_PRESET_STATEMENTS_TBL))
+    shiny::uiOutput(ns(BSAFE_ID$OUT_DM_HEADER_TXT)),
+    shiny::uiOutput(ns(BSAFE_ID$OUT_DM_PREFACE_TXT)),
+    shiny::plotOutput(ns(BSAFE_ID$OUT_STAT_INF_DENSITY_PLT)), # spinner
+    shiny::textOutput(ns(BSAFE_ID$OUT_AREA_UNDER_CURVE)),
+    shiny::tableOutput(ns(BSAFE_ID$OUT_DM_PRESET_STATEMENTS_TBL))
   )
 
   list(
@@ -44,7 +44,12 @@ mod_decision_making_ui <- function(id) {
 
 prior_func <- bsafe::map_prior_func
 
-mod_decision_making_server <- function(id, data, analysis_type, safety_topic, treatment, current_trial_data, param_approx, robust_map_mcmc, post_dist, new_trial_analysis) {
+mod_decision_making_server <- function(
+    id, data, analysis_type,
+    safety_topic, treatment,
+    current_trial_data, param_approx,
+    robust_map_mcmc, post_dist,
+    new_trial_analysis) {
   mod <- function(input, output, session) {
     ns <- session[["ns"]]
 
@@ -112,7 +117,7 @@ mod_decision_making_server <- function(id, data, analysis_type, safety_topic, tr
       }
     })
 
-        shiny::observeEvent(analysis_type(), {
+    shiny::observeEvent(analysis_type(), {
       if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
         shinyjs::show(BSAFE_ID$DIV_DM_INCI)
         shinyjs::hide(BSAFE_ID$DIV_DM_AE)
@@ -140,7 +145,7 @@ mod_decision_making_server <- function(id, data, analysis_type, safety_topic, tr
       )
     })
     outputOptions(output, BSAFE_ID$OUT_PERC_SLDR, suspendWhenHidden = FALSE)
-    
+
 
     output[[BSAFE_ID$OUT_AE_PERC_SLDR]] <- shiny::renderUI({
       val <- calc_log_hazard_area(param_approx = param_approx())
@@ -176,7 +181,7 @@ mod_decision_making_server <- function(id, data, analysis_type, safety_topic, tr
     # Preface text for each distribution
 
     dm_preface <- shiny::reactive({
-       if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
+      if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
         switch(input[[BSAFE_ID$SEL_DIST]],
           "Likelihood" = paste0(
             "The likelihood represents information about the proportion of patients with ",
@@ -257,7 +262,7 @@ mod_decision_making_server <- function(id, data, analysis_type, safety_topic, tr
       )
       names(d) <- "Statement"
       d
-  })
+    })
 
     output[[BSAFE_ID$OUT_DM_PRESET_STATEMENTS_TBL]] <- shiny::renderTable({
       preset_statements()
@@ -298,8 +303,8 @@ mock_decision_making_mod <- function() {
     }))
     x <- do.call(mod_decision_making_server, c(list(id = "mock"), trial_in_react))
     output[["out"]] <- shiny::renderPrint({
-      #   x[["data"]]()
-      #   utils::str(x)
+      x[["data"]]()
+      utils::str(x)
     })
   }
 

@@ -1,44 +1,43 @@
 mod_select_analysis_ui <- function(id) {
   ns <- shiny::NS(id)
 
-    side <- list(      
-      shiny::selectInput(ns(BSAFE_ID$SEL_TRT),
-        "Select patients with the respective treatment",
-        choices = c(""),
-        multiple = FALSE
-      ),
-      shiny::selectInput(ns(BSAFE_ID$SEL_ANALYSIS),
-        "Select safety analysis",
-        choices = BSAFE_CHOICES$SEL_ANALYSIS
-      ),
-      shiny::selectInput(ns(BSAFE_ID$SEL_SAF_TOPIC),
-        "Select safety topic",
-        choices = c(
-          ""
-        )
-      ),
-      shiny::numericInput(ns(BSAFE_ID$SET_SEED), "Used seed:",
-        min = 0,
-        value = round(as.numeric(Sys.time()), 0)
-      ),
-      shiny::checkboxInput(ns(BSAFE_ID$CB_POOLED), "Pool by study", value = TRUE)
-    )
+  side <- list(
+    shiny::selectInput(ns(BSAFE_ID$SEL_TRT),
+      "Select patients with the respective treatment",
+      choices = c(""),
+      multiple = FALSE
+    ),
+    shiny::selectInput(ns(BSAFE_ID$SEL_ANALYSIS),
+      "Select safety analysis",
+      choices = BSAFE_CHOICES$SEL_ANALYSIS
+    ),
+    shiny::selectInput(ns(BSAFE_ID$SEL_SAF_TOPIC),
+      "Select safety topic",
+      choices = c(
+        ""
+      )
+    ),
+    shiny::numericInput(ns(BSAFE_ID$SET_SEED), "Used seed:",
+      min = 0,
+      value = round(as.numeric(Sys.time()), 0)
+    ),
+    shiny::checkboxInput(ns(BSAFE_ID$CB_POOLED), "Pool by study", value = TRUE)
+  )
 
-    main <- shiny::tableOutput(ns(BSAFE_ID$OUT_FILE_TABLE))  
+  main <- shiny::tableOutput(ns(BSAFE_ID$OUT_FILE_TABLE))
   list(side = side, main = main)
 }
 
 mod_select_analysis_server <- function(id, data) {
   module <- function(input, output, session) {
-
     shiny::observe({
       choices <- unique(data()[, "ARM"])
       if (length(choices) > 0) {
-        if(!identical(input[[BSAFE_ID$SEL_TRT]], "")){
+        if (!identical(input[[BSAFE_ID$SEL_TRT]], "")) {
           selected <- shiny::isolate(input[[BSAFE_ID$SEL_TRT]])
         } else {
           selected <- choices[[1]]
-        }        
+        }
       } else {
         selected <- NULL
       }
@@ -56,11 +55,11 @@ mod_select_analysis_server <- function(id, data) {
       choices <- safety_topics[as.character(unlist(data()[, "ARM"])) == input[[BSAFE_ID$SEL_TRT]]]
 
       if (length(choices) > 0) {
-        if(!identical(input[[BSAFE_ID$SEL_SAF_TOPIC]], "")){
+        if (!identical(input[[BSAFE_ID$SEL_SAF_TOPIC]], "")) {
           selected <- shiny::isolate(input[[BSAFE_ID$SEL_SAF_TOPIC]])
         } else {
           selected <- choices[[1]]
-        }        
+        }
       } else {
         selected <- NULL
       }
@@ -83,7 +82,7 @@ mod_select_analysis_server <- function(id, data) {
         bool_pooled = ..(input[[BSAFE_ID$CB_POOLED]])
       )
     })
-    
+
     output[[BSAFE_ID$OUT_FILE_TABLE]] <- shiny::renderTable({
       bsafe::input_data_display(
         data = data(),

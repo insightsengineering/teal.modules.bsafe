@@ -93,108 +93,110 @@ mod_simulation_server <- function(id, data) {
         # checking whether at least one treatment AND control arm checkbox is ticked in the corresponding comparison
         if (length(input[[paste0("download_boxes_trt_", i)]]) == 0 |
           length(input[[paste0("download_boxes_ctrl_", i)]]) == 0) { # nolint: indentation_linter
-          shiny::showNotification(paste0("You have to enter both a Treatment arm as well as a Control arm in Table ", i), type = "error")
+          shiny::showNotification(
+            paste0("You have to enter both a Treatment arm as well as a Control arm in Table ", i),
+            type = "error"
+          )
           return()
         }
       }
 
 
-    # TODO: Remove assign usage
-    for(i in seq_len(input[[BSAFE_ID$SLDR_NUM_COMP]])) {
-      # assign values of the ticked checkboxes to the corresponding variables
-      assign(
-        paste0("selected_trt_boxes_", i),
-        input[[paste0("download_boxes_trt_", i)]]
-      )
-      assign(
-        paste0("selected_ctrl_boxes_", i),
-        input[[paste0("download_boxes_ctrl_", i)]]
-      )
+      # TODO: Remove assign usage
+      for (i in seq_len(input[[BSAFE_ID$SLDR_NUM_COMP]])) {
+        # assign values of the ticked checkboxes to the corresponding variables
+        assign(
+          paste0("selected_trt_boxes_", i),
+          input[[paste0("download_boxes_trt_", i)]]
+        )
+        assign(
+          paste0("selected_ctrl_boxes_", i),
+          input[[paste0("download_boxes_ctrl_", i)]]
+        )
 
-      output[[paste0("comparison_", i)]] <- shiny::renderText(
-        # pasting together the displayed comparisons from the corresponding checkbox variables
-        # containing the values of the ticked boxes
-        paste0(
-          paste(unlist(get(paste0("selected_trt_boxes_", i))),
-            collapse = ", "
-          ),
-          " vs. ",
-          paste(unlist(get(paste0("selected_ctrl_boxes_", i))),
-            collapse = ", "
+        output[[paste0("comparison_", i)]] <- shiny::renderText(
+          # pasting together the displayed comparisons from the corresponding checkbox variables
+          # containing the values of the ticked boxes
+          paste0(
+            paste(unlist(get(paste0("selected_trt_boxes_", i))),
+              collapse = ", "
+            ),
+            " vs. ",
+            paste(unlist(get(paste0("selected_ctrl_boxes_", i))),
+              collapse = ", "
+            )
           )
         )
+      }
+
+      cb_list_trt <- vector(
+        mode = "list",
+        length = input[[BSAFE_ID$SLDR_NUM_COMP]]
       )
-    }
+      names(cb_list_trt) <- paste0("grp", 1:input[[BSAFE_ID$SLDR_NUM_COMP]])
+      cb_list_ctrl <- vector(
+        mode = "list",
+        length = input[[BSAFE_ID$SLDR_NUM_COMP]]
+      )
+      names(cb_list_ctrl) <- paste0("grp", 1:input[[BSAFE_ID$SLDR_NUM_COMP]])
+      for (i in seq_len(input[[BSAFE_ID$SLDR_NUM_COMP]])) {
+        cb_list_trt[[i]] <- input[[paste0("download_boxes_trt_", i)]]
+        cb_list_ctrl[[i]] <- input[[paste0("download_boxes_ctrl_", i)]]
+      }
 
-        cb_list_trt <- vector(
-          mode = "list",
-          length = input[[BSAFE_ID$SLDR_NUM_COMP]]
-        )
-        names(cb_list_trt) <- paste0("grp", 1:input[[BSAFE_ID$SLDR_NUM_COMP]])
-        cb_list_ctrl <- vector(
-          mode = "list",
-          length = input[[BSAFE_ID$SLDR_NUM_COMP]]
-        )
-        names(cb_list_ctrl) <- paste0("grp", 1:input[[BSAFE_ID$SLDR_NUM_COMP]])
-        for (i in seq_len(input[[BSAFE_ID$SLDR_NUM_COMP]])) {
-          cb_list_trt[[i]] <- input[[paste0("download_boxes_trt_", i)]]
-          cb_list_ctrl[[i]] <- input[[paste0("download_boxes_ctrl_", i)]]
-        }
+      pgrs <- shiny::showNotification("Running simulations", duration = NULL)
+      ae_summary_data <<- bsafe::ae_summary_table(
+        data(),
+        cb_list_ctrl,
+        cb_list_trt,
+        unique(data()[["SAF_TOPIC"]]),
+        input[[BSAFE_ID$SET_SEED]]
+      )
 
-        pgrs <- shiny::showNotification("Running simulations", duration = NULL)
-        ae_summary_data <<- bsafe::ae_summary_table(
-              data(),
-              cb_list_ctrl,
-              cb_list_trt,
-              unique(data()[["SAF_TOPIC"]]),
-              input[[BSAFE_ID$SET_SEED]]
-            )
-            
-        shiny::removeNotification(pgrs)
+      shiny::removeNotification(pgrs)
 
-             
+
       tmp_dir <- tempdir()
       # TODO: Asses usage of this part and how to improve this, otherwise we will polute the www directory
 
       # # create PDF-file from markdown document to show in popup window
-      # rmarkdown::render(
-      #   input = system.file("template_ae_summary_table.Rmd",
-      #     package = "teal.modules.bsafe",
-      #     mustWork = TRUE
-      #   ),
-      #   # directory where the pdf file will be stored, works on the Docker container
-      #   output_dir = tmp_dir,
-      #   clean = TRUE,
-      #   # parameters needed for markdown file
-      #   params = list(
-      #     ae_summary_Rmd = ae_summary_data(),
-      #     date = format(Sys.time(), "%d %B, %Y"),
-      #     bsafe_version = utils::packageVersion("teal.modules.bsafe"),
-      #     pwemap_version = utils::packageVersion("bsafe"),
-      #     seed = input[[BSAFE_ID$SET_SEED]]
-      #   )
-      # )
+      rmarkdown::render(
+        input = system.file("template_ae_summary_table.Rmd",
+          package = "teal.modules.bsafe",
+          mustWork = TRUE
+        ),
+        # directory where the pdf file will be stored, works on the Docker container
+        output_dir = tmp_dir,
+        clean = TRUE,
+        # parameters needed for markdown file
+        params = list(
+          ae_summary_Rmd = ae_summary_data(),
+          date = format(Sys.time(), "%d %B, %Y"),
+          bsafe_version = utils::packageVersion("teal.modules.bsafe"),
+          pwemap_version = utils::packageVersion("bsafe"),
+          seed = input[[BSAFE_ID$SET_SEED]]
+        )
+      )
 
       # TODO: Asses usage of this part and how to improve this, otherwise we will polute the www directory
-      # # open popup window with specified dimensions and display pdf file in iframe
-      # shiny::showModal(
-      #   shiny::modalDialog(
-      #     shiny::tags$head(
-      #       shiny::tags$style(".modal-dialog{ min-width:1000px}")
-      #     ),
-      #     shiny::tags$head(shiny::tags$style(".modal-body{min-height:700px}")),
-      #     shiny::tags$iframe(
-      #       style = "height:700px; width:100%; scrolling=yes",
-      #       src = "template_ae_summary_table.pdf"
-      #     )
-      #   )
-      # )
+      # open popup window with specified dimensions and display pdf file in iframe
+      shiny::showModal(
+        shiny::modalDialog(
+          shiny::tags$head(
+            shiny::tags$style(".modal-dialog{ min-width:1000px}")
+          ),
+          shiny::tags$head(shiny::tags$style(".modal-body{min-height:700px}")),
+          shiny::tags$iframe(
+            style = "height:700px; width:100%; scrolling=yes",
+            src = "template_ae_summary_table.pdf"
+          )
+        )
+      )
     })
 
     output[[BSAFE_ID$BUT_DWNLD_SUM_TBLS]] <- shiny::downloadHandler(
       filename = "ae_summary_table.pdf",
       content = function(file) {
-
         rmarkdown::render(
           input = system.file("template_ae_summary_table.Rmd",
             package = "teal.modules.bsafe",
@@ -257,8 +259,8 @@ mock_simulation_mod <- function() {
     )
 
     output[["out"]] <- shiny::renderPrint({
-      # x[["data"]]()
-      # utils::str(x)
+      x[["data"]]()
+      utils::str(x)
     })
   }
 

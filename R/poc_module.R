@@ -10,19 +10,19 @@
 #' @export
 poc_UI <- function(id, header = NULL) { # nolint
 
-  bs3_panel <- function(...){
+  bs3_panel <- function(...) {
     shiny::div(
-      class = "panel panel-default",      
+      class = "panel panel-default",
       shiny::div(
         class = "panel-body",
         ...
       )
     )
   }
-  
 
 
-  bars_check <- function(id, label, value = TRUE){
+
+  bars_check <- function(id, label, value = TRUE) {
     bc <- shiny::checkboxInput(id, shiny::tagList(shiny::span(class = "chevron"), label), value = value)
     bc[["attribs"]][["style"]] <- "margin-bottom: 0px"
     bc[["children"]][[1]][["attribs"]][["style"]] <- "margin-bottom: 0px; margin-top: 0px"
@@ -30,15 +30,15 @@ poc_UI <- function(id, header = NULL) { # nolint
     bc
   }
 
-  collapsible_panel <- function(id, label,..., open = TRUE){
+  collapsible_panel <- function(id, label, ..., open = TRUE) {
     bs3_panel(
       bars_check(id, label, value = open),
       shiny::conditionalPanel(
         condition = paste0("input['", id, "']"),
         shiny::hr(style = "margin-top: 5px"),
-        ...      
+        ...
       )
-    )    
+    )
   }
 
   ns <- shiny::NS(id)
@@ -52,36 +52,33 @@ poc_UI <- function(id, header = NULL) { # nolint
   )
 
   ui_list[["mp"]][[1]][["main"]] <- shiny::div(
-    style = "display: grid; grid-template-columns: 1fr 1fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0",
-    shiny::div(ui_list[["mp"]][[1]][["main"]][1:3], style = "grid-column: 1; grid-row:1; max-width: 100%; min-width: 0"),
-    shiny::div(ui_list[["mp"]][[1]][["main"]][4:7], style = "grid-column: 2; grid-row:1; max-width: 100%; min-width: 0"),
-    shiny::div(ui_list[["mp"]][[1]][["main"]][8], style = "grid-column: 1 / span 2; grid-row:2; max-width: 100%; min-width: 0")
+    style = "display: grid; grid-template-columns: 1fr 1fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0", # nolint
+    shiny::div(ui_list[["mp"]][[1]][["main"]][1:3], style = "grid-column: 1; grid-row:1; max-width: 100%; min-width: 0"), # nolint
+    shiny::div(ui_list[["mp"]][[1]][["main"]][4:7], style = "grid-column: 2; grid-row:1; max-width: 100%; min-width: 0"), # nolint
+    shiny::div(ui_list[["mp"]][[1]][["main"]][8], style = "grid-column: 1 / span 2; grid-row:2; max-width: 100%; min-width: 0") # nolint
   )
 
-  ui_list[["rmp"]][[1]][["main"]] <- shiny::div(    
-    style = "display: grid; grid-template-columns: 1.2fr 0.8fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0",
-    shiny::div(ui_list[["rmp"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1;max-width: 100%; min-width: 0"),
-    shiny::div(ui_list[["rmp"]][[1]][["main"]][3], style = "grid-column: 1; grid-row:2;max-width: 100%; min-width: 0"),
-    shiny::div(ui_list[["rmp"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2;max-width: 100%; min-width: 0")
-    
+  ui_list[["rmp"]][[1]][["main"]] <- shiny::div(
+    style = "display: grid; grid-template-columns: 1.2fr 0.8fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0", # nolint
+    shiny::div(ui_list[["rmp"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1;max-width: 100%; min-width: 0"), # nolint
+    shiny::div(ui_list[["rmp"]][[1]][["main"]][3], style = "grid-column: 1; grid-row:2;max-width: 100%; min-width: 0"), # nolint
+    shiny::div(ui_list[["rmp"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2;max-width: 100%; min-width: 0") # nolint
   )
 
-  ui_list[["nta"]][[1]][["main"]] <- shiny::div(    
-    style = "display: grid; grid-template-columns: 1.2fr 0.8fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%",
-    shiny::div(ui_list[["nta"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1;max-width: 100%; min-width: 0"),
-    shiny::div(ui_list[["nta"]][[1]][["main"]][3], style = "grid-column: 1; grid-row:2;max-width: 100%; min-width: 0"),
-    shiny::div(ui_list[["nta"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2;max-width: 100%; min-width: 0")
-    
+  ui_list[["nta"]][[1]][["main"]] <- shiny::div(
+    style = "display: grid; grid-template-columns: 1.2fr 0.8fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%", # nolint
+    shiny::div(ui_list[["nta"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1;max-width: 100%; min-width: 0"), # nolint
+    shiny::div(ui_list[["nta"]][[1]][["main"]][3], style = "grid-column: 1; grid-row:2;max-width: 100%; min-width: 0"), # nolint
+    shiny::div(ui_list[["nta"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2;max-width: 100%; min-width: 0") # nolint
   )
 
-    ui_list[["dm"]][[1]][["main"]] <- shiny::div(    
-    style = "display: grid; grid-template-columns: 1fr 1fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0",
-    shiny::div(ui_list[["dm"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1; min-width: 0"),
-    shiny::div(ui_list[["dm"]][[1]][["main"]][3:4], style = "grid-column: 1; grid-row:2; min-width: 0"),
-    shiny::div(ui_list[["dm"]][[1]][["main"]][5], style = "grid-column: 2; grid-row:2; min-width: 0")
-    
+  ui_list[["dm"]][[1]][["main"]] <- shiny::div(
+    style = "display: grid; grid-template-columns: 1fr 1fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0", # nolint
+    shiny::div(ui_list[["dm"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1; min-width: 0"), # nolint
+    shiny::div(ui_list[["dm"]][[1]][["main"]][3:4], style = "grid-column: 1; grid-row:2; min-width: 0"), # nolint
+    shiny::div(ui_list[["dm"]][[1]][["main"]][5], style = "grid-column: 2; grid-row:2; min-width: 0") # nolint
   )
- 
+
   side <- shiny::sidebarPanel(
     header,
     purrr::imap(
@@ -91,8 +88,9 @@ poc_UI <- function(id, header = NULL) { # nolint
           id = ns(paste0(n, "_side_check")),
           label = v[[2]],
           v[[1]][["side"]]
-      )
-    })
+        )
+      }
+    )
   )
 
   main <- shiny::mainPanel(
@@ -104,8 +102,9 @@ poc_UI <- function(id, header = NULL) { # nolint
           label = v[[2]],
           v[[1]][["main"]],
           open = v[[3]]
-      )
-    })
+        )
+      }
+    )
   )
 
   shiny::tagList(
@@ -138,7 +137,7 @@ poc_server <- function(
       # Here is where we should include the dataset calculation steps
       ..(dataset())
     })
-    
+
 
     # Data table preparation
     sel_analysis <- mod_select_analysis_server("sel_analysis", receive_data)
@@ -204,6 +203,7 @@ poc_server <- function(
       new_trial_analysis = new_trial[["new_trial_analysis"]]
     )
 
+    # nolint start
     # data_preparation <- mod_data_preparation_server(
     #   "data_preparation",
     #   data = receive_data
@@ -214,36 +214,37 @@ poc_server <- function(
     #   data = receive_data
     # )
 
+    # nolint end
+
     # return ----
 
     to_report <- shiny::reactive({
-
       code <- local({
         ec <- shinymeta::newExpansionContext()
-      shinymeta::expandChain(
-        "# Data selection",
-        sel_analysis[["data"]](),
-        "# Map prior",
-        "## Forest Plot",
-        map_prior[["forest_plot"]](),
-        "## Map Summary table",
-        map_prior[["map_summary_table"]](),
-        "# Robust Map Prior",
-        "## Robust plot",
-        robust_map[["robust_plot"]](),
-        "## Robust summary",
-        robust_map[["robust_summary"]](),
-        "# New trial",
-        "## Compare plot",
-        new_trial[["compare_plot"]](),
-        "## Compare table summary",
-        new_trial[["compare_summary_table"]](),
-        "# Decision Making",
-        "## Plot",
-        decision_making[["stat_inf_plot"]](),
-        "## Inference table",
-        decision_making[["preset_statements"]]()
-      )
+        shinymeta::expandChain(
+          "# Data selection",
+          sel_analysis[["data"]](),
+          "# Map prior",
+          "## Forest Plot",
+          map_prior[["forest_plot"]](),
+          "## Map Summary table",
+          map_prior[["map_summary_table"]](),
+          "# Robust Map Prior",
+          "## Robust plot",
+          robust_map[["robust_plot"]](),
+          "## Robust summary",
+          robust_map[["robust_summary"]](),
+          "# New trial",
+          "## Compare plot",
+          new_trial[["compare_plot"]](),
+          "## Compare table summary",
+          new_trial[["compare_summary_table"]](),
+          "# Decision Making",
+          "## Plot",
+          decision_making[["stat_inf_plot"]](),
+          "## Inference table",
+          decision_making[["preset_statements"]]()
+        )
       })
 
       list(
@@ -269,5 +270,3 @@ poc_server <- function(
     module = module
   )
 }
-
-
