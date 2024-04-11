@@ -44,11 +44,42 @@ poc_UI <- function(id, header = NULL) { # nolint
   ns <- shiny::NS(id)
 
   ui_list <- list(
-    a_sel = list(mod_select_analysis_ui(ns("sel_analysis")), "Analysis selection"),
-    mp = list(mod_map_prior_ui(ns("map_prior")), "Map Prior"),
-    rmp = list(mod_robust_map_ui(ns("robust_map")), "Robust Map Prior"),
-    nta = list(mod_new_trial_analysis_ui(ns("new_trial")), "New Trial Analysis"),
-    dm = list(mod_decision_making_ui(ns("decision_making")), "Decision Making")
+    a_sel = list(mod_select_analysis_ui(ns("sel_analysis")), "Analysis selection", FALSE),
+    mp = list(mod_map_prior_ui(ns("map_prior")), "Map Prior", FALSE),
+    rmp = list(mod_robust_map_ui(ns("robust_map")), "Robust Map Prior", FALSE),
+    nta = list(mod_new_trial_analysis_ui(ns("new_trial")), "New Trial Analysis", FALSE),
+    dm = list(mod_decision_making_ui(ns("decision_making")), "Decision Making", TRUE)
+  )
+
+  ui_list[["mp"]][[1]][["main"]] <- shiny::div(
+    style = "display: grid; grid-template-columns: 1fr 1fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%;  box-sizing: content-box",
+    shiny::div(ui_list[["mp"]][[1]][["main"]][1:3], style = "grid-column: 1; grid-row:1"),
+    shiny::div(ui_list[["mp"]][[1]][["main"]][4:7], style = "grid-column: 2; grid-row:1"),
+    shiny::div(ui_list[["mp"]][[1]][["main"]][8], style = "grid-column: 1 / span 2; grid-row:2")
+  )
+
+  ui_list[["rmp"]][[1]][["main"]] <- shiny::div(    
+    style = "display: grid; grid-template-columns: 1fr auto; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%;  box-sizing: content-box",
+    shiny::div(ui_list[["rmp"]][[1]][["main"]][1], style = "grid-column: 1 / span 2; grid-row:1"),
+    shiny::div(ui_list[["rmp"]][[1]][["main"]][2:3], style = "grid-column: 1; grid-row:2"),
+    shiny::div(ui_list[["rmp"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2")
+    
+  )
+
+  ui_list[["nta"]][[1]][["main"]] <- shiny::div(    
+    style = "display: grid; grid-template-columns: 1fr auto; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%;  box-sizing: content-box",
+    shiny::div(ui_list[["nta"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1"),
+    shiny::div(ui_list[["nta"]][[1]][["main"]][3], style = "grid-column: 1; grid-row:2"),
+    shiny::div(ui_list[["nta"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2")
+    
+  )
+
+    ui_list[["dm"]][[1]][["main"]] <- shiny::div(    
+    style = "display: grid; grid-template-columns: 1fr auto; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%;  box-sizing: content-box",
+    shiny::div(ui_list[["dm"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1"),
+    shiny::div(ui_list[["dm"]][[1]][["main"]][3:4], style = "grid-column: 1; grid-row:2"),
+    shiny::div(ui_list[["dm"]][[1]][["main"]][5], style = "grid-column: 2; grid-row:2")
+    
   )
  
   side <- shiny::sidebarPanel(
@@ -71,7 +102,8 @@ poc_UI <- function(id, header = NULL) { # nolint
         collapsible_panel(
           id = ns(paste0(n, "_main_check")),
           label = v[[2]],
-          v[[1]][["main"]]
+          v[[1]][["main"]],
+          open = v[[3]]
       )
     })
   )
@@ -300,4 +332,5 @@ poc_server <- function(
     module = module
   )
 }
+
 

@@ -44,12 +44,10 @@ mod_new_trial_analysis_ui <- function(id) {
   main  <- list(
     shinyjs::hidden(shiny::div(
         id = ns(BSAFE_ID$DIV_NTA_INCI_MAIN),
-        shiny::h2("Prior Data Conflict Assessment"),
         "To assess prior data conflict, compare the prior and posterior probability density function, and the likelihood of the observed data.", # nolint: line_length_linter
       )),
       shinyjs::hidden(shiny::div(
         id = ns(BSAFE_ID$DIV_NTA_AE_MAIN),
-        shiny::h2("Prior Data Conflict Assessment"),
         "To assess prior data conflict, compare the prior and posterior probability density function, and the log likelihood of the observed data on the log scale.", # nolint: line_length_linter
       )),
       shiny::plotOutput(ns(BSAFE_ID$OUT_COMPARE_PLT)),

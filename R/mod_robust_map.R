@@ -29,7 +29,6 @@ mod_robust_map_ui <- function(id) {
   )
 
   main <- list(
-      shiny::h2("Robust MAP Prior"),
         shiny::uiOutput(ns(BSAFE_ID$OUT_PREFACE_ROB_TXT)),
         shiny::uiOutput(ns(BSAFE_ID$OUT_ROB_DENSITY_FCT)),
         shiny::plotOutput(ns(BSAFE_ID$OUT_ROB_MAP_PLT)), # spinner
@@ -124,21 +123,20 @@ mod_robust_map_server <- function(id, data, map_mcmc, param_approx, adj_tau, ana
       robust_txt()
     })
 
-    robust_formula <- shinymeta::metaReactive2({
-      shiny::req(input[[BSAFE_ID$BUT_UPDATE_ROB]])
-      shiny::isolate({
+    robust_formula <- shinymeta::metaReactive({
         shinymeta::metaExpr({
           bsafe::robust_map_prior_mix_dens_display(
             robust_map_object = ..(robust_map_mcmc()),
             select_analysis = ..(analysis_type())
           )
         })
-      })
     })
 
     # Display robust MAP prior mixture density function
     output[[BSAFE_ID$OUT_ROB_DENSITY_FCT]] <- shiny::renderUI({
-      robust_formula()
+      f <- robust_formula()
+      f[[2]][["name"]] <- "span"
+      f   
     })
 
     # Compare robust MAP prior to MAP prior

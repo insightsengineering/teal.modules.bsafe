@@ -33,7 +33,6 @@ mod_decision_making_ui <- function(id) {
         shiny::uiOutput(ns(BSAFE_ID$OUT_DM_PREFACE_TXT)),
         shiny::plotOutput(ns(BSAFE_ID$OUT_STAT_INF_DENSITY_PLT)), # spinner
         shiny::textOutput(ns(BSAFE_ID$OUT_AREA_UNDER_CURVE)),
-        shiny::h2("Inference"),
         shiny::tableOutput(ns(BSAFE_ID$OUT_DM_PRESET_STATEMENTS_TBL))
   )
 
@@ -140,6 +139,8 @@ mod_decision_making_server <- function(id, data, analysis_type, safety_topic, tr
         post = "%"
       )
     })
+    outputOptions(output, BSAFE_ID$OUT_PERC_SLDR, suspendWhenHidden = FALSE)
+    
 
     output[[BSAFE_ID$OUT_AE_PERC_SLDR]] <- shiny::renderUI({
       val <- calc_log_hazard_area(param_approx = param_approx())
@@ -157,12 +158,7 @@ mod_decision_making_server <- function(id, data, analysis_type, safety_topic, tr
       )
     })
 
-    # shiny::uiOutput(ns(BSAFE_ID$OUT_DM_HEADER_TXT)),
-    #     shiny::uiOutput(ns(BSAFE_ID$OUT_DM_PREFACE_TXT)),
-    #     shiny::plotOutput(ns(BSAFE_ID$OUT_STAT_INF_DENSITY_PLT)), # spinner
-    #     shiny::uiOutput(ns(BSAFE_ID$OUT_AREA_UNDER_CURVE)),
-    #     shiny::h2("Inference"),
-    #     shiny::tableOutput(ns(BSAFE_ID$OUT_DM_PRESET_STATEMENTS_TBL))
+    outputOptions(output, BSAFE_ID$OUT_AE_PERC_SLDR, suspendWhenHidden = FALSE)
 
     # Header text
     dm_header <- shiny::reactive({
@@ -173,8 +169,9 @@ mod_decision_making_server <- function(id, data, analysis_type, safety_topic, tr
       }
     })
     output[[BSAFE_ID$OUT_DM_HEADER_TXT]] <- shiny::renderUI({
-      shiny::h2(dm_header())
+      shiny::h4(dm_header())
     })
+
 
     # Preface text for each distribution
 

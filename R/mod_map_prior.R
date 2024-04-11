@@ -28,7 +28,7 @@ mod_map_prior_ui <- function(id){
     )
 
     main <- list(
-      shiny::h2("Model Estimates"),
+      shiny::h4("Model Estimates"),
             # nolint start: line_length_linter
             shiny::h6(
               "Displayed are the point estimates for the mean (dots) and their respective 95% frequentistic confidence intervals.
@@ -37,7 +37,7 @@ mod_map_prior_ui <- function(id){
             ),
             # nolint end
             shiny::plotOutput(ns(BSAFE_ID$OUT_FOREST_PLT)),
-            shiny::h2("MAP Prior"),
+            shiny::h4("MAP Prior"),
             shiny::uiOutput(ns(BSAFE_ID$OUT_PREFACE_PRIOR_TXT)),
             shiny::uiOutput(ns(BSAFE_ID$OUT_DENSITY_FCT)),
             shiny::plotOutput(ns(BSAFE_ID$OUT_MIX_DENSITY_PLT)), # spinner MAP prior distribution
@@ -142,10 +142,13 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
     # Display parametric approximation mixture density function
     # TODO: Cannot be included in the reporter MATHJAX not supported
     output[[BSAFE_ID$OUT_DENSITY_FCT]] <- shiny::renderUI({
-      bsafe::map_prior_function_display(
+      # TODO: This function should return the element to be displayed not a shiny element
+      f <- bsafe::map_prior_function_display(
         param_approx = param_approx(),
         select_analysis = analysis_type()
       )
+      f[[2]][["name"]] <- "span"
+      f      
     })
 
     # Display parametric mixture density
