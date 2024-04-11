@@ -6,7 +6,7 @@
 mock_poc_bsafe_app <- function() {
   ui <- function(request) {
     shiny::fluidPage(
-      poc_UI(
+      bsafe_UI(
         id = "bsafe"
       ),
       shiny::verbatimTextOutput("out")
@@ -14,7 +14,7 @@ mock_poc_bsafe_app <- function() {
   }
 
   server <- function(input, output, session) {
-    x <- poc_server(
+    x <- bsafe_server(
       id = "bsafe",
       dataset = shiny::reactive(as.data.frame(teal.modules.bsafe::bsafe_data))
     )

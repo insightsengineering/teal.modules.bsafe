@@ -8,7 +8,7 @@
 #'
 #' @return the UI
 #' @export
-poc_UI <- function(id, header = NULL) { # nolint
+bsafe_UI <- function(id, header = NULL) { # nolint
 
   bs3_panel <- function(...) {
     shiny::div(
@@ -19,8 +19,6 @@ poc_UI <- function(id, header = NULL) { # nolint
       )
     )
   }
-
-
 
   bars_check <- function(id, label, value = TRUE) {
     bc <- shiny::checkboxInput(id, shiny::tagList(shiny::span(class = "chevron"), label), value = value)
@@ -120,11 +118,10 @@ poc_UI <- function(id, header = NULL) { # nolint
 # server ------------------------------------------------------------------
 
 
-poc_server <- function(
+bsafe_server <- function(
     id,
-    dataset, # Must be reactive
-    reporter,
-    filter_panel_api) {
+    dataset
+  ) {
   module <- function(input, output, session) {
     # global variables --------------------------------------------------------
 

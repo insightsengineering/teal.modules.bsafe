@@ -4,7 +4,7 @@
 ui_dv_poc_example <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    poc_UI(ns("bsafe"), header = shiny::tagList(
+    bsafe_UI(ns("bsafe"), header = shiny::tagList(
       teal.reporter::add_card_button_ui(ns("add")),
       teal.reporter::download_report_button_ui(ns("download")),
       teal.reporter::reset_report_button_ui(ns("resets"))
@@ -23,7 +23,7 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
       d
     })
 
-    to_report <- poc_server(
+    to_report <- bsafe_server(
       "bsafe",
       dataset = dataset,
       filter_panel_api = filter_panel_api,
