@@ -25,9 +25,7 @@ srv_bsafe <- function(id, data, reporter, filter_panel_api, dataset_name) {
 
     to_report <- bsafe_server(
       "bsafe",
-      dataset = dataset,
-      filter_panel_api = filter_panel_api,
-      reporter = reporter
+      dataset = dataset
     )
 
     generic_card_function <- function(card = teal.reporter::ReportCard$new()) {
