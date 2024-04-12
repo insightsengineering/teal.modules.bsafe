@@ -42,8 +42,6 @@ mod_decision_making_ui <- function(id) {
   )
 }
 
-prior_func <- bsafe::map_prior_func
-
 mod_decision_making_server <- function(
     id, data, analysis_type,
     safety_topic, treatment,

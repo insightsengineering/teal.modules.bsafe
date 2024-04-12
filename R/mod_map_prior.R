@@ -51,8 +51,6 @@ mod_map_prior_ui <- function(id) {
   )
 }
 
-prior_func <- bsafe::map_prior_func
-
 mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatment, seed) {
   mod <- function(input, output, session) {
     # Reactives
@@ -96,7 +94,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
       tryCatch(
         {
           shinymeta::metaExpr({
-            prior_func(
+            bsafe::map_prior_func(
               input_data = ..(data()),
               select_analysis = ..(analysis_type()),
               tau_dist = ..(input[[BSAFE_ID$SEL_TAU]]),

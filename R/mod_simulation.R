@@ -44,8 +44,6 @@ mod_simulation_ui <- function(id) {
   )
 }
 
-prior_func <- bsafe::map_prior_func
-
 mod_simulation_server <- function(id, data) {
   mod <- function(input, output, session) {
     ns <- session[["ns"]]

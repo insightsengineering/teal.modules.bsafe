@@ -22,7 +22,6 @@ mod_data_preparation_ui <- function(id) {
   )
 }
 
-prior_func <- bsafe::map_prior_func
 
 mod_data_preparation_server <- function(id, data) {
   mod <- function(input, output, session) {
