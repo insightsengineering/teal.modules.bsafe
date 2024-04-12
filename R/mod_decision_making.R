@@ -79,7 +79,7 @@ mod_decision_making_server <- function(
           )
         })
       }
-    })
+    }, varname = "mix")
 
     stat_inf_dist <- shinymeta::metaReactive2({
       select_dist_selector <- function(sel_analysis, sel_dist, sel_dist_ae) {
@@ -104,7 +104,7 @@ mod_decision_making_server <- function(
           new_trial_analysis = ..(new_trial_analysis())
         )
       })
-    })
+    }, varname = "stat_inf_dist")
 
     # Slider input for proportion of adverse event (quantiles of distribution)
     ae_prop <- shiny::reactive({
@@ -248,7 +248,7 @@ mod_decision_making_server <- function(
         mix = ..(mix()),
         saf_topic = ..(safety_topic())
       )
-    })
+    }, varname = "auc")
     output[[BSAFE_ID$OUT_AREA_UNDER_CURVE]] <- shiny::renderText({
       auc()
     })
@@ -262,7 +262,7 @@ mod_decision_making_server <- function(
       )
       names(d) <- "Statement"
       d
-    })
+    }, varname = "preset_statements")
 
     output[[BSAFE_ID$OUT_DM_PRESET_STATEMENTS_TBL]] <- shiny::renderTable({
       preset_statements()

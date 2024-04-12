@@ -86,7 +86,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
           hist_borrow = ..(input[[BSAFE_ID$SEL_HIST_BORROW]])
         )
       })
-    })
+    }, varname = "adj_tau")
 
     map_mcmc <- shinymeta::metaReactive2({
       shiny::validate(shiny::need(updated_map_priors(), "Selection or data has changed please update Map Prior"))
@@ -109,7 +109,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
           shiny::validate(FALSE, paste("Error calculating::map_prior_func:", e[["message"]]))
         }
       )
-    })
+    }, varname = "map_mcmc")
 
     # Parametric approximation object
     param_approx <- shinymeta::metaReactive2({
@@ -120,7 +120,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
           map_prior = ..(map_mcmc())
         )
       })
-    })
+    }, varname = "parm_approx")
 
     map_mix_density <- shinymeta::metaReactive({
       bsafe::param_mix_density_display( # nolint: object_usage_linter
@@ -138,7 +138,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
         param_approx = ..(param_approx()),
         ess_method = ..(input[[BSAFE_ID$SEL_ESS_METHOD]])
       )
-    })
+    }, varname = "map_summary_table")
 
     forest_plot <- shinymeta::metaReactive({
       bsafe::forest_plot_display(
@@ -147,7 +147,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
         saf_topic = ..(safety_topic()),
         select_btrt = ..(treatment())
       )
-    })
+    }, varname = "forest_plot")
 
     # Outputs and return
 

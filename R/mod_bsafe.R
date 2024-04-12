@@ -133,7 +133,7 @@ bsafe_server <- function(
     receive_data <- shinymeta::metaReactive({
       # Here is where we should include the dataset calculation steps
       ..(dataset())
-    })
+    }, varname = "receive_data")
 
 
     # Data table preparation

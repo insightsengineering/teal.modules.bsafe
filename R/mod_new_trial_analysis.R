@@ -65,6 +65,7 @@ mod_new_trial_analysis_server <- function(
     analysis_type, safety_topic,
     ess_method, treatment, seed) {
   mod <- function(input, output, session) {
+
     current_trial_data <- shinymeta::metaReactive2({
       shiny::req(analysis_type())
       if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
@@ -82,7 +83,7 @@ mod_new_trial_analysis_server <- function(
           )
         })
       }
-    })
+    }, varname = "current_trial_data")
 
     post_dist <- shinymeta::metaReactive2({
       shinymeta::metaExpr(
@@ -96,7 +97,7 @@ mod_new_trial_analysis_server <- function(
           seed = ..(seed())
         )
       )
-    })
+    }, varname = "post_dist")
 
     new_trial_analysis <- shinymeta::metaReactive2({
       shinymeta::metaExpr(
@@ -108,7 +109,7 @@ mod_new_trial_analysis_server <- function(
           post_dist = ..(post_dist())
         )
       )
-    })
+    }, varname = "new_trial_analysis")
 
     shiny::observe({
       shiny::updateSliderInput(session,
@@ -145,7 +146,7 @@ mod_new_trial_analysis_server <- function(
         saf_topic = ..(safety_topic()),
         select_btrt = ..(treatment())
       )
-    })
+    }, varname = "compare_plot")
 
     output[[BSAFE_ID$OUT_COMPARE_PLT]] <- shiny::renderPlot({
       compare_plot()
@@ -160,7 +161,7 @@ mod_new_trial_analysis_server <- function(
         post_dist = ..(post_dist()),
         download = FALSE
       )
-    })
+    }, varname = "compare_summary_table")
 
     output[[BSAFE_ID$OUT_COMPARE_SUM_TBL]] <- shiny::renderTable({
       compare_summary_table()

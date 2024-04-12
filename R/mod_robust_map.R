@@ -68,7 +68,7 @@ mod_robust_map_server <- function(
           seed = ..(seed())
         )
       })
-    })
+    }, varname = "robust_map_mc_mc")
 
     rob_comp <- shinymeta::metaReactive2({
       shinymeta::metaExpr(
@@ -95,7 +95,7 @@ mod_robust_map_server <- function(
           )
         )
       })
-    })
+    }, varname = "robust_txt")
 
     robust_plot <- shinymeta::metaReactive({
       bsafe::robust_map_prior_plot( # nolint: object_usage_linter
@@ -104,7 +104,7 @@ mod_robust_map_server <- function(
         select_btrt = ..(treatment()),
         select_analysis = ..(analysis_type())
       )
-    })
+    }, varname = "robust_plot")
 
     robust_summary <- shinymeta::metaReactive2({
       shiny::req(robust_map_mcmc())
@@ -119,7 +119,7 @@ mod_robust_map_server <- function(
           download = FALSE
         )
       )
-    })
+    }, varname = "robust_summary")
 
     output[[BSAFE_ID$OUT_PREFACE_ROB_TXT]] <- shiny::renderUI({
       robust_txt()
@@ -132,7 +132,7 @@ mod_robust_map_server <- function(
           select_analysis = ..(analysis_type())
         )
       })
-    })
+    }, "robust_formula")
 
     # Display robust MAP prior mixture density function
     output[[BSAFE_ID$OUT_ROB_DENSITY_FCT]] <- shiny::renderUI({
