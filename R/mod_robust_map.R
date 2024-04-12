@@ -132,7 +132,7 @@ mod_robust_map_server <- function(
           select_analysis = ..(analysis_type())
         )
       })
-    }, "robust_formula")
+    }, varname = "robust_formula")
 
     # Display robust MAP prior mixture density function
     output[[BSAFE_ID$OUT_ROB_DENSITY_FCT]] <- shiny::renderUI({
