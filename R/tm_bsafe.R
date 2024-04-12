@@ -1,7 +1,7 @@
 # ui function for the module
 # histogram_var is a teal.transform::data_extract_spec object
 # specifying which columns of which datasets users can choose
-ui_dv_poc_example <- function(id) {
+ui_bsafe <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
     bsafe_UI(ns("bsafe"), header = shiny::tagList(
@@ -15,7 +15,7 @@ ui_dv_poc_example <- function(id) {
 # server function for the module
 # histogram_var is a teal.transform::data_extract_spec object
 # specifying which columns of which datasets users can choose
-srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_name) {
+srv_bsafe <- function(id, data, reporter, filter_panel_api, dataset_name) {
   shiny::moduleServer(id, function(input, output, session) {
     dataset <- shiny::reactive({
       d <- data()[[dataset_name]]
@@ -67,15 +67,15 @@ srv_dv_poc_example <- function(id, data, reporter, filter_panel_api, dataset_nam
 }
 
 # the function which creates the teal module for users
-tm_dv_poc_example <- function(label = "BSAFE", dataset_name) {
+tm_bsafe <- function(label = "BSAFE", dataset_name) {
   checkmate::assert_character(label)
 
 
   teal::module(
     label = label,
-    server = srv_dv_poc_example,
+    server = srv_bsafe,
     server_args = list(dataset_name = dataset_name),
-    ui = ui_dv_poc_example,
+    ui = ui_bsafe,
     datanames = "all"
   )
 }
@@ -91,7 +91,7 @@ mock_teal <- function() {
   app <- teal::init(
     data = data,
     modules = list(
-      tm_dv_poc_example(
+      tm_bsafe(
         label = "teal.modules.bsafe",
         dataset_name = "bsafe_data"
       )
