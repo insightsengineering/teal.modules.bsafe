@@ -130,8 +130,7 @@ bsafe_server <- function(
     ae_summary_data <- NULL
 
     # data input/checks/transformation ----------------------------------------
-    receive_data <- shinymeta::metaReactive({
-      # Here is where we should include the dataset calculation steps
+    receive_data <- shinymeta::metaReactive({      
       ..(dataset())
     }, varname = "receive_data")
 
@@ -218,7 +217,10 @@ bsafe_server <- function(
     to_report <- shiny::reactive({
       code <- local({
         ec <- shinymeta::newExpansionContext()
+        ec$substituteMetaReactive(receive_data, function(){shinymeta::metaExpr(attr(dataset(), "code"), quoted = TRUE)})
         shinymeta::expandChain(
+          "# Data loading",
+          receive_data(),
           "# Data selection",
           sel_analysis[["data"]](),
           "# Map prior",
@@ -240,8 +242,10 @@ bsafe_server <- function(
           "## Plot",
           decision_making[["stat_inf_plot"]](),
           "## Inference table",
-          decision_making[["preset_statements"]]()
+          decision_making[["preset_statements"]](),
+          .expansionContext = ec
         )
+        
       })
 
       list(

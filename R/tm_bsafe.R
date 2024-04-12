@@ -18,9 +18,8 @@ ui_bsafe <- function(id) {
 srv_bsafe <- function(id, data, reporter, filter_panel_api, dataset_name) {
   shiny::moduleServer(id, function(input, output, session) {
     dataset <- shiny::reactive({
-      browser()
       d <- data()[[dataset_name]]
-      attr(d, "code") <- teal.data::get_code(data(), datanames = dataset_name)
+      attr(d, "code") <- rlang::parse_expr(paste0("{",teal.data::get_code(data(), datanames = dataset_name), "}"))
       d
     })
 
