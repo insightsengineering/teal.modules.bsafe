@@ -72,7 +72,7 @@ mod_decision_making_server <- function(
           bsafe::mix_distribution_all(
             current_trial_data = ..(current_trial_data()),
             select_dist = ..(input[[BSAFE_ID$SEL_DIST_AE]]),
-            select_analysis = ..(input[[BSAFE_ID$SEL_ANALYSIS]]),
+            select_analysis = ..(analysis_type()),
             param_approx = ..(param_approx()),
             robust_map_object = ..(robust_map_mcmc()),
             post_dist = ..(post_dist())
@@ -118,10 +118,11 @@ mod_decision_making_server <- function(
     })
 
     shiny::observeEvent(analysis_type(), {
+      shiny::req(analysis_type())
       if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
         shinyjs::show(BSAFE_ID$DIV_DM_INCI)
         shinyjs::hide(BSAFE_ID$DIV_DM_AE)
-      } else if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
+      } else if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
         shinyjs::show(BSAFE_ID$DIV_DM_AE)
         shinyjs::hide(BSAFE_ID$DIV_DM_INCI)
       }
@@ -201,7 +202,7 @@ mod_decision_making_server <- function(
             " and the likelihood (new trial)."
           )
         )
-      } else if (input[[BSAFE_ID$SEL_ANALYSIS]] == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
+      } else if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
         switch(input[[BSAFE_ID$SEL_DIST]],
           "Likelihood" = paste0(
             "The log scale of the likelihood represents information about the proportion of patients with ",
