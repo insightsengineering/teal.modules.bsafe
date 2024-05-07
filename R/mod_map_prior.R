@@ -78,7 +78,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
 
     adj_tau <- shinymeta::metaReactive2(
       {
-        shiny::validate(shiny::need(updated_map_priors(), "Selection or data has changed please update Map Prior"))
+        validate_update_map_prior(updated_map_priors())
         shinymeta::metaExpr({
           bsafe::tau_adjust(
             select_analysis = ..(analysis_type()),
@@ -91,7 +91,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
 
     map_mcmc <- shinymeta::metaReactive2(
       {
-        shiny::validate(shiny::need(updated_map_priors(), "Selection or data has changed please update Map Prior"))
+        validate_update_map_prior(updated_map_priors())
         shiny::req(seed())
         # At this moment the origin of the error Argument eta must be a nonempty numeric vector is pervasive
         # We have opted for a catch all approach while we forward this error to the bsafe package developers
@@ -118,7 +118,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
     # Parametric approximation object
     param_approx <- shinymeta::metaReactive2(
       {
-        shiny::validate(shiny::need(updated_map_priors(), "Selection or data has changed please update Map Prior"))
+        validate_update_map_prior(updated_map_priors())
         shinymeta::metaExpr({
           bsafe::parametric_approx(
             select_analysis = ..(analysis_type()),
