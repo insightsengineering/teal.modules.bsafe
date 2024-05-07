@@ -1,5 +1,3 @@
-# ui ----------------------------------------------------------------------
-
 #' @title quic.bsafe's ui function
 #' @description  implements the UI for the quic.bsafe shiny app
 #'
@@ -114,8 +112,6 @@ bsafe_UI <- function(id, header = NULL) { # nolint
     )
   )
 }
-
-# server ------------------------------------------------------------------
 
 
 bsafe_server <- function(
@@ -327,4 +323,9 @@ bsafe_server <- function(
     id = id,
     module = module
   )
+}
+
+data_saf_topic_char_limiter <- function(data) {
+  data[["SAF_TOPIC"]] <- stringr::str_sub(data[["SAF_TOPIC"]], end = 30)
+  return(data)
 }

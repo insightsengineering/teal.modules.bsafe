@@ -213,6 +213,18 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
   shiny::moduleServer(id, mod)
 }
 
+validate_update_map_prior <- function(updated_map_priors) {
+  shiny::validate(shiny::need(updated_map_priors, "Selection or data has changed please update Map Prior"))
+}
+
+preface_prior_txt <- function(sel_analysis) {
+  if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
+    return(paste0("Using a MAP approach, the prior approximated as the Beta mixture distribution:"))
+  } else if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
+    return(paste0("Using a MAP approach, the log scale of the prior approximated as the Normal mixture distribution:"))
+  }
+}
+
 mock_map_prior_mod <- function() {
   ui <- function(request) {
     shiny::fluidPage(

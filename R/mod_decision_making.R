@@ -295,6 +295,22 @@ mod_decision_making_server <- function(
   shiny::moduleServer(id, mod)
 }
 
+# TODO: Alexander input on what to expect and what to put in
+calc_log_hazard_area <- function(param_approx) {
+  val <- c(
+    round(param_approx[2, 1] - 2 * param_approx[3, 1], 3),
+    round(param_approx[2, 1] + 2 * param_approx[3, 1], 3)
+  )
+  return(val)
+}
+
+# TODO: Alexander input on what to expect and what to put in
+calc_param_approx_boundaries <- function(param_approx) {
+  lower_bound <- param_approx[2, 1] - param_approx[3, 1]
+  upper_bound <- param_approx[2, 1] + param_approx[3, 1]
+  return(c(lower_bound, upper_bound))
+}
+
 mock_decision_making_mod <- function() {
   ui <- function(request) {
     shiny::fluidPage(

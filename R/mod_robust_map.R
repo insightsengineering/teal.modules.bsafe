@@ -178,6 +178,23 @@ mod_robust_map_server <- function(
   shiny::moduleServer(id, mod)
 }
 
+preface_rob_txt <- function(sel_analysis, rob_weight, rob_mean) {
+  if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
+    return(paste0(
+      "Based on a weakly informative conjugate component with weight ",
+      rob_weight, " and mean ", rob_mean,
+      " the robust MAP prior is approximated as w * (MAP Prior) + (1 - w) * (weakly informative prior): "
+    ))
+  } else if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
+    return(paste0(
+      "Based on a EX-NEX approach with non-exchangeable probability P(nex) =  ",
+      rob_weight, " and mean ", rob_mean,
+      " on the log scale of the robust MAP prior is approximated as",
+      " (1 - P(nex)) * (MAP Prior) + P(nex) * (weakly informative prior): "
+    ))
+  }
+}
+
 mock_robust_map_mod <- function() {
   ui <- function(request) {
     shiny::fluidPage(
