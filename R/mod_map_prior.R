@@ -59,7 +59,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
     updated_map_priors <- shiny::reactiveVal(FALSE)
 
     shiny::observeEvent(input[["submit"]], {
-      shiny::req(input[["submit"]]>0)
+      shiny::req(input[["submit"]] > 0)
       updated_map_priors(TRUE)
     })
 
@@ -76,49 +76,58 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
 
 
 
-    adj_tau <- shinymeta::metaReactive2({
-      shiny::validate(shiny::need(updated_map_priors(), "Selection or data has changed please update Map Prior"))
-      shinymeta::metaExpr({
-        bsafe::tau_adjust(
-          select_analysis = ..(analysis_type()),
-          hist_borrow = ..(input[[BSAFE_ID$SEL_HIST_BORROW]])
-        )
-      })
-    }, varname = "adj_tau")
+    adj_tau <- shinymeta::metaReactive2(
+      {
+        shiny::validate(shiny::need(updated_map_priors(), "Selection or data has changed please update Map Prior"))
+        shinymeta::metaExpr({
+          bsafe::tau_adjust(
+            select_analysis = ..(analysis_type()),
+            hist_borrow = ..(input[[BSAFE_ID$SEL_HIST_BORROW]])
+          )
+        })
+      },
+      varname = "adj_tau"
+    )
 
-    map_mcmc <- shinymeta::metaReactive2({
-      shiny::validate(shiny::need(updated_map_priors(), "Selection or data has changed please update Map Prior"))
-      shiny::req(seed())
-      # At this moment the origin of the error Argument eta must be a nonempty numeric vector is pervasive
-      # We have opted for a catch all approach while we forward this error to the bsafe package developers
-      tryCatch(
-        {
-          shinymeta::metaExpr({
-            bsafe::map_prior_func(
-              input_data = ..(data()),
-              select_analysis = ..(analysis_type()),
-              tau_dist = ..(input[[BSAFE_ID$SEL_TAU]]),
-              adj_tau = ..(adj_tau()),
-              seed = ..(seed())
-            )
-          })
-        },
-        error = function(e) {
-          shiny::validate(FALSE, paste("Error calculating::map_prior_func:", e[["message"]]))
-        }
-      )
-    }, varname = "map_mcmc")
+    map_mcmc <- shinymeta::metaReactive2(
+      {
+        shiny::validate(shiny::need(updated_map_priors(), "Selection or data has changed please update Map Prior"))
+        shiny::req(seed())
+        # At this moment the origin of the error Argument eta must be a nonempty numeric vector is pervasive
+        # We have opted for a catch all approach while we forward this error to the bsafe package developers
+        tryCatch(
+          {
+            shinymeta::metaExpr({
+              bsafe::map_prior_func(
+                input_data = ..(data()),
+                select_analysis = ..(analysis_type()),
+                tau_dist = ..(input[[BSAFE_ID$SEL_TAU]]),
+                adj_tau = ..(adj_tau()),
+                seed = ..(seed())
+              )
+            })
+          },
+          error = function(e) {
+            shiny::validate(FALSE, paste("Error calculating::map_prior_func:", e[["message"]]))
+          }
+        )
+      },
+      varname = "map_mcmc"
+    )
 
     # Parametric approximation object
-    param_approx <- shinymeta::metaReactive2({
-      shiny::validate(shiny::need(updated_map_priors(), "Selection or data has changed please update Map Prior"))
-      shinymeta::metaExpr({
-        bsafe::parametric_approx(
-          select_analysis = ..(analysis_type()),
-          map_prior = ..(map_mcmc())
-        )
-      })
-    }, varname = "parm_approx")
+    param_approx <- shinymeta::metaReactive2(
+      {
+        shiny::validate(shiny::need(updated_map_priors(), "Selection or data has changed please update Map Prior"))
+        shinymeta::metaExpr({
+          bsafe::parametric_approx(
+            select_analysis = ..(analysis_type()),
+            map_prior = ..(map_mcmc())
+          )
+        })
+      },
+      varname = "parm_approx"
+    )
 
     map_mix_density <- shinymeta::metaReactive({
       bsafe::param_mix_density_display( # nolint: object_usage_linter
@@ -129,23 +138,29 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
       )
     })
 
-    map_summary_table <- shinymeta::metaReactive({
-      bsafe::model_summary_display( # nolint: object_usage_linter
-        map_object = ..(map_mcmc()),
-        select_analysis = ..(analysis_type()),
-        param_approx = ..(param_approx()),
-        ess_method = ..(input[[BSAFE_ID$SEL_ESS_METHOD]])
-      )
-    }, varname = "map_summary_table")
+    map_summary_table <- shinymeta::metaReactive(
+      {
+        bsafe::model_summary_display( # nolint: object_usage_linter
+          map_object = ..(map_mcmc()),
+          select_analysis = ..(analysis_type()),
+          param_approx = ..(param_approx()),
+          ess_method = ..(input[[BSAFE_ID$SEL_ESS_METHOD]])
+        )
+      },
+      varname = "map_summary_table"
+    )
 
-    forest_plot <- shinymeta::metaReactive({
-      bsafe::forest_plot_display(
-        map_object = ..(map_mcmc()),
-        select_analysis = ..(analysis_type()),
-        saf_topic = ..(safety_topic()),
-        select_btrt = ..(treatment())
-      )
-    }, varname = "forest_plot")
+    forest_plot <- shinymeta::metaReactive(
+      {
+        bsafe::forest_plot_display(
+          map_object = ..(map_mcmc()),
+          select_analysis = ..(analysis_type()),
+          saf_topic = ..(safety_topic()),
+          select_btrt = ..(treatment())
+        )
+      },
+      varname = "forest_plot"
+    )
 
     # Outputs and return
 

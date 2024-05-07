@@ -51,24 +51,27 @@ mod_robust_map_server <- function(
       }
     })
 
-    robust_map_mcmc <- shinymeta::metaReactive2({
-      # rob weight in function and return that
-      shiny::req(analysis_type())
-      shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
-      shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
-      shinymeta::metaExpr({
-        bsafe::robust_map(
-          select_analysis = ..(analysis_type()),
-          param_approx = ..(param_approx()),
-          input_data = ..(data()),
-          robust_weight = ..(input[[BSAFE_ID$SLDR_ROB_WEIGHT]]),
-          # TODO: It uses the mean in the selector even when it is hidden
-          robust_mean = ..(input[[BSAFE_ID$SLDR_ROB_MEAN]]),
-          adj_tau = ..(adj_tau()),
-          seed = ..(seed())
-        )
-      })
-    }, varname = "robust_map_mc_mc")
+    robust_map_mcmc <- shinymeta::metaReactive2(
+      {
+        # rob weight in function and return that
+        shiny::req(analysis_type())
+        shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
+        shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
+        shinymeta::metaExpr({
+          bsafe::robust_map(
+            select_analysis = ..(analysis_type()),
+            param_approx = ..(param_approx()),
+            input_data = ..(data()),
+            robust_weight = ..(input[[BSAFE_ID$SLDR_ROB_WEIGHT]]),
+            # TODO: It uses the mean in the selector even when it is hidden
+            robust_mean = ..(input[[BSAFE_ID$SLDR_ROB_MEAN]]),
+            adj_tau = ..(adj_tau()),
+            seed = ..(seed())
+          )
+        })
+      },
+      varname = "robust_map_mc_mc"
+    )
 
     rob_comp <- shinymeta::metaReactive2({
       shinymeta::metaExpr(
@@ -81,58 +84,70 @@ mod_robust_map_server <- function(
     })
 
     # Preface robust MAP prior output
-    robust_txt <- shinymeta::metaReactive2({
-      shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
-      shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
-      shinymeta::metaExpr({
-        shiny::withMathJax(
-          shiny::h6(
-            preface_rob_txt(
-              sel_analysis = ..(analysis_type()),
-              rob_weight = ..(input[[BSAFE_ID$SLDR_ROB_WEIGHT]]),
-              rob_mean = ..(input[[BSAFE_ID$SLDR_ROB_MEAN]])
+    robust_txt <- shinymeta::metaReactive2(
+      {
+        shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
+        shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
+        shinymeta::metaExpr({
+          shiny::withMathJax(
+            shiny::h6(
+              preface_rob_txt(
+                sel_analysis = ..(analysis_type()),
+                rob_weight = ..(input[[BSAFE_ID$SLDR_ROB_WEIGHT]]),
+                rob_mean = ..(input[[BSAFE_ID$SLDR_ROB_MEAN]])
+              )
             )
           )
-        )
-      })
-    }, varname = "robust_txt")
+        })
+      },
+      varname = "robust_txt"
+    )
 
-    robust_plot <- shinymeta::metaReactive({
-      bsafe::robust_map_prior_plot( # nolint: object_usage_linter
-        rob_comp = ..(rob_comp()),
-        saf_topic = ..(safety_topic()),
-        select_btrt = ..(treatment()),
-        select_analysis = ..(analysis_type())
-      )
-    }, varname = "robust_plot")
-
-    robust_summary <- shinymeta::metaReactive2({
-      shiny::req(robust_map_mcmc())
-      shinymeta::metaExpr(
-        bsafe::summary_stats_robust_map_prior_display( # nolint: object_usage_linter
-          map_object = ..(map_mcmc()),
-          select_analysis = ..(analysis_type()),
-          param_approx = ..(param_approx()),
-          ess_method = ..(ess_method()),
-          robust_map_object = ..(robust_map_mcmc()),
-          rob_ess_method = ..(input[[BSAFE_ID$SEL_ROB_ESS_METHOD]]),
-          download = FALSE
+    robust_plot <- shinymeta::metaReactive(
+      {
+        bsafe::robust_map_prior_plot( # nolint: object_usage_linter
+          rob_comp = ..(rob_comp()),
+          saf_topic = ..(safety_topic()),
+          select_btrt = ..(treatment()),
+          select_analysis = ..(analysis_type())
         )
-      )
-    }, varname = "robust_summary")
+      },
+      varname = "robust_plot"
+    )
+
+    robust_summary <- shinymeta::metaReactive2(
+      {
+        shiny::req(robust_map_mcmc())
+        shinymeta::metaExpr(
+          bsafe::summary_stats_robust_map_prior_display( # nolint: object_usage_linter
+            map_object = ..(map_mcmc()),
+            select_analysis = ..(analysis_type()),
+            param_approx = ..(param_approx()),
+            ess_method = ..(ess_method()),
+            robust_map_object = ..(robust_map_mcmc()),
+            rob_ess_method = ..(input[[BSAFE_ID$SEL_ROB_ESS_METHOD]]),
+            download = FALSE
+          )
+        )
+      },
+      varname = "robust_summary"
+    )
 
     output[[BSAFE_ID$OUT_PREFACE_ROB_TXT]] <- shiny::renderUI({
       robust_txt()
     })
 
-    robust_formula <- shinymeta::metaReactive({
-      shinymeta::metaExpr({
-        bsafe::robust_map_prior_mix_dens_display(
-          robust_map_object = ..(robust_map_mcmc()),
-          select_analysis = ..(analysis_type())
-        )
-      })
-    }, varname = "robust_formula")
+    robust_formula <- shinymeta::metaReactive(
+      {
+        shinymeta::metaExpr({
+          bsafe::robust_map_prior_mix_dens_display(
+            robust_map_object = ..(robust_map_mcmc()),
+            select_analysis = ..(analysis_type())
+          )
+        })
+      },
+      varname = "robust_formula"
+    )
 
     # Display robust MAP prior mixture density function
     output[[BSAFE_ID$OUT_ROB_DENSITY_FCT]] <- shiny::renderUI({

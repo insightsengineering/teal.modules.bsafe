@@ -51,58 +51,64 @@ mod_decision_making_server <- function(
   mod <- function(input, output, session) {
     ns <- session[["ns"]]
 
-    mix <- shinymeta::metaReactive2({
-      if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
-        shiny::req(input[[BSAFE_ID$SEL_DIST]])
-        shinymeta::metaExpr({
-          bsafe::mix_distribution_all(
-            current_trial_data = ..(current_trial_data()),
-            select_dist = ..(input[[BSAFE_ID$SEL_DIST]]),
-            select_analysis = ..(analysis_type()),
-            param_approx = ..(param_approx()),
-            robust_map_object = ..(robust_map_mcmc()),
-            post_dist = ..(post_dist())
-          )
-        })
-      } else if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
-        shiny::req(input[[BSAFE_ID$SEL_DIST_AE]])
-        shinymeta::metaExpr({
-          bsafe::mix_distribution_all(
-            current_trial_data = ..(current_trial_data()),
-            select_dist = ..(input[[BSAFE_ID$SEL_DIST_AE]]),
-            select_analysis = ..(analysis_type()),
-            param_approx = ..(param_approx()),
-            robust_map_object = ..(robust_map_mcmc()),
-            post_dist = ..(post_dist())
-          )
-        })
-      }
-    }, varname = "mix")
-
-    stat_inf_dist <- shinymeta::metaReactive2({
-      select_dist_selector <- function(sel_analysis, sel_dist, sel_dist_ae) {
-        if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
-          return(sel_dist)
-        } else if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
-          return(sel_dist_ae)
+    mix <- shinymeta::metaReactive2(
+      {
+        if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
+          shiny::req(input[[BSAFE_ID$SEL_DIST]])
+          shinymeta::metaExpr({
+            bsafe::mix_distribution_all(
+              current_trial_data = ..(current_trial_data()),
+              select_dist = ..(input[[BSAFE_ID$SEL_DIST]]),
+              select_analysis = ..(analysis_type()),
+              param_approx = ..(param_approx()),
+              robust_map_object = ..(robust_map_mcmc()),
+              post_dist = ..(post_dist())
+            )
+          })
+        } else if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
+          shiny::req(input[[BSAFE_ID$SEL_DIST_AE]])
+          shinymeta::metaExpr({
+            bsafe::mix_distribution_all(
+              current_trial_data = ..(current_trial_data()),
+              select_dist = ..(input[[BSAFE_ID$SEL_DIST_AE]]),
+              select_analysis = ..(analysis_type()),
+              param_approx = ..(param_approx()),
+              robust_map_object = ..(robust_map_mcmc()),
+              post_dist = ..(post_dist())
+            )
+          })
         }
-      }
+      },
+      varname = "mix"
+    )
 
-      select_dist <- select_dist_selector(
-        sel_analysis = analysis_type(),
-        sel_dist = input[[BSAFE_ID$SEL_DIST]],
-        sel_dist_ae = input[[BSAFE_ID$SEL_DIST_AE]]
-      )
+    stat_inf_dist <- shinymeta::metaReactive2(
+      {
+        select_dist_selector <- function(sel_analysis, sel_dist, sel_dist_ae) {
+          if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
+            return(sel_dist)
+          } else if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
+            return(sel_dist_ae)
+          }
+        }
 
-      shinymeta::metaExpr({
-        bsafe::sampling_all_plot(
-          select_analysis = ..(analysis_type()),
-          select_dist = ..(select_dist),
-          param_approx = ..(param_approx()),
-          new_trial_analysis = ..(new_trial_analysis())
+        select_dist <- select_dist_selector(
+          sel_analysis = analysis_type(),
+          sel_dist = input[[BSAFE_ID$SEL_DIST]],
+          sel_dist_ae = input[[BSAFE_ID$SEL_DIST_AE]]
         )
-      })
-    }, varname = "stat_inf_dist")
+
+        shinymeta::metaExpr({
+          bsafe::sampling_all_plot(
+            select_analysis = ..(analysis_type()),
+            select_dist = ..(select_dist),
+            param_approx = ..(param_approx()),
+            new_trial_analysis = ..(new_trial_analysis())
+          )
+        })
+      },
+      varname = "stat_inf_dist"
+    )
 
     # Slider input for proportion of adverse event (quantiles of distribution)
     ae_prop <- shiny::reactive({
@@ -241,27 +247,33 @@ mod_decision_making_server <- function(
     })
 
     # Interpret area under the curve
-    auc <- shinymeta::metaReactive({
-      bsafe::area_under_the_curve(
-        ae_prop = ..(ae_prop()),
-        mix = ..(mix()),
-        saf_topic = ..(safety_topic())
-      )
-    }, varname = "auc")
+    auc <- shinymeta::metaReactive(
+      {
+        bsafe::area_under_the_curve(
+          ae_prop = ..(ae_prop()),
+          mix = ..(mix()),
+          saf_topic = ..(safety_topic())
+        )
+      },
+      varname = "auc"
+    )
     output[[BSAFE_ID$OUT_AREA_UNDER_CURVE]] <- shiny::renderText({
       auc()
     })
 
     # Table of preset statistical inference statements
-    preset_statements <- shinymeta::metaReactive({
-      d <- bsafe::preset_stat_table(
-        mix = ..(mix()),
-        saf_topic = ..(safety_topic()),
-        select_analysis = ..(analysis_type())
-      )
-      names(d) <- "Statement"
-      d
-    }, varname = "preset_statements")
+    preset_statements <- shinymeta::metaReactive(
+      {
+        d <- bsafe::preset_stat_table(
+          mix = ..(mix()),
+          saf_topic = ..(safety_topic()),
+          select_analysis = ..(analysis_type())
+        )
+        names(d) <- "Statement"
+        d
+      },
+      varname = "preset_statements"
+    )
 
     output[[BSAFE_ID$OUT_DM_PRESET_STATEMENTS_TBL]] <- shiny::renderTable({
       preset_statements()

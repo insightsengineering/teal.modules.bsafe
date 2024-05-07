@@ -19,7 +19,7 @@ srv_bsafe <- function(id, data, reporter, filter_panel_api, dataset_name) {
   shiny::moduleServer(id, function(input, output, session) {
     dataset <- shiny::reactive({
       d <- data()[[dataset_name]]
-      attr(d, "code") <- rlang::parse_expr(paste0("{",teal.data::get_code(data(), datanames = dataset_name), "}"))
+      attr(d, "code") <- rlang::parse_expr(paste0("{", teal.data::get_code(data(), datanames = dataset_name), "}"))
       d
     })
 

@@ -65,51 +65,59 @@ mod_new_trial_analysis_server <- function(
     analysis_type, safety_topic,
     ess_method, treatment, seed) {
   mod <- function(input, output, session) {
+    current_trial_data <- shinymeta::metaReactive2(
+      {
+        shiny::req(analysis_type())
+        if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
+          shinymeta::metaExpr({
+            list(
+              new_v1 = ..(input[[BSAFE_ID$SLDR_N_PAT]]),
+              new_v2 = ..(input[[BSAFE_ID$SLDR_N_AE]])
+            )
+          })
+        } else if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
+          shinymeta::metaExpr({
+            list(
+              new_v1 = ..(input[[BSAFE_ID$SLDR_AE_FIRST_OCCURENCE]]),
+              new_v2 = ..(input[[BSAFE_ID$SLDR_CUMM_TIME_FIRST_AE]])
+            )
+          })
+        }
+      },
+      varname = "current_trial_data"
+    )
 
-    current_trial_data <- shinymeta::metaReactive2({
-      shiny::req(analysis_type())
-      if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
-        shinymeta::metaExpr({
-          list(
-            new_v1 = ..(input[[BSAFE_ID$SLDR_N_PAT]]),
-            new_v2 = ..(input[[BSAFE_ID$SLDR_N_AE]])
+    post_dist <- shinymeta::metaReactive2(
+      {
+        shinymeta::metaExpr(
+          bsafe::posterior_dist(
+            select_analysis = ..(analysis_type()),
+            input_data = ..(data()),
+            robust_map_prior = ..(robust_map_mcmc()),
+            explore = TRUE,
+            new_v1 = ..(current_trial_data())[["new_v1"]],
+            new_v2 = ..(current_trial_data())[["new_v2"]],
+            seed = ..(seed())
           )
-        })
-      } else if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
-        shinymeta::metaExpr({
-          list(
-            new_v1 = ..(input[[BSAFE_ID$SLDR_AE_FIRST_OCCURENCE]]),
-            new_v2 = ..(input[[BSAFE_ID$SLDR_CUMM_TIME_FIRST_AE]])
+        )
+      },
+      varname = "post_dist"
+    )
+
+    new_trial_analysis <- shinymeta::metaReactive2(
+      {
+        shinymeta::metaExpr(
+          bsafe::new_trial_compare(
+            select_analysis = ..(analysis_type()),
+            robust_map_prior = ..(robust_map_mcmc()),
+            new_v1 = ..(current_trial_data())[["new_v1"]],
+            new_v2 = ..(current_trial_data())[["new_v2"]],
+            post_dist = ..(post_dist())
           )
-        })
-      }
-    }, varname = "current_trial_data")
-
-    post_dist <- shinymeta::metaReactive2({
-      shinymeta::metaExpr(
-        bsafe::posterior_dist(
-          select_analysis = ..(analysis_type()),
-          input_data = ..(data()),
-          robust_map_prior = ..(robust_map_mcmc()),
-          explore = TRUE,
-          new_v1 = ..(current_trial_data())[["new_v1"]],
-          new_v2 = ..(current_trial_data())[["new_v2"]],
-          seed = ..(seed())
         )
-      )
-    }, varname = "post_dist")
-
-    new_trial_analysis <- shinymeta::metaReactive2({
-      shinymeta::metaExpr(
-        bsafe::new_trial_compare(
-          select_analysis = ..(analysis_type()),
-          robust_map_prior = ..(robust_map_mcmc()),
-          new_v1 = ..(current_trial_data())[["new_v1"]],
-          new_v2 = ..(current_trial_data())[["new_v2"]],
-          post_dist = ..(post_dist())
-        )
-      )
-    }, varname = "new_trial_analysis")
+      },
+      varname = "new_trial_analysis"
+    )
 
     shiny::observe({
       shiny::updateSliderInput(session,
@@ -139,29 +147,35 @@ mod_new_trial_analysis_server <- function(
       }
     })
 
-    compare_plot <- shinymeta::metaReactive({
-      bsafe::nta_data_conflict_assassment_plot(
-        select_analysis = ..(analysis_type()),
-        new_trial_analysis = ..(new_trial_analysis()),
-        saf_topic = ..(safety_topic()),
-        select_btrt = ..(treatment())
-      )
-    }, varname = "compare_plot")
+    compare_plot <- shinymeta::metaReactive(
+      {
+        bsafe::nta_data_conflict_assassment_plot(
+          select_analysis = ..(analysis_type()),
+          new_trial_analysis = ..(new_trial_analysis()),
+          saf_topic = ..(safety_topic()),
+          select_btrt = ..(treatment())
+        )
+      },
+      varname = "compare_plot"
+    )
 
     output[[BSAFE_ID$OUT_COMPARE_PLT]] <- shiny::renderPlot({
       compare_plot()
     })
 
-    compare_summary_table <- shinymeta::metaReactive({
-      bsafe::summary_stat_all_display(
-        select_analysis = ..(analysis_type()),
-        robust_map_object = ..(robust_map_mcmc()),
-        ess_method = ..(ess_method()),
-        current_trial_data = ..(current_trial_data()),
-        post_dist = ..(post_dist()),
-        download = FALSE
-      )
-    }, varname = "compare_summary_table")
+    compare_summary_table <- shinymeta::metaReactive(
+      {
+        bsafe::summary_stat_all_display(
+          select_analysis = ..(analysis_type()),
+          robust_map_object = ..(robust_map_mcmc()),
+          ess_method = ..(ess_method()),
+          current_trial_data = ..(current_trial_data()),
+          post_dist = ..(post_dist()),
+          download = FALSE
+        )
+      },
+      varname = "compare_summary_table"
+    )
 
     output[[BSAFE_ID$OUT_COMPARE_SUM_TBL]] <- shiny::renderTable({
       compare_summary_table()
