@@ -15,7 +15,7 @@ calc_param_approx_boundaries <- function(param_approx) {
 }
 # covered
 data_saf_topic_char_limiter <- function(data) {
-  data[, "SAF_TOPIC"] <- stringr::str_sub(data[, "SAF_TOPIC"], end = 30)
+  data[["SAF_TOPIC"]] <- stringr::str_sub(data[["SAF_TOPIC"]], end = 30)
   return(data)
 }
 # covered
