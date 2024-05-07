@@ -130,8 +130,50 @@ bsafe_server <- function(
     ae_summary_data <- NULL
 
     # data input/checks/transformation ----------------------------------------
-    receive_data <- shinymeta::metaReactive({      
+    receive_data <- shinymeta::metaReactive2({
+    data <- dataset()
+
+    shiny::validate(
+      shiny::need(
+        checkmate::test_numeric(data[["DOSE"]], null.ok = TRUE),
+        "Dose needs to be a number"),
+      shiny::need(
+        checkmate::test_integer(data[["FREQ"]], null.ok = TRUE),
+        "Freq needts to be an integer"),
+      shiny::need(
+        checkmate::test_numeric(data[["LENGTH"]], null.ok = TRUE),
+        "Length needts to be an number"),
+      shiny::need(
+        checkmate::test_character(data[["STUDYID"]]),
+        "STUDYID needs to be a character"),
+      shiny::need(
+        checkmate::test_numeric(data[["N"]]),
+        "N needs to be a number"),
+      shiny::need(
+        checkmate::test_numeric(data[["N_WITH_AE"]]),
+        "N_with_AE needs to be a number"),
+      shiny::need(
+        checkmate::test_numeric(data[["TOT_EXP"]]),
+        "TOT_EXP needs to be a number"),
+      shiny::need(
+        checkmate::test_character(data[["SAF_TOPIC"]]),
+        "SAF_TOPIC needs to be a character"),
+      shiny::need(
+        checkmate::test_character(data[["STUDY_ARM"]]),
+        "STUDY_ARM needs to be a character"),
+      # shiny::need(
+      #   checkmate::test_numeric(data[["TOT_HIST"]]),
+      #   "HIST needs to be a number"),
+      shiny::need(
+        checkmate::test_true(all(data[["N_WITH_AE"]] <= data[["N"]])),
+        "N_WITH_AE_COLUMN must me lower or equal than N")
+    )
+
+    shinymeta::metaExpr({
       ..(dataset())
+      data_saf_topic_char_limiter(..(dataset()))
+    })
+      
     }, varname = "receive_data")
 
 
