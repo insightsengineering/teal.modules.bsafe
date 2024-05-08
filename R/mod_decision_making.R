@@ -2,33 +2,31 @@ mod_decision_making_ui <- function(id) {
   ns <- shiny::NS(id)
 
   side <- list(
-    shinyjs::hidden(shiny::div(
-      id = ns(BSAFE_ID$DIV_DM_INCI),
-      shiny::selectInput(ns(BSAFE_ID$SEL_DIST),
-        "Make statistical inference about the",
-        choices = BSAFE_CHOICES$SEL_DIST,
-        selected = BSAFE_DEFAULTS$SEL_DIST
-      ),
-      shiny::withMathJax("Adjust sliders for \\(P(LB_{AE} < p_{AE} < UB_{AE})\\),"),
-      htmltools::HTML("<br/>"),
-      shiny::uiOutput(ns(BSAFE_ID$OUT_PERC_SLDR)),
-    )),
+    shiny::selectInput(ns(BSAFE_ID$SEL_DIST),
+      "Make statistical inference about the",
+      choices = BSAFE_CHOICES$SEL_DIST,
+      selected = BSAFE_DEFAULTS$SEL_DIST
+    ),
+    shinyjs::hidden(
+      shiny::div(
+        id = ns(BSAFE_ID$DIV_DM_INCI),
+        shiny::withMathJax("Adjust sliders for \\(P(LB_{AE} < p_{AE} < UB_{AE})\\),"),
+        htmltools::HTML("<br/>"),
+        shiny::uiOutput(ns(BSAFE_ID$OUT_PERC_SLDR_CONT)),
+      )
+    ),
     shinyjs::hidden(
       shiny::div(
         id = ns(BSAFE_ID$DIV_DM_AE),
-        shiny::selectInput(ns(BSAFE_ID$SEL_DIST_AE),
-          "Make statistical inference about the",
-          choices = BSAFE_CHOICES$SEL_DIST,
-          selected = BSAFE_DEFAULTS$SEL_DIST
-        ),
         shiny::withMathJax("Adjust sliders for \\(P(LB_{AE} < p_{AE} < UB_{AE})\\),"),
         htmltools::HTML("<br/>"),
-        shiny::uiOutput(ns(BSAFE_ID$OUT_AE_PERC_SLDR))
+        shiny::uiOutput(ns(BSAFE_ID$OUT_AE_PERC_SLDR_CONT))
       )
     )
   )
 
   main <- list(
+    shinyjs::useShinyjs(),
     shiny::uiOutput(ns(BSAFE_ID$OUT_DM_HEADER_TXT)),
     shiny::uiOutput(ns(BSAFE_ID$OUT_DM_PREFACE_TXT)),
     shiny::plotOutput(ns(BSAFE_ID$OUT_STAT_INF_DENSITY_PLT)), # spinner
@@ -53,55 +51,27 @@ mod_decision_making_server <- function(
 
     mix <- shinymeta::metaReactive2(
       {
-        if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
-          shiny::req(input[[BSAFE_ID$SEL_DIST]])
-          shinymeta::metaExpr({
-            bsafe::mix_distribution_all(
-              current_trial_data = ..(current_trial_data()),
-              select_dist = ..(input[[BSAFE_ID$SEL_DIST]]),
-              select_analysis = ..(analysis_type()),
-              param_approx = ..(param_approx()),
-              robust_map_object = ..(robust_map_mcmc()),
-              post_dist = ..(post_dist())
-            )
-          })
-        } else if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
-          shiny::req(input[[BSAFE_ID$SEL_DIST_AE]])
-          shinymeta::metaExpr({
-            bsafe::mix_distribution_all(
-              current_trial_data = ..(current_trial_data()),
-              select_dist = ..(input[[BSAFE_ID$SEL_DIST_AE]]),
-              select_analysis = ..(analysis_type()),
-              param_approx = ..(param_approx()),
-              robust_map_object = ..(robust_map_mcmc()),
-              post_dist = ..(post_dist())
-            )
-          })
-        }
+        shiny::req(input[[BSAFE_ID$SEL_DIST]])
+        shinymeta::metaExpr({
+          bsafe::mix_distribution_all(
+            current_trial_data = ..(current_trial_data()),
+            select_dist = ..(input[[BSAFE_ID$SEL_DIST]]),
+            select_analysis = ..(analysis_type()),
+            param_approx = ..(param_approx()),
+            robust_map_object = ..(robust_map_mcmc()),
+            post_dist = ..(post_dist())
+          )
+        })
       },
       varname = "mix"
     )
 
     stat_inf_dist <- shinymeta::metaReactive2(
       {
-        select_dist_selector <- function(sel_analysis, sel_dist, sel_dist_ae) {
-          if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
-            return(sel_dist)
-          } else if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
-            return(sel_dist_ae)
-          }
-        }
-
-        select_dist <- select_dist_selector(
-          sel_analysis = analysis_type(),
-          sel_dist = input[[BSAFE_ID$SEL_DIST]],
-          sel_dist_ae = input[[BSAFE_ID$SEL_DIST_AE]]
-        )
-
         shinymeta::metaExpr({
           bsafe::sampling_all_plot(
             select_analysis = ..(analysis_type()),
-            select_dist = ..(select_dist),
+            select_dist = ..(input[[BSAFE_ID$SEL_DIST]]),
             param_approx = ..(param_approx()),
             new_trial_analysis = ..(new_trial_analysis())
           )
@@ -132,9 +102,7 @@ mod_decision_making_server <- function(
       }
     })
 
-
-
-    output[[BSAFE_ID$OUT_PERC_SLDR]] <- shiny::renderUI({
+    output[[BSAFE_ID$OUT_PERC_SLDR_CONT]] <- shiny::renderUI({
       shiny::sliderInput(
         ns(BSAFE_ID$OUT_PERC_SLDR),
         shiny::withMathJax(
@@ -152,7 +120,7 @@ mod_decision_making_server <- function(
     shiny::outputOptions(output, BSAFE_ID$OUT_PERC_SLDR, suspendWhenHidden = FALSE)
 
 
-    output[[BSAFE_ID$OUT_AE_PERC_SLDR]] <- shiny::renderUI({
+    output[[BSAFE_ID$OUT_AE_PERC_SLDR_CONT]] <- shiny::renderUI({
       val <- calc_log_hazard_area(param_approx = param_approx())
       shiny::sliderInput(
         ns(BSAFE_ID$OUT_AE_PERC_SLDR),
@@ -172,11 +140,7 @@ mod_decision_making_server <- function(
 
     # Header text
     dm_header <- shiny::reactive({
-      if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
-        input[[BSAFE_ID$SEL_DIST]]
-      } else if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
-        input[[BSAFE_ID$SEL_DIST_AE]]
-      }
+      input[[BSAFE_ID$SEL_DIST]]
     })
     output[[BSAFE_ID$OUT_DM_HEADER_TXT]] <- shiny::renderUI({
       shiny::h4(dm_header())
@@ -186,47 +150,9 @@ mod_decision_making_server <- function(
     # Preface text for each distribution
 
     dm_preface <- shiny::reactive({
-      if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
-        switch(input[[BSAFE_ID$SEL_DIST]],
-          "Likelihood" = paste0(
-            "The likelihood represents information about the proportion of patients with ",
-            safety_topic(),
-            " in the population of the new trial that is contained in the observed data."
-          ),
-          "MAP Prior" = paste0(""),
-          "Robust MAP Prior" = paste0(
-            "The robust MAP prior distribution is our prediction of the true, underlying proportion of patients with ",
-            safety_topic(),
-            " in the population of the new trial if they were to receive placebo."
-          ),
-          "Posterior" = paste0(
-            "The posterior distribution represents information about the proportion of patients with ",
-            safety_topic(),
-            " in the population of the new trial after combining the prior (historical data)",
-            " and the likelihood (new trial)."
-          )
-        )
-      } else if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
-        switch(input[[BSAFE_ID$SEL_DIST]],
-          "Likelihood" = paste0(
-            "The log scale of the likelihood represents information about the proportion of patients with ",
-            safety_topic(),
-            " in the population of the new trial that is contained in the observed data."
-          ),
-          "MAP Prior" = paste0(""),
-          "Robust MAP Prior" = paste0(
-            "The log scale of the robust MAP prior distribution is our prediction of the true, underlying proportion of patients with ", # nolint: line_length_linter
-            safety_topic(),
-            " in the population of the new trial if they were to receive placebo."
-          ),
-          "Posterior" = paste0(
-            "The log scale of the posterior distribution represents information about the proportion of patients with ",
-            safety_topic(),
-            " in the population of the new trial after combining the prior (historical data) and the likelihood (new trial)." # nolint: line_length_linter
-          )
-        )
-      }
+      get_preface(analysis_type(), safety_topic(), input[[BSAFE_ID$SEL_DIST]])
     })
+
     output[[BSAFE_ID$OUT_DM_PREFACE_TXT]] <- shiny::renderUI({
       dm_preface()
     })
@@ -279,17 +205,17 @@ mod_decision_making_server <- function(
       preset_statements()
     })
 
-
-
-    return(
-      list(
-        header = dm_header,
-        preface = dm_preface,
-        stat_inf_plot = stat_inf_plot,
-        auc = auc,
-        preset_statements = preset_statements
-      )
+    r <- list(
+      header = dm_header,
+      preface = dm_preface,
+      stat_inf_plot = stat_inf_plot,
+      auc = auc,
+      preset_statements = preset_statements
     )
+
+    do.call(shiny::exportTestValues, as.list(environment()))
+
+    return(r)
   }
 
   shiny::moduleServer(id, mod)
@@ -311,7 +237,51 @@ calc_param_approx_boundaries <- function(param_approx) {
   return(c(lower_bound, upper_bound))
 }
 
-mock_decision_making_mod <- function() {
+get_preface <- function(analysis_type, safety_topic, distribution) {
+  if (analysis_type == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
+    switch(distribution,
+      "Likelihood" = paste0(
+        "The likelihood represents information about the proportion of patients with ",
+        safety_topic,
+        " in the population of the new trial that is contained in the observed data."
+      ),
+      "MAP Prior" = paste0(""),
+      "Robust MAP Prior" = paste0(
+        "The robust MAP prior distribution is our prediction of the true, underlying proportion of patients with ",
+        safety_topic,
+        " in the population of the new trial if they were to receive placebo."
+      ),
+      "Posterior" = paste0(
+        "The posterior distribution represents information about the proportion of patients with ",
+        safety_topic,
+        " in the population of the new trial after combining the prior (historical data)",
+        " and the likelihood (new trial)."
+      )
+    )
+  } else if (analysis_type == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
+    switch(distribution,
+      "Likelihood" = paste0(
+        "The log scale of the likelihood represents information about the proportion of patients with ",
+        safety_topic,
+        " in the population of the new trial that is contained in the observed data."
+      ),
+      "MAP Prior" = paste0(""),
+      "Robust MAP Prior" = paste0(
+        "The log scale of the robust MAP prior distribution is our prediction of the true, underlying proportion of patients with ", # nolint: line_length_linter
+        safety_topic,
+        " in the population of the new trial if they were to receive placebo."
+      ),
+      "Posterior" = paste0(
+        "The log scale of the posterior distribution represents information about the proportion of patients with ",
+        safety_topic,
+        " in the population of the new trial after combining the prior (historical data) and the likelihood (new trial)." # nolint: line_length_linter
+      )
+    )
+  }
+}
+
+
+mock_decision_making_mod <- function(analysis_type = BSAFE_CHOICES$SEL_ANALYSIS[1]) {
   ui <- function(request) {
     shiny::fluidPage(
       mod_decision_making_ui(
@@ -322,17 +292,27 @@ mock_decision_making_mod <- function() {
   }
 
   server <- function(input, output, session) {
-    trial_in <- readRDS("nt.rds")
-    trial_in_react <- purrr::map(trial_in, ~ local({
-      shiny::reactive({
-        .x
-      })
-    }))
-    x <- do.call(mod_decision_making_server, c(list(id = "mock"), trial_in_react))
+    trial_in_metareact <- purrr::imap(teal.modules.bsafe::test_dm_in, function(v, n) {
+      shinymeta::metaReactive(
+        {
+          rlang::quo(teal.modules.bsafe::test_dm_in[[!!n]])
+        },
+        quoted = TRUE,
+        varname = n
+      )
+    })
+    trial_in_metareact[["analysis_type"]] <- shinymeta::metaReactive(
+      {
+        analysis_type
+      },
+      varname = "analysis_type"
+    )
+    x <- do.call(mod_decision_making_server, c(list(id = "mock"), trial_in_metareact))
+
     output[["out"]] <- shiny::renderPrint({
-      x[["data"]]()
       utils::str(x)
     })
+    do.call(shiny::exportTestValues, as.list(environment()))
   }
 
   shiny::shinyApp(
