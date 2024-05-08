@@ -1,0 +1,10 @@
+Test is restricted to a minimum as most of the computations happen in bsafe. Reactives contain mostly
+single calls to the bsafe package that has its own testing.
+
+Implements:
+- Testing of non-reactive helpers
+- Testing of UI elements that appear and disappear depending on other selections
+- All outputs are present
+- Inputs can be read and changed
+- Returned values per module are correct
+- Metareactives content returned by each module returned the same object when evaluated
