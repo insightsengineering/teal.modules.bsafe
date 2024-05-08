@@ -58,4 +58,59 @@ test_that("get_safety_topic_choices_and_selection returns NULL selected value wh
 })
 })
 
+# app tests ----
+local({
+tns <- tns_factory("mock")
 
+app <- start_app_driver(teal.modules.bsafe:::mock_select_analysis_mod())
+on.exit(if ("stop" %in% names(app)) app$stop())
+
+fail_if_app_not_started <- function() {
+  if (is.null(app)) rlang::abort("App could not be started")
+}
+
+test_that("can read and change treatment", {
+  expected_value <- "Treatment"
+  app$set_inputs(!!tns(BSAFE_ID$SEL_TRT) := expected_value)
+  current_value <- shiny::isolate(app$get_values()[["export"]][["r"]][["treatment"]]())
+  expect_equal(current_value, expected_value)
+})
+
+test_that("can read and change change analysis_type", {
+  expected_value <- "Exposure-adjusted AE rate"
+  app$set_inputs(!!tns(BSAFE_ID$SEL_ANALYSIS) := expected_value)
+  current_value <- shiny::isolate(app$get_values()[["export"]][["r"]][["analysis_type"]]())
+  expect_equal(current_value, expected_value)
+})
+
+test_that("can read and change safety_topic", {
+  expected_value <- "Vomitting"
+  app$set_inputs(!!tns(BSAFE_ID$SEL_SAF_TOPIC) := expected_value)
+  current_value <- shiny::isolate(app$get_values()[["export"]][["r"]][["safety_topic"]]())
+  expect_equal(current_value, expected_value)
+})
+
+test_that("can read and change seed", {
+  expected_value <- 1
+  app$set_inputs(!!tns(BSAFE_ID$SET_SEED) := expected_value)
+  current_value <- as.numeric(shiny::isolate(app$get_values()[["export"]][["r"]][["seed"]]()))
+  expect_equal(current_value, expected_value)
+})
+
+test_that("returned data is a data.frame",{
+  current_value <- shiny::isolate(app$get_values()[["export"]][["r"]][["data"]]())
+  checkmate::expect_data_frame(current_value)
+})
+
+test_that("exported code reproduces the output",{
+  expected_val <- shiny::isolate(app$get_values()[["export"]][["r"]][["data"]]())
+  current_val <- eval(shinymeta::expandChain(shiny::isolate(app$get_values()[["export"]][["r"]][["data"]]())))
+  expect_identical(current_val, expected_val)
+})
+
+
+
+# SMOKE TESTING
+# TESTING THE REPORT AND THE GENERATED CODE PER MODULE?
+
+})
