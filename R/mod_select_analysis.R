@@ -74,15 +74,17 @@ mod_select_analysis_server <- function(id, data) {
       )
     })
 
-    return(
-      list(
+    r <- list(
         data = prepared_data,
         analysis_type = shiny::reactive(input[[BSAFE_ID$SEL_ANALYSIS]]),
         safety_topic = shiny::reactive(input[[BSAFE_ID$SEL_SAF_TOPIC]]),
         treatment = shiny::reactive(input[[BSAFE_ID$SEL_TRT]]),
         seed = shiny::reactive(input[[BSAFE_ID$SET_SEED]])
       )
-    )
+
+    do.call(shiny::exportTestValues, as.list(environment()))
+
+    return(r)
   }
 
   shiny::moduleServer(id, module)
@@ -127,15 +129,17 @@ mock_select_analysis_mod <- function() {
   }
 
   server <- function(input, output, session) {
-    x <- mod_select_analysis_server(
+    r <- mod_select_analysis_server(
       id = "mock",
-      data = shiny::reactive(as.data.frame(teal.modules.bsafe::bsafe_data))
+      data = shinymeta::metaReactive(as.data.frame(teal.modules.bsafe::bsafe_data), varname = "data")
     )
 
     output[["out"]] <- shiny::renderPrint({
-      x[["data"]]()
-      utils::str(x)
+      r[["data"]]()
+      utils::str(r)
     })
+
+    do.call(shiny::exportTestValues, as.list(environment()))
   }
 
   shiny::shinyApp(
