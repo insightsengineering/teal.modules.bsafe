@@ -294,7 +294,8 @@ mock_decision_making_mod <- function(analysis_type = BSAFE_CHOICES$SEL_ANALYSIS[
       mod_decision_making_ui(
         id = "mock"
       ),
-      shiny::verbatimTextOutput("out")
+      shiny::verbatimTextOutput("out"),
+      shiny::plotOutput("plot")
     )
   }
 
@@ -310,14 +311,18 @@ mock_decision_making_mod <- function(analysis_type = BSAFE_CHOICES$SEL_ANALYSIS[
     })
     trial_in_metareact[["analysis_type"]] <- shinymeta::metaReactive(
       {
-        analysis_type
+        shinymeta::..(analysis_type)
       },
       varname = "analysis_type"
     )
-    x <- do.call(mod_decision_making_server, c(list(id = "mock"), trial_in_metareact))
+    r <- do.call(mod_decision_making_server, c(list(id = "mock"), trial_in_metareact))
 
     output[["out"]] <- shiny::renderPrint({
-      utils::str(x)
+      shinymeta::expandChain(r[["stat_inf_plot"]]())
+    })
+
+    output[["plot"]] <- shiny::renderPlot({
+      rlang::eval_tidy(shinymeta::expandChain(r[["stat_inf_plot"]]()))
     })
     do.call(shiny::exportTestValues, as.list(environment()))
   }
