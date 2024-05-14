@@ -90,7 +90,7 @@ local({
     tf2 <- tempfile()
     fig1<- shiny::isolate(app$get_values()[["export"]][["r"]][["stat_inf_plot"]]())
     vdiffr::write_svg(fig1, tf1)
-    fig2<<- rlang::eval_tidy(shinymeta::expandChain(shiny::isolate(app$get_values()[["export"]][["r"]][["stat_inf_plot"]]())))
+    fig2<- rlang::eval_tidy(shinymeta::expandChain(shiny::isolate(app$get_values()[["export"]][["r"]][["stat_inf_plot"]]())))
     vdiffr::write_svg(fig2, tf2)
     expect_identical(readLines(tf1), readLines(tf2))
   })  
