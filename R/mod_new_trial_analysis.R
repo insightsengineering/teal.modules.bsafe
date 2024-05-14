@@ -65,27 +65,21 @@ mod_new_trial_analysis_server <- function(
     analysis_type, safety_topic,
     ess_method, treatment, seed) {
   mod <- function(input, output, session) {
-    current_trial_data <- shinymeta::metaReactive2(
-      {
-        shiny::req(analysis_type())
-        if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
-          shinymeta::metaExpr({
-            list(
-              new_v1 = ..(input[[BSAFE_ID$SLDR_N_PAT]]),
-              new_v2 = ..(input[[BSAFE_ID$SLDR_N_AE]])
-            )
-          })
-        } else if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
-          shinymeta::metaExpr({
-            list(
-              new_v1 = ..(input[[BSAFE_ID$SLDR_AE_FIRST_OCCURENCE]]),
-              new_v2 = ..(input[[BSAFE_ID$SLDR_CUMM_TIME_FIRST_AE]])
-            )
-          })
-        }
-      },
-      varname = "current_trial_data"
-    )
+    current_trial_data <- shiny::reactive({
+      shiny::req(analysis_type())
+      if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
+        checkmate::assert_true(input[[BSAFE_ID$SLDR_N_PAT]] >= input[[BSAFE_ID$SLDR_N_AE]])
+        list(
+          new_v1 = input[[BSAFE_ID$SLDR_N_PAT]],
+          new_v2 = input[[BSAFE_ID$SLDR_N_AE]]
+        )
+      } else if (analysis_type() == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
+        list(
+          new_v1 = input[[BSAFE_ID$SLDR_AE_FIRST_OCCURENCE]],
+          new_v2 = input[[BSAFE_ID$SLDR_CUMM_TIME_FIRST_AE]]
+        )
+      }
+    })
 
     post_dist <- shinymeta::metaReactive2(
       {
@@ -95,8 +89,8 @@ mod_new_trial_analysis_server <- function(
             input_data = ..(data()),
             robust_map_prior = ..(robust_map_mcmc()),
             explore = TRUE,
-            new_v1 = ..(current_trial_data())[["new_v1"]],
-            new_v2 = ..(current_trial_data())[["new_v2"]],
+            new_v1 = ..(current_trial_data()[["new_v1"]]),
+            new_v2 = ..(current_trial_data()[["new_v2"]]),
             seed = ..(seed())
           )
         )
@@ -110,8 +104,8 @@ mod_new_trial_analysis_server <- function(
           bsafe::new_trial_compare(
             select_analysis = ..(analysis_type()),
             robust_map_prior = ..(robust_map_mcmc()),
-            new_v1 = ..(current_trial_data())[["new_v1"]],
-            new_v2 = ..(current_trial_data())[["new_v2"]],
+            new_v1 = ..(current_trial_data()[["new_v1"]]),
+            new_v2 = ..(current_trial_data()[["new_v2"]]),
             post_dist = ..(post_dist())
           )
         )
@@ -181,13 +175,17 @@ mod_new_trial_analysis_server <- function(
       compare_summary_table()
     })
 
-    list(
+    r <- list(
       new_trial_analysis = new_trial_analysis,
       post_dist = post_dist,
       current_trial_data = current_trial_data,
       compare_plot = compare_plot,
       compare_summary_table = compare_summary_table
     )
+
+    do.call(shiny::exportTestValues, as.list(environment()))
+
+    return(r)
   }
 
   shiny::moduleServer(
@@ -196,7 +194,7 @@ mod_new_trial_analysis_server <- function(
   )
 }
 
-mock_new_trial_analysis_mod <- function() {
+mock_new_trial_analysis_mod <- function(analysis_type = BSAFE_CHOICES$SEL_ANALYSIS[1]) {
   ui <- function(request) {
     shiny::fluidPage(
       mod_new_trial_analysis_ui(
@@ -207,18 +205,30 @@ mock_new_trial_analysis_mod <- function() {
   }
 
   server <- function(input, output, session) {
-    trial_in <- readRDS("new_trial_in.rds")
-    trial_in <- readRDS("new_trial_in.rds") |> purrr::discard_at(c("sel_dist", "sel_dist_ae"))
-    trial_in_react <- purrr::map(trial_in, ~ local({
-      shiny::reactive({
-        .x
-      })
-    }))
-    x <- do.call(mod_new_trial_analysis_server, c(list(id = "mock"), trial_in_react))
+    metareact_in <- purrr::imap(teal.modules.bsafe::test_na_in, function(v, n) {
+      shinymeta::metaReactive(
+        {
+          rlang::quo(teal.modules.bsafe::test_na_in[[!!n]])
+        },
+        quoted = TRUE,
+        varname = n
+      )
+    })
+
+    metareact_in[["analysis_type"]] <- shinymeta::metaReactive(
+      {
+        shinymeta::..(analysis_type)
+      },
+      varname = "analysis_type"
+    )
+
+    r <- do.call(mod_new_trial_analysis_server, c(list(id = "mock"), metareact_in))
     output[["out"]] <- shiny::renderPrint({
       x[["data"]]()
       utils::str(x)
     })
+
+    do.call(shiny::exportTestValues, as.list(environment()))
   }
 
   shiny::shinyApp(
