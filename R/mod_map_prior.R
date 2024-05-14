@@ -200,13 +200,13 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
     })
 
     r <- list(
-        map_mcmc = map_mcmc,
-        param_approx = param_approx,
-        adj_tau = adj_tau,
-        ess_method = shiny::reactive(input[[BSAFE_ID$SEL_ESS_METHOD]]),
-        forest_plot = forest_plot,
-        map_summary_table = map_summary_table
-      )
+      map_mcmc = map_mcmc,
+      param_approx = param_approx,
+      adj_tau = adj_tau,
+      ess_method = shiny::reactive(input[[BSAFE_ID$SEL_ESS_METHOD]]),
+      forest_plot = forest_plot,
+      map_summary_table = map_summary_table
+    )
 
     do.call(shiny::exportTestValues, as.list(environment()))
 
@@ -245,30 +245,37 @@ mock_map_prior_mod <- function() {
   }
 
   server <- function(input, output, session) {
-    data <- shinymeta::metaReactive2({
-      input[["invalidate_data"]]
-      shinymeta::metaExpr({
-        data <- data.frame(
-          STUDYID = factor(c(9)),
-          N = c(123L),
-          N_WITH_AE = c(21L),
-          HIST = c(1)
-        )
-      })
-    }, varname = "data")
+    data <- shinymeta::metaReactive2(
+      {
+        input[["invalidate_data"]]
+        shinymeta::metaExpr({
+          data <- data.frame(
+            STUDYID = factor(c(9)),
+            N = c(123L),
+            N_WITH_AE = c(21L),
+            HIST = c(1)
+          )
+        })
+      },
+      varname = "data"
+    )
 
     analysis_type <- shiny::reactive({
       input[["invalidate_analysis"]]
-      "Incidence proportion"})
+      "Incidence proportion"
+    })
     safety_topic <- shiny::reactive({
       input[["invalidate_safety"]]
-      "Nausea"})
+      "Nausea"
+    })
     treatment <- shiny::reactive({
       input[["invalidate_treatment"]]
-      "Treatment"})
+      "Treatment"
+    })
     seed <- shiny::reactive({
       input[["invalidate_seed"]]
-      1})
+      1
+    })
 
     r <- mod_map_prior_server(
       id = "mock",

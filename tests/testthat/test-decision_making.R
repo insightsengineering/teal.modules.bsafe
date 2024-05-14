@@ -74,7 +74,7 @@ local({
   })
 
   test_that("preset_statements table is present", {
-    pe_table <- app$get_values()[["output"]][[tns(BSAFE_ID$OUT_DM_PRESET_STATEMENTS_TBL)]]    
+    pe_table <- app$get_values()[["output"]][[tns(BSAFE_ID$OUT_DM_PRESET_STATEMENTS_TBL)]]
     opening_tag <- regmatches(pe_table, regexpr("<table[^>]*>", pe_table))
     expect_length(opening_tag, 1)
   })
@@ -88,13 +88,12 @@ local({
   test_that("exported plot code matches output", {
     tf1 <- tempfile()
     tf2 <- tempfile()
-    fig1<- shiny::isolate(app$get_values()[["export"]][["r"]][["stat_inf_plot"]]())
+    fig1 <- shiny::isolate(app$get_values()[["export"]][["r"]][["stat_inf_plot"]]())
     vdiffr::write_svg(fig1, tf1)
-    fig2<- rlang::eval_tidy(shinymeta::expandChain(shiny::isolate(app$get_values()[["export"]][["r"]][["stat_inf_plot"]]())))
+    fig2 <- rlang::eval_tidy(shinymeta::expandChain(shiny::isolate(app$get_values()[["export"]][["r"]][["stat_inf_plot"]]())))
     vdiffr::write_svg(fig2, tf2)
     expect_identical(readLines(tf1), readLines(tf2))
-  })  
-  
+  })
 })
 
 # app tests ----
@@ -109,7 +108,7 @@ local({
   }
 
   test_that("can read and change ae perc slider", {
-    expected_value <- c(0, 2)  
+    expected_value <- c(0, 2)
     app$set_inputs(!!tns(BSAFE_ID$OUT_AE_PERC_SLDR) := expected_value)
     app$wait_for_idle()
     current_value <- shiny::isolate(app$get_values()[["input"]][[tns(BSAFE_ID$OUT_AE_PERC_SLDR)]])
@@ -127,7 +126,4 @@ local({
     opening_tag <- regmatches(div, regexpr("<div[^>]*>", div))
     expect_true(grepl("display: none", opening_tag))
   })
-  
 })
-
-

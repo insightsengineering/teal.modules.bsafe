@@ -110,7 +110,7 @@ local({
   test_that("map_summary_table code eval matches value", {
     expect_code_val_match("map_summary_table", app)
   })
-  
+
   test_that("can read and change tau", {
     expected_value <- "HalfNormal"
     app$set_inputs(!!tns(BSAFE_ID$SEL_TAU) := "Half-normal")
@@ -135,23 +135,23 @@ local({
     expect_equal(current_value, expected_value)
   })
 
-  test_that("menu prior is invalidated when any change in the input values to map prior happens",{
+  test_that("menu prior is invalidated when any change in the input values to map prior happens", {
     button_id <- c(
       "invalidate_data",
       "invalidate_analysis",
       "invalidate_seed"
     )
 
-    purrr::walk(button_id, function(id){
+    purrr::walk(button_id, function(id) {
       app$click(id)
       app$wait_for_idle()
       expect_error(class = "shiny.silent.error", shiny::isolate(app$get_values()[["export"]][["r"]][["map_mcmc"]]()))
       app$click(tns("submit"))
       app$wait_for_idle()
-    })   
-    
+    })
+
     # adj_tau trough history borrow
-    
+
     app$set_inputs(!!tns(BSAFE_ID$SEL_HIST_BORROW) := "Large")
     app$wait_for_idle()
     expect_error(class = "shiny.silent.error", shiny::isolate(app$get_values()[["export"]][["r"]][["map_mcmc"]]()))
@@ -161,7 +161,5 @@ local({
     # app$set_inputs(!!tns(BSAFE_ID$SEL_TAU) := "Half-normal")
     # app$wait_for_idle()
     # expect_error(class = "shiny.silent.error", shiny::isolate(app$get_values()[["export"]][["r"]][["map_mcmc"]]()))
-
   })
-  
 })

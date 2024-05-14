@@ -159,17 +159,17 @@ mod_decision_making_server <- function(
 
     # Plot density
     stat_inf_plot <- shinymeta::metaReactive2({
-      r_ae_prop <- ae_prop() # Requires being resolved before hand because of the way it is used in decision_making_density_plot
-      shinymeta::metaExpr({      
-      bsafe::decision_making_density_plot(
-        stat_inf_dist = ..(stat_inf_dist()),
-        select_analysis = ..(analysis_type()),
-        ae_prop = ..(r_ae_prop),
-        saf_topic = ..(safety_topic()),
-        select_btrt = ..(treatment())
-      )
-    })
-    
+      # Requires being resolved before hand because of the way it is used in decision_making_density_plot
+      r_ae_prop <- ae_prop()
+      shinymeta::metaExpr({
+        bsafe::decision_making_density_plot(
+          stat_inf_dist = ..(stat_inf_dist()),
+          select_analysis = ..(analysis_type()),
+          ae_prop = ..(r_ae_prop),
+          saf_topic = ..(safety_topic()),
+          select_btrt = ..(treatment())
+        )
+      })
     })
 
     output[[BSAFE_ID$OUT_STAT_INF_DENSITY_PLT]] <- shiny::renderPlot({
@@ -179,13 +179,14 @@ mod_decision_making_server <- function(
     # Interpret area under the curve
     auc <- shinymeta::metaReactive2(
       {
-        r_ae_prop <- ae_prop() # Requires being resolved before hand because of the way it is used in decision_making_density_plot
+        # Requires being resolved before hand because of the way it is used in decision_making_density_plot
+        r_ae_prop <- ae_prop()
         shinymeta::metaExpr({
-        bsafe::area_under_the_curve(
-          ae_prop = ..(r_ae_prop),
-          mix = ..(mix()),
-          saf_topic = ..(safety_topic())
-        )
+          bsafe::area_under_the_curve(
+            ae_prop = ..(r_ae_prop),
+            mix = ..(mix()),
+            saf_topic = ..(safety_topic())
+          )
         })
       },
       varname = "auc"
@@ -324,6 +325,7 @@ mock_decision_making_mod <- function(analysis_type = BSAFE_CHOICES$SEL_ANALYSIS[
     output[["plot"]] <- shiny::renderPlot({
       rlang::eval_tidy(shinymeta::expandChain(r[["stat_inf_plot"]]()))
     })
+
     do.call(shiny::exportTestValues, as.list(environment()))
   }
 

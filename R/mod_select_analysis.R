@@ -29,7 +29,6 @@ mod_select_analysis_ui <- function(id) {
 }
 
 mod_select_analysis_server <- function(id, data) {
-
   module <- function(input, output, session) {
     shiny::observe({
       cs <- get_arm_choices_and_selection(data(), input[[BSAFE_ID$SEL_TRT]])
@@ -42,7 +41,7 @@ mod_select_analysis_server <- function(id, data) {
     })
 
     shiny::observe({
-      cs <- get_safety_topic_choices_and_selection(data(), input[[BSAFE_ID$SEL_SAF_TOPIC]], input[[BSAFE_ID$SEL_TRT]])
+      cs <- get_sfty_choices_select(data(), input[[BSAFE_ID$SEL_SAF_TOPIC]], input[[BSAFE_ID$SEL_TRT]])
 
       shiny::updateSelectInput(
         session,
@@ -75,12 +74,12 @@ mod_select_analysis_server <- function(id, data) {
     })
 
     r <- list(
-        data = prepared_data,
-        analysis_type = shiny::reactive(input[[BSAFE_ID$SEL_ANALYSIS]]),
-        safety_topic = shiny::reactive(input[[BSAFE_ID$SEL_SAF_TOPIC]]),
-        treatment = shiny::reactive(input[[BSAFE_ID$SEL_TRT]]),
-        seed = shiny::reactive(input[[BSAFE_ID$SET_SEED]])
-      )
+      data = prepared_data,
+      analysis_type = shiny::reactive(input[[BSAFE_ID$SEL_ANALYSIS]]),
+      safety_topic = shiny::reactive(input[[BSAFE_ID$SEL_SAF_TOPIC]]),
+      treatment = shiny::reactive(input[[BSAFE_ID$SEL_TRT]]),
+      seed = shiny::reactive(input[[BSAFE_ID$SET_SEED]])
+    )
 
     do.call(shiny::exportTestValues, as.list(environment()))
 
@@ -92,29 +91,29 @@ mod_select_analysis_server <- function(id, data) {
 
 get_arm_choices_and_selection <- function(data, previous_selection) {
   choices <- unique(data[["ARM"]])
-      if (length(choices) > 0) {
-        if (!identical(previous_selection, "")) {
-          selected <- previous_selection
-        } else {
-          selected <- choices[[1]]
-        }
-      } else {
-        selected <- NULL
-      }
-      list(choices = choices, selected = selected)
+  if (length(choices) > 0) {
+    if (!identical(previous_selection, "")) {
+      selected <- previous_selection
+    } else {
+      selected <- choices[[1]]
+    }
+  } else {
+    selected <- NULL
+  }
+  list(choices = choices, selected = selected)
 }
 
-get_safety_topic_choices_and_selection <- function(data, previous_selection, arm_selection) {  
+get_sfty_choices_select <- function(data, previous_selection, arm_selection) {
   choices <- unique(data[["SAF_TOPIC"]][data[["ARM"]] %in% arm_selection])
-      if (length(choices) > 0) {
-        if (!identical(previous_selection, "")) {
-          selected <- previous_selection
-        } else {
-          selected <- choices[[1]]
-        }
-      } else {
-        selected <- NULL
-      }
+  if (length(choices) > 0) {
+    if (!identical(previous_selection, "")) {
+      selected <- previous_selection
+    } else {
+      selected <- choices[[1]]
+    }
+  } else {
+    selected <- NULL
+  }
   list(choices = choices, selected = selected)
 }
 
