@@ -2,6 +2,7 @@ mod_map_prior_ui <- function(id) {
   ns <- shiny::NS(id)
 
   side <- list(
+    # TODO: SEL_TAU has a single value
     shiny::selectInput(ns(BSAFE_ID$SEL_TAU),
       "Between-Trial Heterogeneity Prior Distribution",
       choices = BSAFE_CHOICES$SEL_TAU,
@@ -198,8 +199,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
         kableExtra::kable_styling("striped")
     })
 
-    return(
-      list(
+    r <- list(
         map_mcmc = map_mcmc,
         param_approx = param_approx,
         adj_tau = adj_tau,
@@ -207,7 +207,10 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
         forest_plot = forest_plot,
         map_summary_table = map_summary_table
       )
-    )
+
+    do.call(shiny::exportTestValues, as.list(environment()))
+
+    return(r)
   }
 
   shiny::moduleServer(id, mod)
@@ -218,6 +221,7 @@ validate_update_map_prior <- function(updated_map_priors) {
 }
 
 preface_prior_txt <- function(sel_analysis) {
+  checkmate::assert_subset(sel_analysis, BSAFE_CHOICES$SEL_ANALYSIS)
   if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
     return(paste0("Using a MAP approach, the prior approximated as the Beta mixture distribution:"))
   } else if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
@@ -228,6 +232,11 @@ preface_prior_txt <- function(sel_analysis) {
 mock_map_prior_mod <- function() {
   ui <- function(request) {
     shiny::fluidPage(
+      shiny::actionButton("invalidate_data", "Invalidate Data"),
+      shiny::actionButton("invalidate_analysis", "Invalidate Analysis"),
+      shiny::actionButton("invalidate_safety", "Invalidate Safety"),
+      shiny::actionButton("invalidate_treatment", "Invalidate Treatment"),
+      shiny::actionButton("invalidate_seed", "Invalidate Seed"),
       mod_map_prior_ui(
         id = "mock"
       ),
@@ -236,26 +245,45 @@ mock_map_prior_mod <- function() {
   }
 
   server <- function(input, output, session) {
-    data <- data.frame(
-      STUDYID = factor(c(9)),
-      N = c(123L),
-      N_WITH_AE = c(21L),
-      HIST = c(1)
-    )
+    data <- shinymeta::metaReactive2({
+      input[["invalidate_data"]]
+      shinymeta::metaExpr({
+        data <- data.frame(
+          STUDYID = factor(c(9)),
+          N = c(123L),
+          N_WITH_AE = c(21L),
+          HIST = c(1)
+        )
+      })
+    }, varname = "data")
 
-    x <- mod_map_prior_server(
+    analysis_type <- shiny::reactive({
+      input[["invalidate_analysis"]]
+      "Incidence proportion"})
+    safety_topic <- shiny::reactive({
+      input[["invalidate_safety"]]
+      "Nausea"})
+    treatment <- shiny::reactive({
+      input[["invalidate_treatment"]]
+      "Treatment"})
+    seed <- shiny::reactive({
+      input[["invalidate_seed"]]
+      1})
+
+    r <- mod_map_prior_server(
       id = "mock",
-      data = shiny::reactive(data),
-      analysis_type = shiny::reactive("Incidence proportion"),
-      safety_topic = shiny::reactive("Nausea"),
-      treatment = shiny::reactive("Treatment"),
-      seed = shiny::reactive(round(as.numeric(Sys.time()), 0))
+      data = data,
+      analysis_type = analysis_type,
+      safety_topic = safety_topic,
+      treatment = treatment,
+      seed = seed
     )
 
     output[["out"]] <- shiny::renderPrint({
-      x[["map_mcmc"]]()
-      utils::str(x)
+      r[["map_mcmc"]]()
+      utils::str(r)
     })
+    do.call(shiny::exportTestValues, as.list(environment()))
   }
 
   shiny::shinyApp(
