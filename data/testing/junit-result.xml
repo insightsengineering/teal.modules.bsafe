@@ -1,551 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="decision_making" timestamp="2024-05-15T10:29:53Z" hostname="df8c495dae36" tests="16" skipped="0" failures="0" errors="14" time="0.304">
-    <testcase time="0.012" classname="decision_making" name="calc_log_hazard_area_returns_correct_values"/>
-    <testcase time="0.022" classname="decision_making" name="calc_param_approx_boundaries_returns_correct_lower_and_upper_boundaries"/>
-    <testcase time="0.0139999999999999" classname="decision_making" name="can_read_and_change_distribution">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-decision_making.R:30:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.03" classname="decision_making" name="can_read_and_change_non_ae_perc_slider">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-decision_making.R:38:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.03" classname="decision_making" name="ae_div_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-decision_making.R:45:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.016" classname="decision_making" name="inci_div_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-decision_making.R:51:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.014" classname="decision_making" name="header_element_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-decision_making.R:57:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.013" classname="decision_making" name="preface_element_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-decision_making.R:62:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0159999999999999" classname="decision_making" name="plot_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-decision_making.R:67:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.014" classname="decision_making" name="auc_text_element_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-decision_making.R:72:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.016" classname="decision_making" name="preset_statements_table_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-decision_making.R:77:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0190000000000001" classname="decision_making" name="exported_preset_statements_code_matches_output">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-decision_making.R:83:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][["r"]][["preset_statements"]]()) at test-decision_making.R:83:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.0269999999999999" classname="decision_making" name="exported_plot_code_matches_output">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-decision_making.R:91:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][["r"]][["stat_inf_plot"]]()) at test-decision_making.R:91:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.0309999999999999" classname="decision_making" name="can_read_and_change_ae_perc_slider">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-decision_making.R:112:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.016" classname="decision_making" name="ae_div_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-decision_making.R:119:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.014" classname="decision_making" name="inci_div_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-decision_making.R:125:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
+  <testsuite name="decision_making" timestamp="2024-05-15T13:15:58Z" hostname="48ee973b61f6" tests="16" skipped="0" failures="0" errors="0" time="34.279">
+    <testcase time="0.013" classname="decision_making" name="calc_log_hazard_area_returns_correct_values"/>
+    <testcase time="0.0209999999999999" classname="decision_making" name="calc_param_approx_boundaries_returns_correct_lower_and_upper_boundaries"/>
+    <testcase time="13.348" classname="decision_making" name="can_read_and_change_distribution"/>
+    <testcase time="1.971" classname="decision_making" name="can_read_and_change_non_ae_perc_slider"/>
+    <testcase time="0.00900000000000034" classname="decision_making" name="ae_div_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
+    <testcase time="0.00799999999999912" classname="decision_making" name="inci_div_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
+    <testcase time="0.998999999999999" classname="decision_making" name="header_element_is_present"/>
+    <testcase time="1.196" classname="decision_making" name="preface_element_is_present"/>
+    <testcase time="0.960999999999999" classname="decision_making" name="plot_is_present"/>
+    <testcase time="0.953000000000003" classname="decision_making" name="auc_text_element_is_present"/>
+    <testcase time="0.974999999999998" classname="decision_making" name="preset_statements_table_is_present"/>
+    <testcase time="2.178" classname="decision_making" name="exported_preset_statements_code_matches_output"/>
+    <testcase time="2.453" classname="decision_making" name="exported_plot_code_matches_output"/>
+    <testcase time="9.176" classname="decision_making" name="can_read_and_change_ae_perc_slider"/>
+    <testcase time="0.0100000000000051" classname="decision_making" name="ae_div_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
+    <testcase time="0.00799999999999557" classname="decision_making" name="inci_div_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
   </testsuite>
-  <testsuite name="map_prior" timestamp="2024-05-15T10:29:53Z" hostname="df8c495dae36" tests="24" skipped="0" failures="0" errors="21" time="0.547">
-    <testcase time="0.052" classname="map_prior" name="preface_prior_txt_returns_correct_preface_for_MAP_approach"/>
-    <testcase time="0.004" classname="map_prior" name="preface_prior_txt_returns_correct_preface_for_log_scale_approach"/>
-    <testcase time="0.0069999999999999" classname="map_prior" name="preface_prior_txt_returns_an_error_for_unknown_selection_analysis"/>
-    <testcase time="0.0110000000000001" classname="map_prior" name="map_prior_is_calculated_when_button_is_pressed">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-map_prior.R:34:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.016" classname="map_prior" name="forest_plot_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-map_prior.R:40:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.02" classname="map_prior" name="mix_density_plot_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-map_prior.R:45:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.016" classname="map_prior" name="preface_prior_text_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-map_prior.R:50:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0189999999999999" classname="map_prior" name="density_function_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-map_prior.R:55:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0150000000000001" classname="map_prior" name="summary_table_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-map_prior.R:60:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0189999999999999" classname="map_prior" name="map_mcmc_returned_values_is_a_gMAP_object">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-map_prior.R:65:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["map_mcmc"]]()) at test-map_prior.R:65:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.026" classname="map_prior" name="param_approx_returned_values_is_a_EM_object">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-map_prior.R:70:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["param_approx"]]()) at test-map_prior.R:70:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.0249999999999999" classname="map_prior" name="adj_tau_returned_values_is_a_numeric">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-map_prior.R:75:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["adj_tau"]]()) at test-map_prior.R:75:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.0270000000000001" classname="map_prior" name="ess_method_is_a_subset_from_BSAFE_CHOICES_SEL_ESS_METHOD">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-map_prior.R:80:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["ess_method"]]()) at test-map_prior.R:80:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.028" classname="map_prior" name="forest_plot_is_a_ggplot">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-map_prior.R:85:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["forest_plot"]]()) at test-map_prior.R:85:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.0239999999999998" classname="map_prior" name="map_summary_table_is_a_data.frame">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-map_prior.R:90:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["map_summary_table"]]()) at test-map_prior.R:90:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.0270000000000001" classname="map_prior" name="map_mcmc_code_eval_matches_print">
-      <error type="error" message="Error in `expect_code_print_match(&quot;map_mcmc&quot;, app)`: attempt to apply non-function ('test-map_prior.R:95:5')">Error in `expect_code_print_match("map_mcmc", app)`: attempt to apply non-function
+  <testsuite name="map_prior" timestamp="2024-05-15T13:16:32Z" hostname="48ee973b61f6" tests="27" skipped="0" failures="1" errors="0" time="78.496">
+    <testcase time="0.0910000000000011" classname="map_prior" name="preface_prior_txt_returns_correct_preface_for_MAP_approach"/>
+    <testcase time="0.00300000000000011" classname="map_prior" name="preface_prior_txt_returns_correct_preface_for_log_scale_approach"/>
+    <testcase time="0.00999999999999801" classname="map_prior" name="preface_prior_txt_returns_an_error_for_unknown_selection_analysis"/>
+    <testcase time="12.108" classname="map_prior" name="map_prior_is_calculated_when_button_is_pressed"/>
+    <testcase time="1.462" classname="map_prior" name="forest_plot_is_present"/>
+    <testcase time="1.774" classname="map_prior" name="mix_density_plot_is_present"/>
+    <testcase time="1.456" classname="map_prior" name="preface_prior_text_is_present"/>
+    <testcase time="1.469" classname="map_prior" name="density_function_is_present"/>
+    <testcase time="1.568" classname="map_prior" name="summary_table_is_present"/>
+    <testcase time="1.84" classname="map_prior" name="map_mcmc_returned_values_is_a_gMAP_object"/>
+    <testcase time="1.45500000000001" classname="map_prior" name="param_approx_returned_values_is_a_EM_object"/>
+    <testcase time="1.486" classname="map_prior" name="adj_tau_returned_values_is_a_numeric"/>
+    <testcase time="1.734" classname="map_prior" name="ess_method_is_a_subset_from_BSAFE_CHOICES_SEL_ESS_METHOD"/>
+    <testcase time="1.852" classname="map_prior" name="forest_plot_is_a_ggplot"/>
+    <testcase time="1.442" classname="map_prior" name="map_summary_table_is_a_data.frame">
+      <failure type="failure" message="Check on 'v' failed: Must be of type 'data.frame', not 'kableExtra/knitr_kable' ('test-map_prior.R:94:5')">Check on 'v' failed: Must be of type 'data.frame', not 'kableExtra/knitr_kable'
 Backtrace:
     x
- 1. \-teal.modules.bsafe:::expect_code_print_match("map_mcmc", app) at test-map_prior.R:95:5</error>
+ 1. \-checkmate::expect_data_frame(v) at test-map_prior.R:94:5
+ 2.   \-checkmate::makeExpectation(x, res, info, label)</failure>
     </testcase>
-    <testcase time="0.024" classname="map_prior" name="param_approx_code_eval_matches_print">
-      <error type="error" message="Error in `expect_code_print_match(&quot;param_approx&quot;, app)`: attempt to apply non-function ('test-map_prior.R:99:5')">Error in `expect_code_print_match("param_approx", app)`: attempt to apply non-function
-Backtrace:
-    x
- 1. \-teal.modules.bsafe:::expect_code_print_match(...) at test-map_prior.R:99:5</error>
-    </testcase>
-    <testcase time="0.024" classname="map_prior" name="adj_tau_code_eval_matches_value">
-      <error type="error" message="Error in `expect_code_val_match(&quot;adj_tau&quot;, app)`: attempt to apply non-function ('test-map_prior.R:103:5')">Error in `expect_code_val_match("adj_tau", app)`: attempt to apply non-function
-Backtrace:
-    x
- 1. \-teal.modules.bsafe:::expect_code_val_match("adj_tau", app) at test-map_prior.R:103:5</error>
-    </testcase>
-    <testcase time="0.0209999999999999" classname="map_prior" name="forest_plot_code_eval_matches_plot">
-      <error type="error" message="Error in `expect_code_plot_match(&quot;forest_plot&quot;, app)`: attempt to apply non-function ('test-map_prior.R:107:5')">Error in `expect_code_plot_match("forest_plot", app)`: attempt to apply non-function
-Backtrace:
-    x
- 1. \-teal.modules.bsafe:::expect_code_plot_match("forest_plot", app) at test-map_prior.R:107:5</error>
-    </testcase>
-    <testcase time="0.0250000000000001" classname="map_prior" name="map_summary_table_code_eval_matches_value">
-      <error type="error" message="Error in `expect_code_val_match(&quot;map_summary_table&quot;, app)`: attempt to apply non-function ('test-map_prior.R:111:5')">Error in `expect_code_val_match("map_summary_table", app)`: attempt to apply non-function
-Backtrace:
-    x
- 1. \-teal.modules.bsafe:::expect_code_val_match(...) at test-map_prior.R:111:5</error>
-    </testcase>
-    <testcase time="0.0239999999999998" classname="map_prior" name="can_read_and_change_tau">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-map_prior.R:116:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0170000000000001" classname="map_prior" name="can_read_and_change_hist_borrow">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-map_prior.R:124:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.02" classname="map_prior" name="can_read_and_change_effective_sampling_method">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-map_prior.R:132:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.056" classname="map_prior" name="menu_prior_is_invalidated_when_any_change_in_the_input_values_to_map_prior_happens">
-      <error type="error" message="&lt;purrr_error_indexed/rlang_error/error/condition&gt; ('test-map_prior.R:146:7')">&lt;purrr_error_indexed/rlang_error/error/condition&gt;
-Error in `map(.x, .f, ..., .progress = .progress)`: i In index: 1.
-Caused by error in `.f()`:
-! attempt to apply non-function
-Backtrace:
-     x
-  1. +-purrr::walk(...) at test-map_prior.R:145:5
-  2. | \-purrr::map(.x, .f, ..., .progress = .progress)
-  3. |   \-purrr:::map_("list", .x, .f, ..., .progress = .progress)
-  4. |     +-purrr:::with_indexed_errors(...)
-  5. |     | \-base::withCallingHandlers(...)
-  6. |     +-purrr:::call_with_cleanup(...)
-  7. |     \-teal.modules.bsafe (local) .f(.x[[i]], ...)
-  8. \-base::.handleSimpleError(...) at test-map_prior.R:146:7
-  9.   \-purrr (local) h(simpleError(msg, call))
- 10.     \-cli::cli_abort(...)
- 11.       \-rlang::abort(...)</error>
-    </testcase>
+    <testcase time="5.313" classname="map_prior" name="map_mcmc_code_eval_matches_print"/>
+    <testcase time="5.386" classname="map_prior" name="param_approx_code_eval_matches_print"/>
+    <testcase time="1.479" classname="map_prior" name="adj_tau_code_eval_matches_value"/>
+    <testcase time="5.524" classname="map_prior" name="forest_plot_code_eval_matches_plot"/>
+    <testcase time="5.426" classname="map_prior" name="map_summary_table_code_eval_matches_value"/>
+    <testcase time="5.97200000000001" classname="map_prior" name="can_read_and_change_tau"/>
+    <testcase time="1.19999999999999" classname="map_prior" name="can_read_and_change_hist_borrow"/>
+    <testcase time="5.104" classname="map_prior" name="can_read_and_change_effective_sampling_method"/>
+    <testcase time="1.17700000000001" classname="map_prior" name="menu_prior_is_invalidated_when_any_change_in_the_input_values_to_map_prior_happens"/>
+    <testcase time="4.247" classname="map_prior" name="menu_prior_is_invalidated_when_any_change_in_the_input_values_to_map_prior_happens"/>
+    <testcase time="4.044" classname="map_prior" name="menu_prior_is_invalidated_when_any_change_in_the_input_values_to_map_prior_happens"/>
+    <testcase time="3.87400000000001" classname="map_prior" name="menu_prior_is_invalidated_when_any_change_in_the_input_values_to_map_prior_happens"/>
   </testsuite>
-  <testsuite name="new_trial_analysis" timestamp="2024-05-15T10:29:54Z" hostname="df8c495dae36" tests="18" skipped="0" failures="0" errors="18" time="0.48">
-    <testcase time="0.155" classname="new_trial_analysis" name="ae_div_side_and_main_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-new_trial_analysis.R:21:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.02" classname="new_trial_analysis" name="inci_div_side_and_main_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-new_trial_analysis.R:31:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0190000000000001" classname="new_trial_analysis" name="can_read_and_change_number_of_patients">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-new_trial_analysis.R:42:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0189999999999999" classname="new_trial_analysis" name="can_read_and_change_number_of_patients_with_AE">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-new_trial_analysis.R:50:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0190000000000001" classname="new_trial_analysis" name="number_of_patients_with_AE_slider_is_updated_when_number_of_patients_change">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-new_trial_analysis.R:58:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0189999999999999" classname="new_trial_analysis" name="mix_density_plot_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-new_trial_analysis.R:70:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0150000000000001" classname="new_trial_analysis" name="summary_table_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-new_trial_analysis.R:75:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0149999999999999" classname="new_trial_analysis" name="new_trial_analysis_is_a_string">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-new_trial_analysis.R:80:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["new_trial_analysis"]]()) at test-new_trial_analysis.R:80:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.022" classname="new_trial_analysis" name="post_dist_is_a_string">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-new_trial_analysis.R:85:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["post_dist"]]()) at test-new_trial_analysis.R:85:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.022" classname="new_trial_analysis" name="current_trial_data_is_a_string">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-new_trial_analysis.R:90:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["current_trial_data"]]()) at test-new_trial_analysis.R:90:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.026" classname="new_trial_analysis" name="compare_plot_is_a_ggplot">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-new_trial_analysis.R:95:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["compare_plot"]]()) at test-new_trial_analysis.R:95:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.022" classname="new_trial_analysis" name="map_summary_table_is_a_data.frame">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-new_trial_analysis.R:100:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["compare_summary_table"]]()) at test-new_trial_analysis.R:100:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.0219999999999998" classname="new_trial_analysis" name="compare_plot_code_eval_matches_plot">
-      <error type="error" message="Error in `expect_code_plot_match(&quot;compare_plot&quot;, app)`: attempt to apply non-function ('test-new_trial_analysis.R:105:5')">Error in `expect_code_plot_match("compare_plot", app)`: attempt to apply non-function
+  <testsuite name="new_trial_analysis" timestamp="2024-05-15T13:17:56Z" hostname="48ee973b61f6" tests="23" skipped="0" failures="1" errors="0" time="27.298">
+    <testcase time="5.79799999999999" classname="new_trial_analysis" name="ae_div_side_and_main_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
+    <testcase time="0.00600000000000023" classname="new_trial_analysis" name="ae_div_side_and_main_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
+    <testcase time="0.00800000000000978" classname="new_trial_analysis" name="inci_div_side_and_main_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
+    <testcase time="0.00600000000000023" classname="new_trial_analysis" name="inci_div_side_and_main_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
+    <testcase time="1.88499999999999" classname="new_trial_analysis" name="can_read_and_change_number_of_patients"/>
+    <testcase time="1.482" classname="new_trial_analysis" name="can_read_and_change_number_of_patients_with_AE"/>
+    <testcase time="1.53500000000001" classname="new_trial_analysis" name="number_of_patients_with_AE_slider_is_updated_when_number_of_patients_change"/>
+    <testcase time="1.496" classname="new_trial_analysis" name="number_of_patients_with_AE_slider_is_updated_when_number_of_patients_change"/>
+    <testcase time="0.742999999999995" classname="new_trial_analysis" name="mix_density_plot_is_present"/>
+    <testcase time="0.749000000000009" classname="new_trial_analysis" name="summary_table_is_present"/>
+    <testcase time="0.742999999999995" classname="new_trial_analysis" name="new_trial_analysis_is_a_string"/>
+    <testcase time="0.74199999999999" classname="new_trial_analysis" name="post_dist_is_a_string"/>
+    <testcase time="0.739000000000004" classname="new_trial_analysis" name="current_trial_data_is_a_string"/>
+    <testcase time="0.740000000000009" classname="new_trial_analysis" name="compare_plot_is_a_ggplot"/>
+    <testcase time="0.780000000000001" classname="new_trial_analysis" name="map_summary_table_is_a_data.frame">
+      <failure type="failure" message="Check on 'v' failed: Must be of type 'data.frame', not 'kableExtra/knitr_kable' ('test-new_trial_analysis.R:104:5')">Check on 'v' failed: Must be of type 'data.frame', not 'kableExtra/knitr_kable'
 Backtrace:
     x
- 1. \-teal.modules.bsafe:::expect_code_plot_match("compare_plot", app) at test-new_trial_analysis.R:105:5</error>
+ 1. \-checkmate::expect_data_frame(v) at test-new_trial_analysis.R:104:5
+ 2.   \-checkmate::makeExpectation(x, res, info, label)</failure>
     </testcase>
-    <testcase time="0.0180000000000002" classname="new_trial_analysis" name="compare_summary_table_code_eval_matches_value">
-      <error type="error" message="Error in `expect_code_val_match(&quot;compare_summary_table&quot;, app)`: attempt to apply non-function ('test-new_trial_analysis.R:109:5')">Error in `expect_code_val_match("compare_summary_table", app)`: attempt to apply non-function
-Backtrace:
-    x
- 1. \-teal.modules.bsafe:::expect_code_val_match(...) at test-new_trial_analysis.R:109:5</error>
-    </testcase>
-    <testcase time="0.02" classname="new_trial_analysis" name="ae_div_side_and_main_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-new_trial_analysis.R:122:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0149999999999997" classname="new_trial_analysis" name="inci_div_side_and_main_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-new_trial_analysis.R:132:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0170000000000003" classname="new_trial_analysis" name="can_read_and_change_first_occurence">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-new_trial_analysis.R:143:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0149999999999997" classname="new_trial_analysis" name="can_read_and_change_cummulative_time">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-new_trial_analysis.R:151:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
+    <testcase time="1.03799999999998" classname="new_trial_analysis" name="compare_plot_code_eval_matches_plot"/>
+    <testcase time="0.825000000000017" classname="new_trial_analysis" name="compare_summary_table_code_eval_matches_value"/>
+    <testcase time="5.49799999999999" classname="new_trial_analysis" name="ae_div_side_and_main_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
+    <testcase time="0.007000000000005" classname="new_trial_analysis" name="ae_div_side_and_main_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
+    <testcase time="0.00800000000000978" classname="new_trial_analysis" name="inci_div_side_and_main_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
+    <testcase time="0.00600000000000023" classname="new_trial_analysis" name="inci_div_side_and_main_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
+    <testcase time="1.31399999999999" classname="new_trial_analysis" name="can_read_and_change_first_occurence"/>
+    <testcase time="1.15000000000001" classname="new_trial_analysis" name="can_read_and_change_cummulative_time"/>
   </testsuite>
-  <testsuite name="robust_map" timestamp="2024-05-15T10:29:54Z" hostname="df8c495dae36" tests="18" skipped="0" failures="0" errors="15" time="0.281">
-    <testcase time="0.0140000000000002" classname="robust_map" name="preface_rob_txt_returns_correct_preface_for_weakly_informative_conjugate_component"/>
-    <testcase time="0.00300000000000011" classname="robust_map" name="preface_rob_txt_returns_correct_preface_for_EX_NEX_approach"/>
-    <testcase time="0.004" classname="robust_map" name="preface_rob_txt_returns_NULL_for_unknown_selection_analysis"/>
-    <testcase time="0.00699999999999967" classname="robust_map" name="robust_mean_div_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-robust_map.R:51:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0150000000000001" classname="robust_map" name="can_read_and_informative_prior_weight">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-robust_map.R:58:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0150000000000001" classname="robust_map" name="can_read_and_change_ess_method">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-robust_map.R:66:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0149999999999997" classname="robust_map" name="robust_map_mcmc_is_data.frame">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-robust_map.R:73:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["robust_map_mcmc"]]()) at test-robust_map.R:73:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.0260000000000002" classname="robust_map" name="robust_plot_is_ggplot">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-robust_map.R:78:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["robust_plot"]]()) at test-robust_map.R:78:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.024" classname="robust_map" name="robust_summary_is_data.frame">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-robust_map.R:83:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][[tns("r")]][["robust_summary"]]()) at test-robust_map.R:83:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.0219999999999998" classname="robust_map" name="preface_text_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-robust_map.R:88:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0150000000000001" classname="robust_map" name="density_function_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-robust_map.R:93:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0150000000000001" classname="robust_map" name="robust_map_plot_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-robust_map.R:98:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0149999999999997" classname="robust_map" name="table_is_present">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-robust_map.R:103:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0180000000000002" classname="robust_map" name="robust_map_mcmc_code_eval_matches_value">
-      <error type="error" message="Error in `expect_code_val_match(&quot;robust_map_mcmc&quot;, app)`: attempt to apply non-function ('test-robust_map.R:108:5')">Error in `expect_code_val_match("robust_map_mcmc", app)`: attempt to apply non-function
+  <testsuite name="robust_map" timestamp="2024-05-15T13:18:18Z" hostname="48ee973b61f6" tests="18" skipped="0" failures="1" errors="0" time="35.586">
+    <testcase time="0.0660000000000025" classname="robust_map" name="preface_rob_txt_returns_correct_preface_for_weakly_informative_conjugate_component"/>
+    <testcase time="0.0029999999999859" classname="robust_map" name="preface_rob_txt_returns_correct_preface_for_EX_NEX_approach"/>
+    <testcase time="0.00300000000001432" classname="robust_map" name="preface_rob_txt_returns_NULL_for_unknown_selection_analysis"/>
+    <testcase time="5.822" classname="robust_map" name="robust_mean_div_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
+    <testcase time="2.42899999999997" classname="robust_map" name="can_read_and_informative_prior_weight"/>
+    <testcase time="5.774" classname="robust_map" name="can_read_and_change_ess_method"/>
+    <testcase time="1.274" classname="robust_map" name="robust_map_mcmc_is_data.frame"/>
+    <testcase time="1.25800000000001" classname="robust_map" name="robust_plot_is_ggplot"/>
+    <testcase time="1.261" classname="robust_map" name="robust_summary_is_data.frame">
+      <failure type="failure" message="Check on 'v' failed: Must be of type 'data.frame', not 'kableExtra/knitr_kable' ('test-robust_map.R:85:5')">Check on 'v' failed: Must be of type 'data.frame', not 'kableExtra/knitr_kable'
 Backtrace:
     x
- 1. \-teal.modules.bsafe:::expect_code_val_match(...) at test-robust_map.R:108:5</error>
+ 1. \-checkmate::expect_data_frame(v) at test-robust_map.R:85:5
+ 2.   \-checkmate::makeExpectation(x, res, info, label)</failure>
     </testcase>
-    <testcase time="0.0190000000000001" classname="robust_map" name="robust_plot_code_eval_matches_value">
-      <error type="error" message="Error in `expect_code_plot_match(&quot;robust_plot&quot;, app)`: attempt to apply non-function ('test-robust_map.R:112:5')">Error in `expect_code_plot_match("robust_plot", app)`: attempt to apply non-function
-Backtrace:
-    x
- 1. \-teal.modules.bsafe:::expect_code_plot_match("robust_plot", app) at test-robust_map.R:112:5</error>
-    </testcase>
-    <testcase time="0.0189999999999997" classname="robust_map" name="robust_summary_code_eval_matches_value">
-      <error type="error" message="Error in `expect_code_val_match(&quot;robust_summary&quot;, app)`: attempt to apply non-function ('test-robust_map.R:116:5')">Error in `expect_code_val_match("robust_summary", app)`: attempt to apply non-function
-Backtrace:
-    x
- 1. \-teal.modules.bsafe:::expect_code_val_match(...) at test-robust_map.R:116:5</error>
-    </testcase>
-    <testcase time="0.02" classname="robust_map" name="robust_mean_div_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-robust_map.R:127:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0150000000000001" classname="robust_map" name="can_read_and_change_informative_prior_mean">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-robust_map.R:134:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
+    <testcase time="1.30200000000002" classname="robust_map" name="preface_text_is_present"/>
+    <testcase time="1.261" classname="robust_map" name="density_function_is_present"/>
+    <testcase time="1.31" classname="robust_map" name="robust_map_plot_is_present"/>
+    <testcase time="1.57799999999997" classname="robust_map" name="table_is_present"/>
+    <testcase time="1.37800000000001" classname="robust_map" name="robust_map_mcmc_code_eval_matches_value"/>
+    <testcase time="1.535" classname="robust_map" name="robust_plot_code_eval_matches_value"/>
+    <testcase time="1.43800000000002" classname="robust_map" name="robust_summary_code_eval_matches_value"/>
+    <testcase time="5.595" classname="robust_map" name="robust_mean_div_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
+    <testcase time="2.29899999999998" classname="robust_map" name="can_read_and_change_informative_prior_mean"/>
   </testsuite>
-  <testsuite name="select_analysis" timestamp="2024-05-15T10:29:54Z" hostname="df8c495dae36" tests="16" skipped="0" failures="0" errors="6" time="0.137">
-    <testcase time="0.0140000000000002" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_choices_when_previous_selection_is_empty"/>
-    <testcase time="0.004" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_empty"/>
-    <testcase time="0.00299999999999967" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_choices_when_previous_selection_is_not_empty"/>
-    <testcase time="0.00300000000000011" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_not_empty"/>
-    <testcase time="0.00300000000000011" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_choices_when_there_are_choices"/>
-    <testcase time="0.004" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_selected_value_when_there_are_choices"/>
-    <testcase time="0.00299999999999967" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_choices_when_previous_selection_is_not_empty"/>
-    <testcase time="0.00300000000000011" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_not_empty"/>
-    <testcase time="0.00700000000000012" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_NULL_choices_when_there_are_no_choices"/>
-    <testcase time="0.004" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_NULL_selected_value_when_there_are_no_choices"/>
-    <testcase time="0.00700000000000012" classname="select_analysis" name="can_read_and_change_treatment">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-select_analysis.R:74:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0149999999999997" classname="select_analysis" name="can_read_and_change_change_analysis_type">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-select_analysis.R:82:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0150000000000001" classname="select_analysis" name="can_read_and_change_safety_topic">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-select_analysis.R:90:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.0140000000000002" classname="select_analysis" name="can_read_and_change_seed">
-      <error type="error" message="Error in `eval(code, test_env)`: attempt to apply non-function ('test-select_analysis.R:98:5')">Error in `eval(code, test_env)`: attempt to apply non-function</error>
-    </testcase>
-    <testcase time="0.016" classname="select_analysis" name="returned_data_is_a_data.frame">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-select_analysis.R:105:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][["r"]][["data"]]()) at test-select_analysis.R:105:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
-    <testcase time="0.0219999999999998" classname="select_analysis" name="exported_data_code_matches_output">
-      <error type="error" message="Error in `..stacktraceon..(expr)`: attempt to apply non-function ('test-select_analysis.R:110:5')">Error in `..stacktraceon..(expr)`: attempt to apply non-function
-Backtrace:
-     x
-  1. \-shiny::isolate(app$get_values()[["export"]][["r"]][["data"]]()) at test-select_analysis.R:110:5
-  2.   +-shiny::..stacktraceoff..(...)
-  3.   \-ctx$run(...)
-  4.     +-promises::with_promise_domain(...)
-  5.     | \-domain$wrapSync(expr)
-  6.     +-shiny::withReactiveDomain(...)
-  7.     | \-promises::with_promise_domain(...)
-  8.     |   \-domain$wrapSync(expr)
-  9.     |     \-base::force(expr)
- 10.     \-env$runWith(self, func)
- 11.       \-shiny (local) contextFunc()
- 12.         \-shiny::..stacktraceon..(expr)</error>
-    </testcase>
+  <testsuite name="select_analysis" timestamp="2024-05-15T13:18:54Z" hostname="48ee973b61f6" tests="16" skipped="0" failures="0" errors="0" time="7.972">
+    <testcase time="0.0690000000000168" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_choices_when_previous_selection_is_empty"/>
+    <testcase time="0.00399999999999068" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_empty"/>
+    <testcase time="0.00300000000001432" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_choices_when_previous_selection_is_not_empty"/>
+    <testcase time="0.0029999999999859" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_not_empty"/>
+    <testcase time="0.00399999999999068" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_choices_when_there_are_choices"/>
+    <testcase time="0.00300000000001432" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_selected_value_when_there_are_choices"/>
+    <testcase time="0.0029999999999859" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_choices_when_previous_selection_is_not_empty"/>
+    <testcase time="0.00300000000001432" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_not_empty"/>
+    <testcase time="0.00399999999999068" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_NULL_choices_when_there_are_no_choices"/>
+    <testcase time="0.0040000000000191" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_NULL_selected_value_when_there_are_no_choices"/>
+    <testcase time="3.79399999999998" classname="select_analysis" name="can_read_and_change_treatment"/>
+    <testcase time="0.984000000000009" classname="select_analysis" name="can_read_and_change_change_analysis_type"/>
+    <testcase time="0.966000000000008" classname="select_analysis" name="can_read_and_change_safety_topic"/>
+    <testcase time="0.909999999999997" classname="select_analysis" name="can_read_and_change_seed"/>
+    <testcase time="0.399999999999977" classname="select_analysis" name="returned_data_is_a_data.frame"/>
+    <testcase time="0.818000000000012" classname="select_analysis" name="exported_data_code_matches_output"/>
   </testsuite>
 </testsuites>
