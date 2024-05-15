@@ -224,8 +224,8 @@ mock_new_trial_analysis_mod <- function(analysis_type = BSAFE_CHOICES$SEL_ANALYS
 
     r <- do.call(mod_new_trial_analysis_server, c(list(id = "mock"), metareact_in))
     output[["out"]] <- shiny::renderPrint({
-      x[["data"]]()
-      utils::str(x)
+      r[["data"]]()
+      utils::str(r)
     })
 
     do.call(shiny::exportTestValues, as.list(environment()))
