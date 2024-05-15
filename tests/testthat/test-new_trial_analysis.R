@@ -62,7 +62,7 @@ local({
 
     app$set_inputs(!!tns(BSAFE_ID$SLDR_N_AE) := 6)
     app$wait_for_idle()
-    current_value <- shiny::isolate(app$get_values()[["input"]][[tns(BSAFE_ID$SLDR_N_AE)]])    
+    current_value <- shiny::isolate(app$get_values()[["input"]][[tns(BSAFE_ID$SLDR_N_AE)]])
     expect_equal(current_value, 5)
   })
 
