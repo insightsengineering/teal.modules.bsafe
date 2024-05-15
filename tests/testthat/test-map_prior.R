@@ -23,7 +23,10 @@ local({
 local({
   tns <- tns_factory("mock")
 
-  app <- start_app_driver(teal.modules.bsafe:::mock_map_prior_mod())
+  app <- shinytest2::AppDriver$new(teal.modules.bsafe:::mock_map_prior_mod())
+  wait_value_idle(app, input = tns(BSAFE_ID$SEL_TAU))
+  
+  
   on.exit(if ("stop" %in% names(app)) app$stop())
 
   fail_if_app_not_started <- function() {

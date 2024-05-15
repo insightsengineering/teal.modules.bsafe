@@ -40,7 +40,8 @@ local({
 local({
   tns <- tns_factory("mock")
 
-  app <- start_app_driver(teal.modules.bsafe:::mock_robust_map_mod())
+  app <- shinytest2::AppDriver$new(teal.modules.bsafe:::mock_robust_map_mod())
+  wait_value_idle(app, input = tns(BSAFE_ID$SLDR_ROB_WEIGHT))
   on.exit(if ("stop" %in% names(app)) app$stop())
 
   fail_if_app_not_started <- function() {
@@ -116,7 +117,8 @@ local({
     expect_code_val_match("robust_summary", app)
   })
 
-  app <- start_app_driver(teal.modules.bsafe:::mock_robust_map_mod(BSAFE_CHOICES$SEL_ANALYSIS[2]))
+  app <- shinytest2::AppDriver$new(teal.modules.bsafe:::mock_robust_map_mod(BSAFE_CHOICES$SEL_ANALYSIS[2]))
+  wait_value_idle(app, input = tns(BSAFE_ID$SLDR_ROB_MEAN))
   on.exit(if ("stop" %in% names(app)) app$stop())
 
   fail_if_app_not_started <- function() {

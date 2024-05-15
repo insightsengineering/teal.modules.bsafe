@@ -8,7 +8,8 @@ local({
 local({
   tns <- tns_factory("mock")
 
-  app <- start_app_driver(teal.modules.bsafe:::mock_new_trial_analysis_mod())
+  app <- shinytest2::AppDriver$new(teal.modules.bsafe:::mock_new_trial_analysis_mod())
+  wait_value_idle(app, input = tns(BSAFE_ID$SLDR_N_PAT))
   on.exit(if ("stop" %in% names(app)) app$stop())
 
   fail_if_app_not_started <- function() {
@@ -28,6 +29,8 @@ local({
   })
 
   test_that("inci div side and main is visible when analysis_type is BSAFE_CHOICES$SEL_ANALYSIS[1]", {
+
+    
     div <- app$get_html(paste0("#", tns(BSAFE_ID$DIV_NTA_INCI)))
     opening_tag <- regmatches(div, regexpr("<div[^>]*>", div))
     expect_false(grepl("display: none", opening_tag))
@@ -111,14 +114,15 @@ local({
 
 
 
-  app <- start_app_driver(teal.modules.bsafe:::mock_new_trial_analysis_mod(BSAFE_CHOICES$SEL_ANALYSIS[2]))
+  app <- shinytest2::AppDriver$new(teal.modules.bsafe:::mock_new_trial_analysis_mod(BSAFE_CHOICES$SEL_ANALYSIS[2]))
+  wait_value_idle(app, input = tns(BSAFE_ID$SLDR_AE_FIRST_OCCURENCE))
   on.exit(if ("stop" %in% names(app)) app$stop())
 
   fail_if_app_not_started <- function() {
     if (is.null(app)) rlang::abort("App could not be started")
   }
 
-  test_that("ae div side and main is visible when analysis_type is BSAFE_CHOICES$SEL_ANALYSIS[1]", {
+  test_that("ae div side and main is visible when analysis_type is BSAFE_CHOICES$SEL_ANALYSIS[2]", {
     div <- app$get_html(paste0("#", tns(BSAFE_ID$DIV_NTA_AE)))
     opening_tag <- regmatches(div, regexpr("<div[^>]*>", div))
     expect_false(grepl("display: none", opening_tag))
@@ -128,7 +132,7 @@ local({
     expect_false(grepl("display: none", opening_tag))
   })
 
-  test_that("inci div side and main is hidden when analysis_type is BSAFE_CHOICES$SEL_ANALYSIS[1]", {
+  test_that("inci div side and main is hidden when analysis_type is BSAFE_CHOICES$SEL_ANALYSIS[2]", {
     div <- app$get_html(paste0("#", tns(BSAFE_ID$DIV_NTA_INCI)))
     opening_tag <- regmatches(div, regexpr("<div[^>]*>", div))
     expect_true(grepl("display: none", opening_tag))
