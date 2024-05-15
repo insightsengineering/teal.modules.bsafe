@@ -34,9 +34,7 @@ Imports:
     rlang,
     shinymeta,
     teal.data,    
-    teal.widgets,
     teal.reporter,
-    teal.code,
     styler
 Suggests:
     testthat (>= 3.0.4),
