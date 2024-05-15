@@ -34,7 +34,10 @@ Imports:
     knitr,
     rlang,
     shinymeta,
-    teal.data
+    teal.data,    
+    teal.widgets,
+    teal.reporter,
+    teal.code
 Suggests:
     testthat (>= 3.0.4)
 RoxygenNote: 7.3.1
