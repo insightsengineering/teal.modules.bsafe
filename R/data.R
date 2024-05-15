@@ -6,3 +6,6 @@
 
 #' @title test data for new analysis trial
 "test_na_in"
+
+#' @title test data for robust map
+"test_rm_in"

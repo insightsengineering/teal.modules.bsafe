@@ -13,6 +13,9 @@ mod_robust_map_ui <- function(id) {
       shiny::div(
         id = ns(BSAFE_ID$DIV_ROB_MEAN),
         shiny::sliderInput(ns(BSAFE_ID$SLDR_ROB_MEAN),
+          # TODO: bsafe cannot handle values below than 1, because a log is calculated in bsafe and then RBest
+          # complains because mean cannot be below 0
+          # TODO: bsafe throws error for given combinations on prior weigth and prior mean exp
           "Weakly-informative Prior Mean on the exp scale",
           value = 0.5, # default starting value
           min = 0.01,
@@ -29,6 +32,7 @@ mod_robust_map_ui <- function(id) {
   )
 
   main <- list(
+    shinyjs::useShinyjs(),
     shiny::uiOutput(ns(BSAFE_ID$OUT_PREFACE_ROB_TXT)),
     shiny::uiOutput(ns(BSAFE_ID$OUT_ROB_DENSITY_FCT)),
     shiny::plotOutput(ns(BSAFE_ID$OUT_ROB_MAP_PLT)), # spinner
@@ -168,11 +172,15 @@ mod_robust_map_server <- function(
         kableExtra::kable_styling("striped")
     }
 
-    list(
+    r <- list(
       robust_map_mcmc = robust_map_mcmc,
       robust_plot = robust_plot,
       robust_summary = robust_summary
     )
+
+    do.call(shiny::exportTestValues, as.list(environment()))
+
+    return(r)
   }
 
   shiny::moduleServer(id, mod)
@@ -195,7 +203,7 @@ preface_rob_txt <- function(sel_analysis, rob_weight, rob_mean) {
   }
 }
 
-mock_robust_map_mod <- function() {
+mock_robust_map_mod <- function(analysis_type = BSAFE_CHOICES$SEL_ANALYSIS[1]) {
   ui <- function(request) {
     shiny::fluidPage(
       mod_robust_map_ui(
@@ -206,32 +214,31 @@ mock_robust_map_mod <- function() {
   }
 
   server <- function(input, output, session) {
-    data <- data.frame(
-      STUDYID = factor(c(9)),
-      N = c(123L),
-      N_WITH_AE = c(21L),
-      HIST = c(1)
+    metareact_in <- purrr::imap(teal.modules.bsafe::test_rm_in, function(v, n) {
+      shinymeta::metaReactive(
+        {
+          rlang::quo(teal.modules.bsafe::test_rm_in[[!!n]])
+        },
+        quoted = TRUE,
+        varname = n
+      )
+    })
+
+    metareact_in[["analysis_type"]] <- shinymeta::metaReactive(
+      {
+        shinymeta::..(analysis_type)
+      },
+      varname = "analysis_type"
     )
 
-    map_prior_out <- readRDS("map_prior_out.rds")
-
-    x <- mod_robust_map_server(
-      id = "mock",
-      data = shiny::reactive(data),
-      map_mcmc = shiny::reactive(map_prior_out[["map_mcmc"]]),
-      param_approx = shiny::reactive(map_prior_out[["param_approx"]]),
-      adj_tau = shiny::reactive(map_prior_out[["adj_tau"]]),
-      analysis_type = shiny::reactive("Incidence proportion"),
-      treatment = shiny::reactive("Treatment"),
-      safety_topic = shiny::reactive("Nausea"),
-      ess_method = shiny::reactive(map_prior_out[["ess_method"]]),
-      seed = shiny::reactive(round(as.numeric(Sys.time()), 0))
-    )
+    r <- do.call(mod_robust_map_server, c(list(id = "mock"), metareact_in))
 
     output[["out"]] <- shiny::renderPrint({
-      x[["data"]]()
-      utils::str(x)
+      r[["data"]]()
+      utils::str(r)
     })
+
+    do.call(shiny::exportTestValues, as.list(environment()))
   }
 
   shiny::shinyApp(
