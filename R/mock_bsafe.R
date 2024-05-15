@@ -1,9 +1,11 @@
+# nocov start
+
 #' @title mock_poc_bsafe_app
 #'
 #' @description dummy mock app function
 #'
 #' @export
-mock_poc_bsafe_app <- function() {
+mock_bsafe <- function() {
   ui <- function(request) {
     shiny::fluidPage(
       bsafe_UI(
@@ -29,3 +31,5 @@ mock_poc_bsafe_app <- function() {
     server = server
   )
 }
+
+# nocov end
