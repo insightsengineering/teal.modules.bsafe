@@ -117,7 +117,7 @@ mod_decision_making_server <- function(
         post = "%"
       )
     })
-    shiny::outputOptions(output, BSAFE_ID$OUT_PERC_SLDR, suspendWhenHidden = FALSE)
+    shiny::outputOptions(output, BSAFE_ID$OUT_PERC_SLDR_CONT, suspendWhenHidden = FALSE)
 
 
     output[[BSAFE_ID$OUT_AE_PERC_SLDR_CONT]] <- shiny::renderUI({
@@ -136,7 +136,7 @@ mod_decision_making_server <- function(
       )
     })
 
-    shiny::outputOptions(output, BSAFE_ID$OUT_AE_PERC_SLDR, suspendWhenHidden = FALSE)
+    shiny::outputOptions(output, BSAFE_ID$OUT_AE_PERC_SLDR_CONT, suspendWhenHidden = FALSE)
 
     # Header text
     dm_header <- shiny::reactive({
