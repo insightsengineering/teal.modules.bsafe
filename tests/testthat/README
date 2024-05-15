@@ -1,10 +1,10 @@
-Test is restricted to a minimum as most of the computations happen in bsafe. Reactives contain mostly
-single calls to the bsafe package that has its own testing.
+Tests are minimized as most computations occur in bsafe. Reactives predominantly consist of single calls to the bsafe
+package, which has its own set of tests.
 
-Implements:
-- Testing of non-reactive helpers
-- Testing of UI elements that appear and disappear depending on other selections
-- All outputs are present
-- Inputs can be read and changed
-- Returned values per module are correct
-- Metareactives content returned by each module returned the same object when evaluated
+Implemented:
+ - Testing of non-reactive helpers.
+ - Verification of UI elements appearing/disappearing based on selections.
+ - Confirmation of all outputs' presence.
+ - Ability to read and modify inputs.
+ - Validation of correct returned values per module.
+ - Consistency ensured in metareactives content returned by each module.
