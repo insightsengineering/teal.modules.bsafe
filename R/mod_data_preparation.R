@@ -121,7 +121,7 @@ mod_data_preparation_server <- function(id, data) {
       })
     })
 
-    outputOptions(output, BSAFE_ID$OUT_SEL_VAR, suspendWhenHidden = FALSE)
+    shiny::outputOptions(output, BSAFE_ID$OUT_SEL_VAR, suspendWhenHidden = FALSE)
 
 
     shiny::observeEvent(input[[BSAFE_ID$BUT_ADD_ARM]], {

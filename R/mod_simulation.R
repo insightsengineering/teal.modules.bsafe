@@ -74,7 +74,7 @@ mod_simulation_server <- function(id, data) {
       el
     })
 
-    outputOptions(output, BSAFE_ID$OUT_COMP_CB, suspendWhenHidden = FALSE)
+    shiny::outputOptions(output, BSAFE_ID$OUT_COMP_CB, suspendWhenHidden = FALSE)
 
     output[[BSAFE_ID$OUT_COMP_DISPLAY]] <- shiny::renderUI({
       lapply(1:input[[BSAFE_ID$SLDR_NUM_COMP]], function(i) {

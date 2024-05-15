@@ -107,7 +107,7 @@ bsafe_UI <- function(id, header = NULL) { # nolint
 
   shiny::tagList(
     shinyjs::useShinyjs(),
-    includeCSS(system.file("www/bsafe.css", mustWork = TRUE, package = "teal.modules.bsafe")),
+    shiny::includeCSS(system.file("www/bsafe.css", mustWork = TRUE, package = "teal.modules.bsafe")),
     shiny::sidebarLayout(
       sidebarPanel = side,
       mainPanel = main

@@ -29,7 +29,6 @@ Imports:
     bsafe,
     htmltools,
     teal,
-    teal.reporter,
     kableExtra,
     knitr,
     rlang,
@@ -37,7 +36,8 @@ Imports:
     teal.data,    
     teal.widgets,
     teal.reporter,
-    teal.code
+    teal.code,
+    styler
 Suggests:
     testthat (>= 3.0.4)
 RoxygenNote: 7.3.1
