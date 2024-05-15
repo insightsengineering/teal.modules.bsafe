@@ -29,7 +29,7 @@ BSAFE_ID <- pack_of_constants( # nolint
 
   # Robust MAP Prior
   SLDR_ROB_WEIGHT = "robust_weight",
-  DIV_ROB_MEAN = "robust_mean",
+  DIV_ROB_MEAN = "robust_mean_div",
   SLDR_ROB_MEAN = "robust_mean",
   SEL_ROB_ESS_METHOD = "rob_ess_method",
   BUT_UPDATE_ROB = "update_rob",
