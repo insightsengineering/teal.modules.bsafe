@@ -177,14 +177,13 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
 
     # Display parametric approximation mixture density function
     # TODO: Cannot be included in the reporter MATHJAX not supported
+    
     output[[BSAFE_ID$OUT_DENSITY_FCT]] <- shiny::renderUI({
-      # TODO: This function should return the element to be displayed not a shiny element
       f <- bsafe::map_prior_function_display(
         param_approx = param_approx(),
         select_analysis = analysis_type()
       )
-      f[[2]][["name"]] <- "span"
-      f
+      shiny::withMathJax(f)
     })
 
     # Display parametric mixture density

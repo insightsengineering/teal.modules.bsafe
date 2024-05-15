@@ -252,6 +252,7 @@ bsafe_server <- function(
     )
 
     # nolint start
+    # TODO: data preparation and download results are not working on bsafe's side
     # data_preparation <- mod_data_preparation_server(
     #   "data_preparation",
     #   data = receive_data

@@ -13,9 +13,6 @@ mod_robust_map_ui <- function(id) {
       shiny::div(
         id = ns(BSAFE_ID$DIV_ROB_MEAN),
         shiny::sliderInput(ns(BSAFE_ID$SLDR_ROB_MEAN),
-          # TODO: bsafe cannot handle values below than 1, because a log is calculated in bsafe and then RBest
-          # complains because mean cannot be below 0
-          # TODO: bsafe throws error for given combinations on prior weigth and prior mean exp
           "Weakly-informative Prior Mean on the exp scale",
           value = 0.5, # default starting value
           min = 0.01,
@@ -58,6 +55,10 @@ mod_robust_map_server <- function(
     robust_map_mcmc <- shinymeta::metaReactive2(
       {
         # rob weight in function and return that
+        # TODO: bsafe::robust_map cannot handle values below than 1, because a log is calculated in bsafe and then RBest
+        # complains because mean cannot be below 0. BSAFE_ID$SLDR_ROB_MEAN offers values below one that when
+        # log-transformed are <0
+        # TODO: bsafe throws error for given combinations on prior weigth and prior mean exp
         shiny::req(analysis_type())
         shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
         shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
@@ -68,6 +69,7 @@ mod_robust_map_server <- function(
             input_data = ..(data()),
             robust_weight = ..(input[[BSAFE_ID$SLDR_ROB_WEIGHT]]),
             # TODO: It uses the mean in the selector even when it is hidden
+            # TODO: Method selection is done in bsafe which does not seem correct
             robust_mean = ..(input[[BSAFE_ID$SLDR_ROB_MEAN]]),
             adj_tau = ..(adj_tau()),
             seed = ..(seed())
@@ -156,8 +158,7 @@ mod_robust_map_server <- function(
     # Display robust MAP prior mixture density function
     output[[BSAFE_ID$OUT_ROB_DENSITY_FCT]] <- shiny::renderUI({
       f <- robust_formula()
-      f[[2]][["name"]] <- "span"
-      f
+      shiny::withMathJax(f)
     })
 
     # Compare robust MAP prior to MAP prior
