@@ -41,4 +41,4 @@ Suggests:
     shinytest2,
     vdiffr
 RoxygenNote: 7.3.1
-Remotes: insightsengineering/bsafe@557bd8c9f2d748fb45cb5d0521907137a157c5a3
+Remotes: insightsengineering/bsafe@main
