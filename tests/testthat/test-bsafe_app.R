@@ -1,5 +1,5 @@
 # app tests ----
-local({  
+local({
   test_that("bsafe module starts", {
     app <- shinytest2::AppDriver$new(teal.modules.bsafe:::mock_bsafe())
     app$wait_for_idle()
@@ -8,7 +8,7 @@ local({
 })
 
 # app tests ----
-local({  
+local({
   test_that("tm_bsafe starts", {
     app <- suppressWarnings(shinytest2::AppDriver$new(teal.modules.bsafe:::mock_teal()))
     app$wait_for_idle()
