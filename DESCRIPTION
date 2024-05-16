@@ -21,8 +21,7 @@ Imports:
     shinyjs (>= 2.0.0),
     utils,
     purrr,
-    dplyr,
-    rmarkdown,
+    dplyr,    
     stringr,
     checkmate,
     magrittr,
@@ -35,7 +34,8 @@ Imports:
     shinymeta,
     teal.data,    
     teal.reporter,
-    styler
+    styler,
+    markdown
 Suggests:
     testthat (>= 3.0.4),
     shinytest2,
