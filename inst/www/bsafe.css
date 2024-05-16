@@ -1,0 +1,20 @@
+.collapse_menu > label >input.shiny-input-checkbox{
+    display: none;
+  }
+
+  .collapse_menu > label >input.shiny-input-checkbox + span > span.chevron:before {
+    font-size: 2rem;
+    display: inline-block;
+	content:"\203A";    
+}
+  
+.collapse_menu > label >input.shiny-input-checkbox:checked + span > span.chevron:before {
+    font-size: 2rem;
+    display: inline-block;
+	content:"\203A";    
+    transform: rotate(90deg);
+}
+
+
+
+

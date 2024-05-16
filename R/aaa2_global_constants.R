@@ -29,7 +29,7 @@ BSAFE_ID <- pack_of_constants( # nolint
 
   # Robust MAP Prior
   SLDR_ROB_WEIGHT = "robust_weight",
-  DIV_ROB_MEAN = "robust_mean",
+  DIV_ROB_MEAN = "robust_mean_div",
   SLDR_ROB_MEAN = "robust_mean",
   SEL_ROB_ESS_METHOD = "rob_ess_method",
   BUT_UPDATE_ROB = "update_rob",
@@ -55,9 +55,11 @@ BSAFE_ID <- pack_of_constants( # nolint
   DIV_DM_INCI = "dm_inci",
   SEL_DIST = "select_dist",
   OUT_PERC_SLDR = "ae_perc_slider",
+  OUT_PERC_SLDR_CONT = "ae_perc_slider_cont",
   DIV_DM_AE = "dm_er",
   SEL_DIST_AE = "select_dist_er",
   OUT_AE_PERC_SLDR = "ae_perc_slider_dm",
+  OUT_AE_PERC_SLDR_CONT = "ae_perc_slider_dm_cont",
   BUT_UPDATE_STAT_INF = "update_stat_inf",
   OUT_DM_HEADER_TXT = "pdf_title",
   OUT_DM_PREFACE_TXT = "interpret",
