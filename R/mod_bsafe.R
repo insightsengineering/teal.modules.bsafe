@@ -92,27 +92,27 @@ bsafe_UI <- function(id, header = NULL) { # nolint
   )
 
   main <- purrr::imap(
-      ui_list,
-      function(v, n) {
-        collapsible_panel(
-          id = ns(paste0(n, "_main_check")),
-          label = v[[2]],
-          v[[1]][["main"]],
-          open = v[[3]]
-        )
-      }
-    )
+    ui_list,
+    function(v, n) {
+      collapsible_panel(
+        id = ns(paste0(n, "_main_check")),
+        label = v[[2]],
+        v[[1]][["main"]],
+        open = v[[3]]
+      )
+    }
+  )
 
   manual_ui <- collapsible_panel(
     id = ns("manual"),
     open = FALSE,
     label = "Getting Started",
-      shiny::includeMarkdown(system.file("gettingStarted_bsafe.Rmd",
-        package = "teal.modules.bsafe",
-        mustWork = TRUE
-      )),
-      shiny::h5("User Manual:"),
-      # shiny::a("open manual", href = "bsafe_manual.pdf")
+    shiny::includeMarkdown(system.file("gettingStarted_bsafe.Rmd",
+      package = "teal.modules.bsafe",
+      mustWork = TRUE
+    )),
+    shiny::h5("User Manual:"),
+    # shiny::a("open manual", href = "bsafe_manual.pdf")
   )
   main <- list(manual_ui, main)
 

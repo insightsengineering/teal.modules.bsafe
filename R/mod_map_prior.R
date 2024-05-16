@@ -177,7 +177,7 @@ mod_map_prior_server <- function(id, data, analysis_type, safety_topic, treatmen
 
     # Display parametric approximation mixture density function
     # TODO: Cannot be included in the reporter MATHJAX not supported
-    
+
     output[[BSAFE_ID$OUT_DENSITY_FCT]] <- shiny::renderUI({
       f <- bsafe::map_prior_function_display(
         param_approx = param_approx(),

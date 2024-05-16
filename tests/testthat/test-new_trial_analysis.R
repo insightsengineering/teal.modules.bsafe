@@ -29,8 +29,6 @@ local({
   })
 
   test_that("inci div side and main is visible when analysis_type is BSAFE_CHOICES$SEL_ANALYSIS[1]", {
-
-    
     div <- app$get_html(paste0("#", tns(BSAFE_ID$DIV_NTA_INCI)))
     opening_tag <- regmatches(div, regexpr("<div[^>]*>", div))
     expect_false(grepl("display: none", opening_tag))
