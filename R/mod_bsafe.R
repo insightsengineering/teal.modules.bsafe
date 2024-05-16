@@ -39,6 +39,17 @@ bsafe_UI <- function(id, header = NULL) { # nolint
 
   ns <- shiny::NS(id)
 
+  manual_ui <- collapsible_panel(
+    id = ns("manual"),
+    label = "Getting Started",
+        shiny::includeMarkdown(system.file("gettingStarted_bsafe.Rmd",
+          package = "teal.modules.bsafe",
+          mustWork = TRUE
+        )),
+        shiny::h5("User Manual:"),
+        # shiny::a("open manual", href = "bsafe_manual.pdf")
+      )
+
   ui_list <- list(
     a_sel = list(mod_select_analysis_ui(ns("sel_analysis")), "Analysis selection", FALSE),
     mp = list(mod_map_prior_ui(ns("map_prior")), "Map Prior", FALSE),
@@ -90,7 +101,7 @@ bsafe_UI <- function(id, header = NULL) { # nolint
   )
 
   main <- shiny::mainPanel(
-    purrr::imap(
+    {l <- purrr::imap(
       ui_list,
       function(v, n) {
         collapsible_panel(
@@ -101,6 +112,7 @@ bsafe_UI <- function(id, header = NULL) { # nolint
         )
       }
     )
+    list(manual_ui, l)}
   )
 
   shiny::tagList(
