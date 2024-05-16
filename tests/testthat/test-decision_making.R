@@ -21,7 +21,7 @@ local({
   app <- shinytest2::AppDriver$new(teal.modules.bsafe:::mock_decision_making_mod())
   # Wait for the app to be in place
   wait_value_idle(app, input = tns(BSAFE_ID$SEL_DIST))
-  
+
   on.exit(if ("stop" %in% names(app)) app$stop())
 
   fail_if_app_not_started <- function() {
@@ -104,9 +104,9 @@ local({
   tns <- tns_factory("mock")
 
   app <- shinytest2::AppDriver$new(teal.modules.bsafe:::mock_decision_making_mod(BSAFE_CHOICES$SEL_ANALYSIS[2]))
-  
+
   # Wait for the app to be in place
-  wait_value_idle(app, input = tns(BSAFE_ID$OUT_AE_PERC_SLDR))  
+  wait_value_idle(app, input = tns(BSAFE_ID$OUT_AE_PERC_SLDR))
 
   on.exit(if ("stop" %in% names(app)) app$stop())
 

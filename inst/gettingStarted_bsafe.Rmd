@@ -18,29 +18,14 @@ BSAFE has two main uses.
 
 Analyses are available for incidence proportions as well as for exposure adjusted incidence rates.  
 
-First, you have to upload a dataset.  
-You can now either jump directly to the Download tab for a summary table or explore the MAP priors in the app in more depth.  
+To explore the priors, you have to enter the information subsequently in every panel.  
 
-To explore the priors, you have to enter the information subsequently in every tab.  
-To a complete analysis with default values, you may directly jump to **Download Results** after uploading your data.  
-
-### **Upload Data**
-
-In this tab you have to provide the data you want to analyze with the app.  
-This is necessary to explore a single MAP Prior in the app,
-or to download the results.
-
-The data applicable for a MAP prior are also displayed after uploading some data.
-
-Here you can also ensure the replicability of your results.
-
-#### Upload CSV File
+#### Data structure
 
 It is expected to upload the data as .csv file.
 Click on **Browse** to choose the data you want to upload.  
 You can only upload one file and it needs to combine your datasets, if necessary.  
 The columns of your data has to include the following variables:
-
 
 Variable       | Data type       | Description                                                                                              |                
 -------------- | --------------- | ---------------------------------------------------------------------------------------------------------|

@@ -39,6 +39,8 @@ bsafe_UI <- function(id, header = NULL) { # nolint
 
   ns <- shiny::NS(id)
 
+
+
   ui_list <- list(
     a_sel = list(mod_select_analysis_ui(ns("sel_analysis")), "Analysis selection", FALSE),
     mp = list(mod_map_prior_ui(ns("map_prior")), "Map Prior", FALSE),
@@ -75,7 +77,7 @@ bsafe_UI <- function(id, header = NULL) { # nolint
     shiny::div(ui_list[["dm"]][[1]][["main"]][5], style = "grid-column: 2; grid-row:2; min-width: 0") # nolint
   )
 
-  side <- shiny::sidebarPanel(
+  side <- shiny::tagList(
     header,
     purrr::imap(
       ui_list,
@@ -89,26 +91,37 @@ bsafe_UI <- function(id, header = NULL) { # nolint
     )
   )
 
-  main <- shiny::mainPanel(
-    purrr::imap(
-      ui_list,
-      function(v, n) {
-        collapsible_panel(
-          id = ns(paste0(n, "_main_check")),
-          label = v[[2]],
-          v[[1]][["main"]],
-          open = v[[3]]
-        )
-      }
-    )
+  main <- purrr::imap(
+    ui_list,
+    function(v, n) {
+      collapsible_panel(
+        id = ns(paste0(n, "_main_check")),
+        label = v[[2]],
+        v[[1]][["main"]],
+        open = v[[3]]
+      )
+    }
   )
+
+  manual_ui <- collapsible_panel(
+    id = ns("manual"),
+    open = FALSE,
+    label = "Getting Started",
+    shiny::includeMarkdown(system.file("gettingStarted_bsafe.Rmd",
+      package = "teal.modules.bsafe",
+      mustWork = TRUE
+    )),
+    shiny::h5("User Manual:"),
+    # shiny::a("open manual", href = "bsafe_manual.pdf")
+  )
+  main <- list(manual_ui, main)
 
   shiny::tagList(
     shinyjs::useShinyjs(),
     shiny::includeCSS(system.file("www/bsafe.css", mustWork = TRUE, package = "teal.modules.bsafe")),
     shiny::sidebarLayout(
-      sidebarPanel = side,
-      mainPanel = main
+      sidebarPanel = shiny::sidebarPanel(side),
+      mainPanel = shiny::mainPanel(main)
     )
   )
 }

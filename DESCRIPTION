@@ -21,8 +21,7 @@ Imports:
     shinyjs (>= 2.0.0),
     utils,
     purrr,
-    dplyr,
-    rmarkdown,
+    dplyr,    
     stringr,
     checkmate,
     magrittr,
@@ -35,10 +34,11 @@ Imports:
     shinymeta,
     teal.data,    
     teal.reporter,
-    styler
+    styler,
+    markdown
 Suggests:
     testthat (>= 3.0.4),
     shinytest2,
     vdiffr
 RoxygenNote: 7.3.1
-Remotes: insightsengineering/bsafe@557bd8c9f2d748fb45cb5d0521907137a157c5a3
+Remotes: insightsengineering/bsafe@main
