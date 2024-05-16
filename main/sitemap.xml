@@ -16,10 +16,16 @@
     <loc>https://insightsengineering.github.io/teal.modules.bsafe/news/index.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/bsafe_UI.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/bsafe_data.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/cash-.pack_of_constants.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/dot_dot_shinymeta.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/dplyr_.data.html</loc>
@@ -28,7 +34,7 @@
     <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/mock_poc_bsafe_app.html</loc>
+    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/mock_bsafe.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/pack_of_constants.html</loc>
@@ -37,6 +43,12 @@
     <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/poc_UI.html</loc>
+    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/test_dm_in.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/test_na_in.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/test_rm_in.html</loc>
   </url>
 </urlset>
