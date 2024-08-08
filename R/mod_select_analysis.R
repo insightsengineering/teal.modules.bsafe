@@ -24,8 +24,9 @@ mod_select_analysis_ui <- function(id) {
     shiny::checkboxInput(ns(BSAFE_ID$CB_POOLED), "Pool by study", value = TRUE)
   )
 
-  main <- shiny::tableOutput(ns(BSAFE_ID$OUT_FILE_TABLE))
-  list(side = side, main = main)
+  # main <- shiny::tableOutput(ns(BSAFE_ID$OUT_FILE_TABLE))
+  # list(side = side, main = main)
+  list(side = side)
 }
 
 mod_select_analysis_server <- function(id, data) {

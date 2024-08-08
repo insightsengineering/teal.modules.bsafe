@@ -114,7 +114,7 @@ bsafe_UI <- function(id, header = NULL) { # nolint
       mustWork = TRUE
     )),
     shiny::h5("User Manual:"),
-    # shiny::a("open manual", href = "bsafe_manual.pdf")
+    shiny::a("open manual", href = system.file("/www/user.manual.b_safe.pdf", mustWork = TRUE, package = "teal.modules.bsafe"))
   )
   main <- list(manual_ui, main)
 
@@ -178,8 +178,8 @@ bsafe_server <- function(
             "SAF_TOPIC needs to be a character"
           ),
           shiny::need(
-            checkmate::test_character(data[["STUDY_ARM"]]),
-            "STUDY_ARM needs to be a character"
+            checkmate::test_character(data[["ARM"]]),
+            "ARM needs to be a character"
           ),
           # TODO: Discuss with Lars the non-existing column
           # nolint start

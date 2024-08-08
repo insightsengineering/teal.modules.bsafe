@@ -139,7 +139,11 @@ mod_data_preparation_server <- function(id, data) {
     })
 
     output[[BSAFE_ID$OUT_ARM_SEL]] <- shiny::renderTable({
-      rv[["data"]]
+      if(is.null(rv[["data"]])) {
+        data()
+      } else {
+        rv[["data"]]
+      }
     })
 
 
