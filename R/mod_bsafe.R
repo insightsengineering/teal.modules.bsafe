@@ -46,7 +46,8 @@ bsafe_UI <- function(id, header = NULL) { # nolint
     mp = list(mod_map_prior_ui(ns("map_prior")), "Map Prior", FALSE),
     rmp = list(mod_robust_map_ui(ns("robust_map")), "Robust Map Prior", FALSE),
     nta = list(mod_new_trial_analysis_ui(ns("new_trial")), "New Trial Analysis", FALSE),
-    dm = list(mod_decision_making_ui(ns("decision_making")), "Decision Making", FALSE)
+    dm = list(mod_decision_making_ui(ns("decision_making")), "Decision Making", FALSE),
+    down = list(mod_simulation_ui(ns("simulation")), "Download", FALSE)
   )
 
   ui_list[["mp"]][[1]][["main"]] <- shiny::div(
@@ -261,7 +262,8 @@ bsafe_server <- function(
       param_approx = map_prior[["param_approx"]],
       current_trial_data = new_trial[["current_trial_data"]],
       post_dist = new_trial[["post_dist"]],
-      new_trial_analysis = new_trial[["new_trial_analysis"]]
+      new_trial_analysis = new_trial[["new_trial_analysis"]],
+      seed = sel_analysis[["seed"]]
     )
 
     # nolint start
@@ -271,10 +273,10 @@ bsafe_server <- function(
     #   data = receive_data
     # )
 
-    # download_results <- mod_simulation_server(
-    #   "simulation",
-    #   data = receive_data
-    # )
+    download_results <- mod_simulation_server(
+      "simulation",
+      data = receive_data
+    )
 
     # nolint end
 

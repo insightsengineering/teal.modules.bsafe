@@ -33,7 +33,7 @@ mod_robust_map_ui <- function(id) {
     shiny::uiOutput(ns(BSAFE_ID$OUT_PREFACE_ROB_TXT)),
     shiny::uiOutput(ns(BSAFE_ID$OUT_ROB_DENSITY_FCT)),
     shiny::plotOutput(ns(BSAFE_ID$OUT_ROB_MAP_PLT)), # spinner
-    shiny::tableOutput(ns(BSAFE_ID$OUT_ROB_SUM_TBL))
+    shiny::htmlOutput(ns(BSAFE_ID$OUT_ROB_SUM_TBL))
   )
 
   list(side = side, main = main)
@@ -58,7 +58,7 @@ mod_robust_map_server <- function(
         # TODO: bsafe::robust_map cannot handle values below than 1, because a log is calculated in bsafe and then RBest
         # complains because mean cannot be below 0. BSAFE_ID$SLDR_ROB_MEAN offers values below one that when
         # log-transformed are <0
-        # TODO: bsafe throws error for given combinations on prior weigth and prior mean exp
+        # TODO: bsafe throws error for given combinations on prior weight and prior mean exp
         shiny::req(analysis_type())
         shiny::req(input[[BSAFE_ID$SLDR_ROB_WEIGHT]])
         shiny::req(input[[BSAFE_ID$SLDR_ROB_MEAN]])
@@ -132,7 +132,8 @@ mod_robust_map_server <- function(
             ess_method = ..(ess_method()),
             robust_map_object = ..(robust_map_mcmc()),
             rob_ess_method = ..(input[[BSAFE_ID$SEL_ROB_ESS_METHOD]]),
-            download = FALSE
+            numerical = FALSE,
+            seed = ..(seed())
           )
         )
       },
@@ -167,11 +168,11 @@ mod_robust_map_server <- function(
     })
 
     # Display summary stats of robust MAP prior and MAP prior
-    output[[BSAFE_ID$OUT_ROB_SUM_TBL]] <- function() {
+    output[[BSAFE_ID$OUT_ROB_SUM_TBL]] <- shiny::renderText({
       robust_summary() %>%
         knitr::kable("html") %>%
         kableExtra::kable_styling("striped")
-    }
+    })
 
     r <- list(
       robust_map_mcmc = robust_map_mcmc,

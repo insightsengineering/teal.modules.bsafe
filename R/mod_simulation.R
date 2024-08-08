@@ -1,47 +1,47 @@
 mod_simulation_ui <- function(id) {
   ns <- shiny::NS(id)
-  shiny::tagList(
-    shiny::sidebarLayout(
-      shiny::sidebarPanel(
-        shiny::sliderInput(ns(BSAFE_ID$SLDR_NUM_COMP),
-          "Number of comparisons",
-          min = 1,
-          max = 5,
-          value = 3,
-          step = 1
-        ),
-        shiny::uiOutput(ns(BSAFE_ID$OUT_COMP_CB)),
-        shiny::actionButton(
-          ns(BSAFE_ID$BUT_COMP_SUBMIT),
-          "Submit"
-        )
+  sui <- list(
+    side = shiny::tagList(
+      shiny::sliderInput(ns(BSAFE_ID$SLDR_NUM_COMP),
+                         "Number of comparisons",
+                         min = 1,
+                         max = 5,
+                         value = 3,
+                         step = 1
       ),
-      shiny::mainPanel(
-        shiny::uiOutput(ns(BSAFE_ID$OUT_DWNLD_PLTS)),
-        shiny::br(),
-        shiny::downloadButton(
-          ns(BSAFE_ID$BUT_DWNLD_SUM_TBLS),
-          "Download All AE Summary Tables"
-        ),
-        shiny::h5(""),
-        shiny::downloadButton(
-          ns(BSAFE_ID$BUT_DWNLD_EXCEL),
-          "Download AE Summary Tables as Excel files"
-        ),
-        shiny::downloadButton(
-          ns(BSAFE_ID$BUT_DWNLD_LOG),
-          "Download log file"
-        ),
-        shiny::textOutput(ns(BSAFE_ID$OUT_EXCEL_PATH_TXT)),
-        shiny::h5(""),
-        shiny::h5("Simulating all tables might take a while."),
-        shiny::h5("You have to press the submit button prior to download."),
-        shiny::h5("The tables can be downloaded as soon as the chosen comparisons are displayed."),
-        shiny::h5("Chosen comparisons:"),
-        shiny::uiOutput(ns(BSAFE_ID$OUT_COMP_DISPLAY))
+      shiny::uiOutput(ns(BSAFE_ID$OUT_COMP_CB)),
+      shiny::actionButton(
+        ns(BSAFE_ID$BUT_COMP_SUBMIT),
+        "Submit"
       )
+    ),
+    main = shiny::tagList(
+      shiny::uiOutput(ns(BSAFE_ID$OUT_DWNLD_PLTS)),
+      shiny::br(),
+      shiny::downloadButton(
+        ns(BSAFE_ID$BUT_DWNLD_SUM_TBLS),
+        "Download All AE Summary Tables"
+      ),
+      shiny::h5(""),
+      shiny::downloadButton(
+        ns(BSAFE_ID$BUT_DWNLD_EXCEL),
+        "Download AE Summary Tables as Excel files"
+      ),
+      shiny::downloadButton(
+        ns(BSAFE_ID$BUT_DWNLD_LOG),
+        "Download log file"
+      ),
+      shiny::textOutput(ns(BSAFE_ID$OUT_EXCEL_PATH_TXT)),
+      shiny::h5(""),
+      shiny::h5("Simulating all tables might take a while."),
+      shiny::h5("You have to press the submit button prior to download."),
+      shiny::h5("The tables can be downloaded as soon as the chosen comparisons are displayed."),
+      shiny::h5("Chosen comparisons:"),
+      shiny::uiOutput(ns(BSAFE_ID$OUT_COMP_DISPLAY))
     )
   )
+
+  ui
 }
 
 mod_simulation_server <- function(id, data) {
@@ -168,7 +168,7 @@ mod_simulation_server <- function(id, data) {
         clean = TRUE,
         # parameters needed for markdown file
         params = list(
-          ae_summary_Rmd = ae_summary_data(),
+          ae_summary_Rmd = ae_summary_data,
           date = format(Sys.time(), "%d %B, %Y"),
           bsafe_version = utils::packageVersion("teal.modules.bsafe"),
           pwemap_version = utils::packageVersion("bsafe"),
@@ -203,7 +203,7 @@ mod_simulation_server <- function(id, data) {
           output_file = file,
           clean = TRUE,
           params = list(
-            ae_summary_Rmd = ae_summary_data(),
+            ae_summary_Rmd = ae_summary_data,
             date = format(Sys.time(), "%d %B, %Y"),
             bsafe_version = utils::packageVersion("teal.modules.bsafe"),
             pwemap_version = utils::packageVersion("bsafe"),

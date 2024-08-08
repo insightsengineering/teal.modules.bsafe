@@ -45,7 +45,7 @@ mod_decision_making_server <- function(
     safety_topic, treatment,
     current_trial_data, param_approx,
     robust_map_mcmc, post_dist,
-    new_trial_analysis) {
+    new_trial_analysis, seed) {
   mod <- function(input, output, session) {
     ns <- session[["ns"]]
 
@@ -59,7 +59,8 @@ mod_decision_making_server <- function(
             select_analysis = ..(analysis_type()),
             param_approx = ..(param_approx()),
             robust_map_object = ..(robust_map_mcmc()),
-            post_dist = ..(post_dist())
+            post_dist = ..(post_dist()),
+            seed = ..(seed())
           )
         })
       },
