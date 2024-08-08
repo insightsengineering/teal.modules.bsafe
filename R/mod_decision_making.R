@@ -2,6 +2,7 @@ mod_decision_making_ui <- function(id) {
   ns <- shiny::NS(id)
 
   side <- list(
+    shinyjs::useShinyjs(),
     shiny::selectInput(ns(BSAFE_ID$SEL_DIST),
       "Make statistical inference about the",
       choices = BSAFE_CHOICES$SEL_DIST,
@@ -26,7 +27,6 @@ mod_decision_making_ui <- function(id) {
   )
 
   main <- list(
-    shinyjs::useShinyjs(),
     shiny::uiOutput(ns(BSAFE_ID$OUT_DM_HEADER_TXT)),
     shiny::uiOutput(ns(BSAFE_ID$OUT_DM_PREFACE_TXT)),
     shiny::plotOutput(ns(BSAFE_ID$OUT_STAT_INF_DENSITY_PLT)), # spinner

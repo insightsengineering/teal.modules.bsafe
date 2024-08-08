@@ -2,6 +2,7 @@ mod_robust_map_ui <- function(id) {
   ns <- shiny::NS(id)
 
   side <- list(
+    shinyjs::useShinyjs(),
     shiny::sliderInput(ns(BSAFE_ID$SLDR_ROB_WEIGHT),
       "Weakly-informative Prior Weight (recommended to be between 0.1 and 0.5)",
       value = 0.2,
@@ -29,7 +30,6 @@ mod_robust_map_ui <- function(id) {
   )
 
   main <- list(
-    shinyjs::useShinyjs(),
     shiny::uiOutput(ns(BSAFE_ID$OUT_PREFACE_ROB_TXT)),
     shiny::uiOutput(ns(BSAFE_ID$OUT_ROB_DENSITY_FCT)),
     shiny::plotOutput(ns(BSAFE_ID$OUT_ROB_MAP_PLT)), # spinner
