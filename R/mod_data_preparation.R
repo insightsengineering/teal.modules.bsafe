@@ -1,26 +1,28 @@
 mod_data_preparation_ui <- function(id) {
   ns <- shiny::NS(id)
-  shiny::tagList(
-    shiny::sidebarLayout(
-      shiny::sidebarPanel(
-        shiny::selectInput(ns(BSAFE_ID$SEL_COLUMN),
-          "Select the columns",
-          choices = "",
-          selected = "",
-          multiple = TRUE
-        ),
-        shiny::uiOutput(ns(BSAFE_ID$OUT_SEL_VAR)),
-        shiny::actionButton(
-          ns(BSAFE_ID$BUT_ADD_ARM),
-          "add arm"
-        )
-      ),
-      shiny::mainPanel(
-        shiny::tableOutput(ns(BSAFE_ID$OUT_ARM_SEL))
-      ),
+  side <- list(
+    shinyjs::useShinyjs(),
+    shiny::selectInput(ns(BSAFE_ID$SEL_COLUMN),
+                       "Select the columns",
+                       choices = "",
+                       selected = "",
+                       multiple = TRUE
+    ),
+    shiny::uiOutput(ns(BSAFE_ID$OUT_SEL_VAR)),
+    shiny::actionButton(
+      ns(BSAFE_ID$BUT_ADD_ARM),
+      "add arm"
     )
   )
+  main <- list(
+    shiny::tableOutput(ns(BSAFE_ID$OUT_ARM_SEL))
+  )
+
+  return(
+    list(side = side, main = main)
+  )
 }
+
 
 
 mod_data_preparation_server <- function(id, data) {
@@ -56,8 +58,8 @@ mod_data_preparation_server <- function(id, data) {
         return(input[[x]])
       })
       names(param_list) <- input[[BSAFE_ID$SEL_COLUMN]]
-      if (!param_list %in% rv$arm_list) {
-        rv$arm_list[[name]] <- param_list
+      if (!param_list$ARM %in% rv$arm_list) {
+        rv$arm_list[[name]] <- param_list$ARM
         print(rv$arm_list)
       } else {
         warning("The selected arm is already available, please select a different one")
@@ -127,22 +129,29 @@ mod_data_preparation_server <- function(id, data) {
     shiny::observeEvent(input[[BSAFE_ID$BUT_ADD_ARM]], {
       shiny::showModal(shiny::modalDialog(
         title = "Name the arm you just created",
-        shiny::textInput("MODAL_INPUT", "Name", ""),
+        shiny::textInput(ns("MODAL_INPUT"), "Name", ""),
         easyClose = TRUE,
         footer = shiny::tagList(
-          shiny::modalButton("Cancel"),
+          shiny::modalButton(ns("Cancel")),
           shiny::actionButton(ns("MODAL_ARM_CREATION"), "OK")
         )
       ))
     })
 
     output[[BSAFE_ID$OUT_ARM_SEL]] <- shiny::renderTable({
-      data()
+      rv[["data"]]
     })
 
 
     return(
-      list()
+      shiny::reactive(
+        if(is.null(rv[["data"]])) {
+          data()
+        } else {
+          rv[["data"]]
+        }
+
+      )
     )
   }
 

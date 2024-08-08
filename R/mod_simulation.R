@@ -44,7 +44,7 @@ mod_simulation_ui <- function(id) {
   ui
 }
 
-mod_simulation_server <- function(id, data) {
+mod_simulation_server <- function(id, data, tmpfolder) {
   mod <- function(input, output, session) {
     ns <- session[["ns"]]
 
@@ -154,7 +154,7 @@ mod_simulation_server <- function(id, data) {
       shiny::removeNotification(pgrs)
 
 
-      tmp_dir <- tempdir()
+      tmp_dir <- tmpfolder
       # TODO: Asses usage of this part and how to improve this, otherwise we will polute the www directory
 
       # # create PDF-file from markdown document to show in popup window
@@ -186,7 +186,10 @@ mod_simulation_server <- function(id, data) {
           shiny::tags$head(shiny::tags$style(".modal-body{min-height:700px}")),
           shiny::tags$iframe(
             style = "height:700px; width:100%; scrolling=yes",
-            src = "template_ae_summary_table.pdf"
+            src =  system.file(paste0("/www", strsplit(tmpfolder, "www")[[1]][2], "/template_ae_summary_table.pdf"),
+                               package = "teal.modules.bsafe",
+                               mustWork = TRUE
+            )
           )
         )
       )

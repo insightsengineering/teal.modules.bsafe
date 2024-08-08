@@ -43,6 +43,7 @@ bsafe_UI <- function(id, header = NULL) { # nolint
 
   ui_list <- list(
     a_sel = list(mod_select_analysis_ui(ns("sel_analysis")), "Analysis selection", FALSE),
+    prep = list(mod_data_preparation_ui(ns("data_preparation")), "Data Preparation", FALSE),
     mp = list(mod_map_prior_ui(ns("map_prior")), "Map Prior", FALSE),
     rmp = list(mod_robust_map_ui(ns("robust_map")), "Robust Map Prior", FALSE),
     nta = list(mod_new_trial_analysis_ui(ns("new_trial")), "New Trial Analysis", FALSE),
@@ -200,9 +201,14 @@ bsafe_server <- function(
       varname = "receive_data"
     )
 
+    # TODO: data preparation and download results are not working on bsafe's side
+    data_preparation <- mod_data_preparation_server(
+      "data_preparation",
+      data = receive_data
+    )
 
     # Data table preparation
-    sel_analysis <- mod_select_analysis_server("sel_analysis", receive_data)
+    sel_analysis <- mod_select_analysis_server("sel_analysis", data_preparation)
     selected_data <- sel_analysis[["data"]] # TODO: Careful with reactive overlap once poc is ready
     seed <- sel_analysis[["seed"]]
 
@@ -267,16 +273,24 @@ bsafe_server <- function(
     )
 
     # nolint start
-    # TODO: data preparation and download results are not working on bsafe's side
-    # data_preparation <- mod_data_preparation_server(
-    #   "data_preparation",
-    #   data = receive_data
-    # )
+
+    tmpfolder <- tempfile(tmpdir = system.file("www", package = "teal.modules.bsafe"))
+    dir.create(tmpfolder)
 
     download_results <- mod_simulation_server(
       "simulation",
-      data = receive_data
+      data = data_preparation,
+      tmpfolder = tmpfolder
     )
+
+    shiny::onStop(function(){unlink(
+      system.file(paste0("/www", strsplit(tmpfolder, "www")[[1]][2]),
+                  package = "teal.modules.bsafe",
+                  mustWork = TRUE),
+      recursive = TRUE
+    )})
+
+    # nolint end
 
     # nolint end
 
