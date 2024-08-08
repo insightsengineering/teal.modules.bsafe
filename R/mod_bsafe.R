@@ -283,12 +283,15 @@ bsafe_server <- function(
       tmpfolder = tmpfolder
     )
 
-    shiny::onStop(function(){unlink(
-      system.file(paste0("/www", strsplit(tmpfolder, "www")[[1]][2]),
-                  package = "teal.modules.bsafe",
-                  mustWork = TRUE),
-      recursive = TRUE
-    )})
+    shiny::onStop(function() {
+      unlink(
+        system.file(paste0("/www", strsplit(tmpfolder, "www")[[1]][2]),
+          package = "teal.modules.bsafe",
+          mustWork = TRUE
+        ),
+        recursive = TRUE
+      )
+    })
 
     # nolint end
 
