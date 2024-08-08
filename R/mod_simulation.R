@@ -186,10 +186,12 @@ mod_simulation_server <- function(id, data, tmpfolder) {
           shiny::tags$head(shiny::tags$style(".modal-body{min-height:700px}")),
           shiny::tags$iframe(
             style = "height:700px; width:100%; scrolling=yes",
-            src =  system.file(
-              paste0("/www",
-                     strsplit(tmpfolder, "www")[[1]][2],
-                     "/template_ae_summary_table.pdf"),
+            src = system.file(
+              paste0(
+                "/www",
+                strsplit(tmpfolder, "www")[[1]][2],
+                "/template_ae_summary_table.pdf"
+              ),
               package = "teal.modules.bsafe",
               mustWork = TRUE
             )
