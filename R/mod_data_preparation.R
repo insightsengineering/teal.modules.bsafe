@@ -155,7 +155,6 @@ mod_data_preparation_server <- function(id, data) {
         } else {
           rv[["data"]]
         }
-
       )
     )
   }
