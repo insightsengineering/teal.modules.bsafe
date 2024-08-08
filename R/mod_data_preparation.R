@@ -2,11 +2,12 @@ mod_data_preparation_ui <- function(id) {
   ns <- shiny::NS(id)
   side <- list(
     shinyjs::useShinyjs(),
-    shiny::selectInput(ns(BSAFE_ID$SEL_COLUMN),
-                       "Select the columns",
-                       choices = "",
-                       selected = "",
-                       multiple = TRUE
+    shiny::selectInput(
+      ns(BSAFE_ID$SEL_COLUMN),
+      "Select the columns",
+      choices = "",
+      selected = "",
+      multiple = TRUE
     ),
     shiny::uiOutput(ns(BSAFE_ID$OUT_SEL_VAR)),
     shiny::actionButton(
@@ -139,7 +140,7 @@ mod_data_preparation_server <- function(id, data) {
     })
 
     output[[BSAFE_ID$OUT_ARM_SEL]] <- shiny::renderTable({
-      if(is.null(rv[["data"]])) {
+      if (is.null(rv[["data"]])) {
         data()
       } else {
         rv[["data"]]
@@ -149,7 +150,7 @@ mod_data_preparation_server <- function(id, data) {
 
     return(
       shiny::reactive(
-        if(is.null(rv[["data"]])) {
+        if (is.null(rv[["data"]])) {
           data()
         } else {
           rv[["data"]]

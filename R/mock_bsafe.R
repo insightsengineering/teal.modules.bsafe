@@ -18,7 +18,14 @@ mock_bsafe <- function() {
   server <- function(input, output, session) {
     x <- bsafe_server(
       id = "bsafe",
-      dataset = shiny::reactive(structure(as.data.frame(teal.modules.bsafe::bsafe_data), code = "teal.modules.bsafe::bsafe_data"))
+      dataset = shiny::reactive(
+        structure(
+          as.data.frame(
+            teal.modules.bsafe::bsafe_data
+          ),
+          code = "teal.modules.bsafe::bsafe_data"
+        )
+      )
     )
 
     output[["out"]] <- shiny::renderPrint({

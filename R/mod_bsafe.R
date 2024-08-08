@@ -114,7 +114,14 @@ bsafe_UI <- function(id, header = NULL) { # nolint
       mustWork = TRUE
     )),
     shiny::h5("User Manual:"),
-    shiny::a("open manual", href = system.file("/www/user.manual.b_safe.pdf", mustWork = TRUE, package = "teal.modules.bsafe"))
+    shiny::a(
+      "open manual",
+      href = system.file(
+        "/www/user.manual.b_safe.pdf",
+        mustWork = TRUE,
+        package = "teal.modules.bsafe"
+      )
+    )
   )
   main <- list(manual_ui, main)
 
@@ -292,7 +299,6 @@ bsafe_server <- function(
 
     # nolint end
 
-    # nolint end
 
     # return ----
 
