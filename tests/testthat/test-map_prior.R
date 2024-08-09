@@ -23,8 +23,6 @@ local({
 local({
   tns <- tns_factory("mock")
 
-  browser()
-
   app <- shinytest2::AppDriver$new(teal.modules.bsafe:::mock_map_prior_mod())
   wait_value_idle(app, input = tns(BSAFE_ID$SEL_TAU))
 
