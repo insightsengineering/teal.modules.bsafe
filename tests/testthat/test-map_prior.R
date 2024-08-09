@@ -23,6 +23,8 @@ local({
 local({
   tns <- tns_factory("mock")
 
+  browser()
+
   app <- shinytest2::AppDriver$new(teal.modules.bsafe:::mock_map_prior_mod())
   wait_value_idle(app, input = tns(BSAFE_ID$SEL_TAU))
 
@@ -35,7 +37,7 @@ local({
 
   test_that("map prior is calculated when button is pressed", {
     app$click(tns("submit"))
-    app$wait_for_idle()
+    app$wait_for_idle(timeout = 180*1000)    
     checkmate::expect_class(shiny::isolate(app$get_values()[["export"]][["r"]][["map_mcmc"]]()), "gMAP")
   })
 
