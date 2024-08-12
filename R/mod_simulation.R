@@ -82,6 +82,7 @@ mod_simulation_server <- function(id, data, tmpfolder) {
       })
     })
 
+    ae_summary_log <- list()
     ae_summary_data <- NULL
 
     shiny::observeEvent(input[[BSAFE_ID$BUT_COMP_SUBMIT]], {
@@ -143,13 +144,20 @@ mod_simulation_server <- function(id, data, tmpfolder) {
       }
 
       pgrs <- shiny::showNotification("Running simulations", duration = NULL)
-      ae_summary_data <<- bsafe::ae_summary_table(
-        data(),
-        cb_list_ctrl,
-        cb_list_trt,
-        unique(data()[["SAF_TOPIC"]]),
-        input[[BSAFE_ID$SET_SEED]]
-      )
+      withCallingHandlers({
+        ae_summary_data <<- bsafe::ae_summary_table(
+          data(),
+          cb_list_ctrl,
+          cb_list_trt,
+          unique(data()[["SAF_TOPIC"]]),
+          input[[BSAFE_ID$SET_SEED]]
+        )
+      },
+      message = function(e) {ae_summary_log[[length(ae_summary_log)+1]] <<- e$message},
+      warning = function(e) {ae_summary_log[[length(ae_summary_log) + 1]] <<- e$message}
+
+        )
+
 
       shiny::removeNotification(pgrs)
 
@@ -172,7 +180,8 @@ mod_simulation_server <- function(id, data, tmpfolder) {
           date = format(Sys.time(), "%d %B, %Y"),
           bsafe_version = utils::packageVersion("teal.modules.bsafe"),
           pwemap_version = utils::packageVersion("bsafe"),
-          seed = input[[BSAFE_ID$SET_SEED]]
+          seed = input[[BSAFE_ID$SET_SEED]],
+          ae_summary_log = ae_summary_log
         )
       )
 
@@ -186,13 +195,9 @@ mod_simulation_server <- function(id, data, tmpfolder) {
           shiny::tags$head(shiny::tags$style(".modal-body{min-height:700px}")),
           shiny::tags$iframe(
             style = "height:700px; width:100%; scrolling=yes",
-            src =  system.file(
-              paste0("/www",
+            src =  paste0("www",
                      strsplit(tmpfolder, "www")[[1]][2],
-                     "/template_ae_summary_table.pdf"),
-              package = "teal.modules.bsafe",
-              mustWork = TRUE
-            )
+                     "/template_ae_summary_table.pdf")
           )
         )
       )
@@ -213,7 +218,8 @@ mod_simulation_server <- function(id, data, tmpfolder) {
             date = format(Sys.time(), "%d %B, %Y"),
             bsafe_version = utils::packageVersion("teal.modules.bsafe"),
             pwemap_version = utils::packageVersion("bsafe"),
-            seed = input[[BSAFE_ID$SET_SEED]]
+            seed = input[[BSAFE_ID$SET_SEED]],
+            ae_summary_log = ae_summary_log
           )
         )
       }

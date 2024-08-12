@@ -116,11 +116,7 @@ bsafe_UI <- function(id, header = NULL) { # nolint
     shiny::h5("User Manual:"),
     shiny::a(
       "open manual",
-      href = system.file(
-        "/www/user.manual.b_safe.pdf",
-        mustWork = TRUE,
-        package = "teal.modules.bsafe"
-      )
+      href = "www/user.manual.b_safe.pdf"
     )
   )
   main <- list(manual_ui, main)
@@ -142,6 +138,7 @@ bsafe_server <- function(
   module <- function(input, output, session) {
     # global variables --------------------------------------------------------
 
+    # register_logger(namespace = "RBesT")
     ns <- session[["ns"]]
 
     ae_summary_data <- NULL
