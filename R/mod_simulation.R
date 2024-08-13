@@ -22,15 +22,17 @@ mod_simulation_ui <- function(id) {
         ns(BSAFE_ID$BUT_DWNLD_SUM_TBLS),
         "Download All AE Summary Tables"
       ),
-      shiny::h5(""),
-      shiny::downloadButton(
-        ns(BSAFE_ID$BUT_DWNLD_EXCEL),
-        "Download AE Summary Tables as Excel files"
-      ),
-      shiny::downloadButton(
-        ns(BSAFE_ID$BUT_DWNLD_LOG),
-        "Download log file"
-      ),
+      # #nolint start
+      # shiny::h5(""),
+      # shiny::downloadButton(
+      #   ns(BSAFE_ID$BUT_DWNLD_EXCEL),
+      #   "Download AE Summary Tables as Excel files"
+      # ),
+      # shiny::downloadButton(
+      #   ns(BSAFE_ID$BUT_DWNLD_LOG),
+      #   "Download log file"
+      # ),
+      #nolint end
       shiny::textOutput(ns(BSAFE_ID$OUT_EXCEL_PATH_TXT)),
       shiny::h5(""),
       shiny::h5("Simulating all tables might take a while."),
