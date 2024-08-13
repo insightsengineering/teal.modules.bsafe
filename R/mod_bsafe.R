@@ -184,12 +184,6 @@ bsafe_server <- function(
             checkmate::test_character(data[["ARM"]]),
             "ARM needs to be a character"
           ),
-          # TODO: Discuss with Lars the non-existing column
-          # nolint start
-          # shiny::need(
-          #   checkmate::test_numeric(data[["TOT_HIST"]]),
-          #   "HIST needs to be a number"),
-          # nolint end
           shiny::need(
             checkmate::test_true(all(data[["N_WITH_AE"]] <= data[["N"]])),
             "N_WITH_AE_COLUMN must me lower or equal than N"

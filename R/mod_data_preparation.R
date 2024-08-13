@@ -97,7 +97,7 @@ mod_data_preparation_server <- function(id, data) {
 
 
     shiny::observe({
-      choices_helper <- setdiff(names(data()), c("STUDYID", "DOSE", "FREQ", "LENGTH", "TREAT"))
+      choices_helper <- names(data())
       shiny::updateSelectInput(session,
         inputId = BSAFE_ID$SEL_COLUMN,
         choices = choices_helper
