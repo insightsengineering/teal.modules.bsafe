@@ -138,7 +138,6 @@ bsafe_server <- function(
   module <- function(input, output, session) {
     # global variables --------------------------------------------------------
 
-    # register_logger(namespace = "RBesT")
     ns <- session[["ns"]]
 
     ae_summary_data <- NULL
@@ -166,11 +165,11 @@ bsafe_server <- function(
             "STUDYID needs to be a character"
           ),
           shiny::need(
-            checkmate::test_numeric(data[["N"]]),
+            checkmate::test_numeric(data[["N"]], null.ok = FALSE, any.missing = FALSE),
             "N needs to be a number"
           ),
           shiny::need(
-            checkmate::test_numeric(data[["N_WITH_AE"]]),
+            checkmate::test_numeric(data[["N_WITH_AE"]], null.ok = FALSE, any.missing = FALSE),
             "N_with_AE needs to be a number"
           ),
           shiny::need(
