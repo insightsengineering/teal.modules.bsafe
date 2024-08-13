@@ -239,8 +239,8 @@ calc_log_hazard_area <- function(param_approx) {
 }
 
 calc_param_approx_boundaries <- function(param_approx) {
-  lower_bound <- RBesT::qmix(param_approx, 0.01)
-  upper_bound <- RBesT::qmix(param_approx, 0.99)
+  lower_bound <- RBesT::qmix(param_approx, 0.25)
+  upper_bound <- RBesT::qmix(param_approx, 0.75)
   return(c(lower_bound, upper_bound))
 }
 
