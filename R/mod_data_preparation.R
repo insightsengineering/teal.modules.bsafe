@@ -59,23 +59,24 @@ mod_data_preparation_server <- function(id, data) {
         return(input[[x]])
       })
       names(param_list) <- input[[BSAFE_ID$SEL_COLUMN]]
-      if (!param_list$ARM %in% rv$arm_list) {
-        rv$arm_list[[name]] <- param_list$ARM
+      if (!name %in% rv$arm_list) {
+        rv$arm_list[[name]] <- name
         print(rv$arm_list)
       } else {
-        warning("The selected arm is already available, please select a different one")
+        showNotification("The selected arm is already available, please select a different one")
       }
       filtered_data <- down_filtering(data(), input[[BSAFE_ID$SEL_COLUMN]])
-      if (length(filtered_data) > 0) {
-        if (length(rv[["data"]] > 0)) {
+      if (nrow(filtered_data) > 0) {
+        if (length(rv[["data"]]) > 0) {
           rv[["data"]] <- dplyr::full_join(rv[["data"]], filtered_data)
         } else {
           rv[["data"]] <- filtered_data
         }
+        full_join_data()
       } else {
-        warning("The arm you created has no rows, please select a different combination")
+        showNotification("The arm you created has no rows, please select a different combination")
+        rv$arm_list[[name]] <-  NULL
       }
-      full_join_data()
       shiny::removeModal()
     })
 
