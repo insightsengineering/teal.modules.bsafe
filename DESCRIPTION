@@ -31,8 +31,9 @@ Imports:
     kableExtra,
     knitr,
     rlang,
+    rmarkdown
     shinymeta,
-    teal.data,    
+    teal.data,
     teal.reporter,
     styler,
     markdown
