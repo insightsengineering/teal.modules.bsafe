@@ -75,7 +75,7 @@ mod_data_preparation_server <- function(id, data) {
         full_join_data()
       } else {
         showNotification("The arm you created has no rows, please select a different combination")
-        rv$arm_list[[name]] <-  NULL
+        rv$arm_list[[name]] <- NULL
       }
       shiny::removeModal()
     })

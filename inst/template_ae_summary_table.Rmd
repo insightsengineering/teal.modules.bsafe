@@ -146,7 +146,7 @@ for (g in groups) {
   )
 
 
-  list_table_1_1[[g]] <- cbind(as.data.frame(array_inci[, , 1, g, drop=F]), as.data.frame(array_inci[, , 2, g, drop=F]))
+  list_table_1_1[[g]] <- cbind(as.data.frame(array_inci[, , 1, g, drop = F]), as.data.frame(array_inci[, , 2, g, drop = F]))
   # list_table_1_1[[g]] <- list_table_1_1[[g]] %>% na.omit()
   list_table_1_1[[g]][, c(3, 10)] <- round(list_table_1_1[[g]][, c(3, 10)] * 100, 1)
   list_table_1_1[[g]][, c(3, 10)] <- round(list_table_1_1[[g]][, c(3, 10)] * 100, 1)
@@ -182,7 +182,7 @@ for (g in groups) {
     " vs. Arm B: ",
     ARMS_ARM_B
   )
-  list_table_1_2[[g]] <- cbind(as.data.frame(array_inci_comp[, , 1, g, drop=F]), as.data.frame(array_inci_comp[, , 2, g, drop=F]))
+  list_table_1_2[[g]] <- cbind(as.data.frame(array_inci_comp[, , 1, g, drop = F]), as.data.frame(array_inci_comp[, , 2, g, drop = F]))
   # list_table_1_2[[g]] <- as.data.frame(cbind(array_inci_comp[, , 1, g], array_inci_comp[, , 2, g]))
   # list_table_1_2[[g]] <- list_table_1_2[[g]] %>% na.omit()
   table_display_2 <- kableExtra::kable(list_table_1_2[[g]][, -6],
@@ -223,7 +223,7 @@ for (g in groups) {
     ARMS_ARM_B
   )
   # list_table_2_1[[g]] <- as.data.frame(cbind(array_er[, , 1, g], array_er[, , 2, g]))
-  list_table_2_1[[g]] <- cbind(as.data.frame(array_er[, , 1, g, drop=F]), as.data.frame(array_er[, , 2, g, drop=F]))
+  list_table_2_1[[g]] <- cbind(as.data.frame(array_er[, , 1, g, drop = F]), as.data.frame(array_er[, , 2, g, drop = F]))
   # list_table_2_1[[g]] <- list_table_2_1[[g]] %>% na.omit()
   table_display_3 <- kableExtra::kable(list_table_2_1[[g]],
     format = "latex",
@@ -260,7 +260,7 @@ for (g in groups) {
     " vs. Arm B: ",
     ARMS_ARM_B
   )
-  list_table_2_2[[g]] <- cbind(as.data.frame(array_er_comp[, , 1, g, drop=F]), as.data.frame(array_er_comp[, , 2, g, drop=F]))
+  list_table_2_2[[g]] <- cbind(as.data.frame(array_er_comp[, , 1, g, drop = F]), as.data.frame(array_er_comp[, , 2, g, drop = F]))
   # list_table_2_2[[g]] <- as.data.frame(cbind(array_er_comp[, , 1, g], array_er_comp[, , 2, g]))
   # list_table_2_2[[g]] <- list_table_2_2[[g]] %>% na.omit()
   if (length(list_table_2_2[[g]]) == 0) {
