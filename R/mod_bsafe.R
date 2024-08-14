@@ -118,6 +118,17 @@ bsafe_UI <- function(id, header = NULL) { # nolint
       "open manual",
       href = "www/user.manual.b_safe.pdf"
     )
+    # ,
+    # shiny::h5("Statistical Analysis Plan:"),
+    # shiny::a(
+    #   "open SAP",
+    #   href = "www/user.manual.b_safe.pdf"
+    # ),
+    # shiny::h5("Testing Documentation:"),
+    # shiny::a(
+    #   "open Testing Documentation",
+    #   href = "www/user.manual.b_safe.pdf"
+    # )
   )
   main <- list(manual_ui, main)
 
