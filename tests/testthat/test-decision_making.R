@@ -1,16 +1,15 @@
 local({
-  param_approx <- matrix(c(1, 2, 0.1), nrow = 3)
+  param_approx <- RBesT::mixbeta(weak=c(0.2, 2, 10), inf=c(0.4, 10, 100), inf2=c(0.4, 30, 80))
 
   test_that("calc_log_hazard_area returns correct values", {
-    expected <- c(1.8, 2.2)
+    expected <- c(0.03, 0.38)
     result <- calc_log_hazard_area(param_approx)
     expect_equal(result, expected)
   })
 
-  test_that("calc_param_approx_boundaries returns correct lower and upper boundaries", {
-    expected <- c(1.9, 2.1)
+  test_that("calc_param_approx_boundaries returns correct lower and upper boundaries", {    
     result <- calc_param_approx_boundaries(param_approx)
-    expect_equal(result, expected)
+    expect_snapshot(result)
   })
 })
 
@@ -115,7 +114,7 @@ local({
   }
 
   test_that("can read and change ae perc slider", {
-    expected_value <- c(0, 2)
+    expected_value <- c(0.1, .73)
     app$set_inputs(!!tns(BSAFE_ID$OUT_AE_PERC_SLDR) := expected_value)
     app$wait_for_idle()
     current_value <- shiny::isolate(app$get_values()[["input"]][[tns(BSAFE_ID$OUT_AE_PERC_SLDR)]])
