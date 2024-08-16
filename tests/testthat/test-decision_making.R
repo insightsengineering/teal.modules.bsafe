@@ -1,5 +1,5 @@
 local({
-  param_approx <- RBesT::mixbeta(weak=c(0.2, 2, 10), inf=c(0.4, 10, 100), inf2=c(0.4, 30, 80))
+  param_approx <- RBesT::mixbeta(weak = c(0.2, 2, 10), inf = c(0.4, 10, 100), inf2 = c(0.4, 30, 80))
 
   test_that("calc_log_hazard_area returns correct values", {
     expected <- c(0.03, 0.38)
@@ -7,7 +7,7 @@ local({
     expect_equal(result, expected)
   })
 
-  test_that("calc_param_approx_boundaries returns correct lower and upper boundaries", {    
+  test_that("calc_param_approx_boundaries returns correct lower and upper boundaries", {
     result <- calc_param_approx_boundaries(param_approx)
     expect_snapshot(result)
   })
