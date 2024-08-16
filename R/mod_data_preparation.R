@@ -10,12 +10,16 @@ mod_data_preparation_ui <- function(id) {
       multiple = TRUE
     ),
     shiny::uiOutput(ns(BSAFE_ID$OUT_SEL_VAR)),
-    shiny::actionButton(
-      ns(BSAFE_ID$BUT_ADD_ARM),
-      "add arm"
-    )
+    shiny::div(
+      style = "display: flex; align-items: baseline; column-gap: 10px",
+      shiny::textInput(inputId = ns("new_arm_name"), label = NULL, placeholder = "New arm name"),
+      shiny::actionButton(ns(BSAFE_ID$BUT_ADD_ARM), "+")
+    ),
+    shiny::uiOutput(ns("current_arms"))
   )
+
   main <- list(
+    shiny::uiOutput(ns("error_box")),
     shiny::tableOutput(ns(BSAFE_ID$OUT_ARM_SEL))
   )
 
@@ -24,13 +28,37 @@ mod_data_preparation_ui <- function(id) {
   )
 }
 
-
-
 mod_data_preparation_server <- function(id, data) {
   mod <- function(input, output, session) {
     ns <- session[["ns"]]
 
-    # calculations/functions --------------------------------------------------
+    current_arms <- shiny::reactiveVal(list())
+
+    shiny::onBookmark(function(state) {
+      state$values$current_arms <- current_arms()
+    })
+
+    shiny::onRestore(function(state) {
+      current_arms(state$values$current_arms)
+    })
+
+    shiny::setBookmarkExclude(names = BSAFE_ID$BUT_ADD_ARM)
+
+    create_arm <- function(data, new_arm, col_vals) {
+      mask <- TRUE
+      for (idx in seq_along(col_vals)) {
+        col_name <- names(col_vals)[[idx]]
+        col_val <- col_vals[[col_name]]
+        mask <- mask & data[[col_name]] %in% col_val
+      }
+
+      data <- data[mask, , drop = FALSE]
+
+      if (nrow(data) > 0) data$ARM <- new_arm
+
+      return(data)
+    }
+
     get_names <- function(name, length) {
       helper <- paste0(name, 1)
       for (i in 2:length) {
@@ -39,63 +67,7 @@ mod_data_preparation_server <- function(id, data) {
       return(helper)
     }
 
-    down_filtering <- function(data, column_names) {
-      for (i in seq_along(column_names)) {
-        selector <- paste0("SEL_", i)
-        elements <- input[[selector]]
-        data <- data %>%
-          dplyr::filter(.data[[column_names[i]]] %in% {{ elements }})
-      }
-      if (length(data[, "ARM"]) > 0) {
-        data[, "ARM"] <- input$MODAL_INPUT
-      }
-      return(data)
-    }
-
-    shiny::observeEvent(input[["MODAL_ARM_CREATION"]], {
-      name <- input$MODAL_INPUT
-      selectors <- get_names("SEL_", length(input[[BSAFE_ID$SEL_COLUMN]]))
-      param_list <- purrr::map(selectors, function(x) {
-        return(input[[x]])
-      })
-      names(param_list) <- input[[BSAFE_ID$SEL_COLUMN]]
-      if (!name %in% rv$arm_list) {
-        rv$arm_list[[name]] <- name
-        print(rv$arm_list)
-      } else {
-        showNotification("The selected arm is already available, please select a different one")
-      }
-      filtered_data <- down_filtering(data(), input[[BSAFE_ID$SEL_COLUMN]])
-      if (nrow(filtered_data) > 0) {
-        if (length(rv[["data"]]) > 0) {
-          rv[["data"]] <- dplyr::full_join(rv[["data"]], filtered_data)
-        } else {
-          rv[["data"]] <- filtered_data
-        }
-        full_join_data()
-      } else {
-        showNotification("The arm you created has no rows, please select a different combination")
-        rv$arm_list[[name]] <- NULL
-      }
-      shiny::removeModal()
-    })
-
-
-    # reactive Values Object
-    rv <- shiny::reactiveValues(arm_list = list(), data = NULL)
-
-    full_join_data <- function() {
-      rv[["data"]] <- dplyr::full_join(rv[["data"]], data())
-    }
-
-    # ui element updates ------------------------------------------------------
-
-
-    # slider input dependent on the new_n slider input in the New Trial Tab
-    # Update label of Number of Patients with AE
-
-
-
+    # Initial menus
 
     shiny::observe({
       choices_helper <- names(data())
@@ -125,39 +97,77 @@ mod_data_preparation_server <- function(id, data) {
       })
     })
 
-    shiny::outputOptions(output, BSAFE_ID$OUT_SEL_VAR, suspendWhenHidden = FALSE)
-
-
-    shiny::observeEvent(input[[BSAFE_ID$BUT_ADD_ARM]], {
-      shiny::showModal(shiny::modalDialog(
-        title = "Name the arm you just created",
-        shiny::textInput(ns("MODAL_INPUT"), "Name", ""),
-        easyClose = TRUE,
-        footer = shiny::tagList(
-          shiny::modalButton(ns("Cancel")),
-          shiny::actionButton(ns("MODAL_ARM_CREATION"), "OK")
-        )
-      ))
+    output[["current_arms"]] <- shiny::renderUI({
+      purrr::imap(
+        current_arms(),
+        function(args, arm_name) {
+          shiny::div(
+            style = "display: flex; align-items: baseline; column-gap: 10px",
+            arm_name,
+            shiny::tags$button(shiny::icon("delete-left"), type = "button", class = "btn btn-default", onClick = paste0("Shiny.setInputValue('", ns("delete_arm"), "', '", arm_name, "', {priority: \"event\"})")),
+          )
+        }
+      )
     })
 
-    output[[BSAFE_ID$OUT_ARM_SEL]] <- shiny::renderTable({
-      if (is.null(rv[["data"]])) {
-        data()
+    shiny::observeEvent(input[["delete_arm"]], {
+      .current_arms <- current_arms()
+      .current_arms <- .current_arms[!names(.current_arms) %in% input[["delete_arm"]]]
+      current_arms(.current_arms)
+    })
+
+    shiny::observeEvent(input[[BSAFE_ID$BUT_ADD_ARM]], {
+      new_name <- input[["new_arm_name"]]
+      current_arm_names <- union(names(current_arms()), data()[["ARM"]])
+
+      if (new_name %in% current_arm_names) {
+        shiny::showNotification("Arm name already exists", type = "error")
+        shiny::req(FALSE)
+      }
+
+      selector_cols <- input[[BSAFE_ID$SEL_COLUMN]]
+      if (length(selector_cols) == 0) {
+        shiny::showNotification("No columns selected")
+        shiny::req(FALSE)
+      }
+
+      selector_ids <- paste0("SEL_", seq_along(selector_cols))
+      selector_vals <- purrr::map(selector_ids, ~ input[[.x]])
+      selector_vals <- stats::setNames(selector_vals, selector_cols)
+
+      if (nrow(create_arm(data(), new_name, selector_vals)) == 0) {
+        shiny::showNotification("Arm has no rows")
+        shiny::req(FALSE)
+      }
+
+      new_el <- list()
+      new_el[[new_name]] <- selector_vals
+      current_arms(c(current_arms(), new_el))
+    })
+
+    shiny::outputOptions(output, BSAFE_ID$OUT_SEL_VAR, suspendWhenHidden = FALSE)
+
+    data_with_arms <- shiny::reactive({
+      if (length(current_arms()) > 0) {
+        d <- data()
+        new_arms <- list()
+        for (idx in seq_along(current_arms())) {
+          new_name <- names(current_arms())[[idx]]
+          new_sel_vals <- current_arms()[[idx]]
+          new_arms[[idx]] <- create_arm(d, new_name, new_sel_vals)
+        }
+        dplyr::bind_rows(d, new_arms)
       } else {
-        rv[["data"]]
+        data()
       }
     })
 
+    output[[BSAFE_ID$OUT_ARM_SEL]] <- shiny::renderTable({
+      data_with_arms()
+    })
 
-    return(
-      shiny::reactive(
-        if (is.null(rv[["data"]])) {
-          data()
-        } else {
-          rv[["data"]]
-        }
-      )
-    )
+
+    return(data_with_arms)
   }
 
   shiny::moduleServer(id, mod)
@@ -166,6 +176,7 @@ mod_data_preparation_server <- function(id, data) {
 mock_data_preparation_mod <- function() {
   ui <- function(request) {
     shiny::fluidPage(
+      shiny::bookmarkButton(),
       mod_data_preparation_ui(
         id = "mock"
       ),
@@ -180,13 +191,13 @@ mock_data_preparation_mod <- function() {
     )
 
     output[["out"]] <- shiny::renderPrint({
-      x[["data"]]()
-      utils::str(x)
+      x()
     })
   }
 
   shiny::shinyApp(
     ui = ui,
-    server = server
+    server = server,
+    enableBookmarking = "url"
   )
 }
