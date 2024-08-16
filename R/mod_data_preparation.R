@@ -109,7 +109,15 @@ mod_data_preparation_server <- function(id, data) {
           shiny::div(
             style = "display: flex; align-items: baseline; column-gap: 10px",
             arm_name,
-            shiny::tags$button(shiny::icon("delete-left"), type = "button", class = "btn btn-default", onClick = paste0("Shiny.setInputValue('", ns("delete_arm"), "', '", arm_name, "', {priority: \"event\"})")),
+            shiny::tags$button(
+              shiny::icon("delete-left"),
+              type = "button",
+              class = "btn btn-default",
+              onClick = paste0(
+                "Shiny.setInputValue('", ns("delete_arm"),
+                "', '", arm_name, "', {priority: \"event\"})"
+              )
+            ),
           )
         }
       )
