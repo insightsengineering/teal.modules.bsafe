@@ -1,54 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/404.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/index.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/bsafe_UI.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/bsafe_data.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/cash-.pack_of_constants.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/dot_dot_shinymeta.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/dplyr_.data.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/mock_bsafe.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/pack_of_constants.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/test_dm_in.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/test_na_in.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/test_rm_in.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/404.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/LICENSE-text.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/authors.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/index.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/news/index.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/bsafe_UI.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/bsafe_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/cash-.pack_of_constants.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/create_arm.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/dot_dot_shinymeta.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/dplyr_.data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/index.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/mock_bsafe.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/pack_of_constants.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/pipe.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/test_dm_in.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/test_na_in.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal.modules.bsafe/reference/test_rm_in.html</loc></url>
 </urlset>
+

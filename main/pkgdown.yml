@@ -1,9 +1,8 @@
-pandoc: 3.1.13
-pkgdown: 2.0.9
+pandoc: '3.2'
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2024-05-16T10:36Z
+last_built: 2024-08-16T14:13Z
 urls:
   reference: https://insightsengineering.github.io/teal.modules.bsafe/reference
   article: https://insightsengineering.github.io/teal.modules.bsafe/articles
-
