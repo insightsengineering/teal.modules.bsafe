@@ -41,5 +41,6 @@ Suggests:
     testthat (>= 3.0.4),
     shinytest2,
     vdiffr
+Config/testthat/edition: 3
 RoxygenNote: 7.3.2
 Remotes: insightsengineering/bsafe@main
