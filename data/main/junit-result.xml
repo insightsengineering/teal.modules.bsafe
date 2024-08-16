@@ -1,124 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="bsafe_app" timestamp="2024-06-05T07:44:55Z" hostname="f6cb3f1653d8" tests="2" skipped="0" failures="0" errors="0" time="11.686">
-    <testcase time="7.585" classname="bsafe_app" name="bsafe_module_starts"/>
-    <testcase time="4.101" classname="bsafe_app" name="tm_bsafe_starts"/>
+  <testsuite name="bsafe_app" timestamp="2024-08-16T14:14:34Z" hostname="6ef87486fc2e" tests="2" skipped="0" failures="0" errors="0" time="14.985">
+    <testcase time="7.568" classname="bsafe_app" name="bsafe_module_starts"/>
+    <testcase time="7.417" classname="bsafe_app" name="tm_bsafe_starts"/>
   </testsuite>
-  <testsuite name="decision_making" timestamp="2024-06-05T07:45:06Z" hostname="f6cb3f1653d8" tests="16" skipped="0" failures="0" errors="0" time="33.711">
-    <testcase time="0.020999999999999" classname="decision_making" name="calc_log_hazard_area_returns_correct_values"/>
-    <testcase time="0.00399999999999956" classname="decision_making" name="calc_param_approx_boundaries_returns_correct_lower_and_upper_boundaries"/>
-    <testcase time="13.087" classname="decision_making" name="can_read_and_change_distribution"/>
-    <testcase time="2.055" classname="decision_making" name="can_read_and_change_non_ae_perc_slider"/>
-    <testcase time="0.0100000000000016" classname="decision_making" name="ae_div_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
-    <testcase time="0.00999999999999801" classname="decision_making" name="inci_div_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
-    <testcase time="1.01" classname="decision_making" name="header_element_is_present"/>
-    <testcase time="0.969999999999999" classname="decision_making" name="preface_element_is_present"/>
-    <testcase time="0.966999999999999" classname="decision_making" name="plot_is_present"/>
-    <testcase time="1.075" classname="decision_making" name="auc_text_element_is_present"/>
-    <testcase time="0.968" classname="decision_making" name="preset_statements_table_is_present"/>
-    <testcase time="2.26" classname="decision_making" name="exported_preset_statements_code_matches_output"/>
-    <testcase time="2.27200000000001" classname="decision_making" name="exported_plot_code_matches_output"/>
-    <testcase time="8.986" classname="decision_making" name="can_read_and_change_ae_perc_slider"/>
-    <testcase time="0.00900000000000034" classname="decision_making" name="ae_div_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
-    <testcase time="0.007000000000005" classname="decision_making" name="inci_div_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
+  <testsuite name="decision_making" timestamp="2024-08-16T14:14:52Z" hostname="6ef87486fc2e" tests="16" skipped="1" failures="0" errors="0" time="32.957">
+    <testcase time="3.331" classname="decision_making" name="calc_log_hazard_area_returns_correct_values"/>
+    <testcase time="0.0159999999999982" classname="decision_making" name="calc_param_approx_boundaries_returns_correct_lower_and_upper_boundaries">
+      <skipped message="Reason: On CRAN ('test-decision_making.R:12:5')"/>
+    </testcase>
+    <testcase time="9.065" classname="decision_making" name="can_read_and_change_distribution"/>
+    <testcase time="1.987" classname="decision_making" name="can_read_and_change_non_ae_perc_slider"/>
+    <testcase time="0.00999999999999801" classname="decision_making" name="ae_div_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
+    <testcase time="0.00900000000000034" classname="decision_making" name="inci_div_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
+    <testcase time="0.998000000000001" classname="decision_making" name="header_element_is_present"/>
+    <testcase time="0.966000000000001" classname="decision_making" name="preface_element_is_present"/>
+    <testcase time="0.981999999999999" classname="decision_making" name="plot_is_present"/>
+    <testcase time="1.068" classname="decision_making" name="auc_text_element_is_present"/>
+    <testcase time="0.958000000000006" classname="decision_making" name="preset_statements_table_is_present"/>
+    <testcase time="2.282" classname="decision_making" name="exported_preset_statements_code_matches_output"/>
+    <testcase time="2.307" classname="decision_making" name="exported_plot_code_matches_output"/>
+    <testcase time="8.959" classname="decision_making" name="can_read_and_change_ae_perc_slider"/>
+    <testcase time="0.0100000000000051" classname="decision_making" name="ae_div_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
+    <testcase time="0.00900000000000034" classname="decision_making" name="inci_div_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
   </testsuite>
-  <testsuite name="map_prior" timestamp="2024-06-05T07:45:40Z" hostname="f6cb3f1653d8" tests="27" skipped="0" failures="0" errors="0" time="77.378">
-    <testcase time="0.0879999999999939" classname="map_prior" name="preface_prior_txt_returns_correct_preface_for_MAP_approach"/>
-    <testcase time="0.00300000000000011" classname="map_prior" name="preface_prior_txt_returns_correct_preface_for_log_scale_approach"/>
-    <testcase time="0.00900000000000034" classname="map_prior" name="preface_prior_txt_returns_an_error_for_unknown_selection_analysis"/>
-    <testcase time="12.079" classname="map_prior" name="map_prior_is_calculated_when_button_is_pressed"/>
-    <testcase time="1.445" classname="map_prior" name="forest_plot_is_present"/>
-    <testcase time="1.457" classname="map_prior" name="mix_density_plot_is_present"/>
-    <testcase time="1.433" classname="map_prior" name="preface_prior_text_is_present"/>
-    <testcase time="1.472" classname="map_prior" name="density_function_is_present"/>
-    <testcase time="1.572" classname="map_prior" name="summary_table_is_present"/>
-    <testcase time="1.46299999999999" classname="map_prior" name="map_mcmc_returned_values_is_a_gMAP_object"/>
-    <testcase time="1.47800000000001" classname="map_prior" name="param_approx_returned_values_is_a_EM_object"/>
-    <testcase time="1.61" classname="map_prior" name="adj_tau_returned_values_is_a_numeric"/>
-    <testcase time="1.96299999999999" classname="map_prior" name="ess_method_is_a_subset_from_BSAFE_CHOICES_SEL_ESS_METHOD"/>
-    <testcase time="1.42700000000001" classname="map_prior" name="forest_plot_is_a_ggplot"/>
-    <testcase time="1.44699999999999" classname="map_prior" name="map_summary_table_is_a_data.frame"/>
-    <testcase time="5.22300000000001" classname="map_prior" name="map_mcmc_code_eval_matches_print"/>
-    <testcase time="5.622" classname="map_prior" name="param_approx_code_eval_matches_print"/>
-    <testcase time="1.43599999999999" classname="map_prior" name="adj_tau_code_eval_matches_value"/>
-    <testcase time="5.396" classname="map_prior" name="forest_plot_code_eval_matches_plot"/>
-    <testcase time="5.35299999999999" classname="map_prior" name="map_summary_table_code_eval_matches_value"/>
-    <testcase time="5.968" classname="map_prior" name="can_read_and_change_tau"/>
-    <testcase time="1.18900000000001" classname="map_prior" name="can_read_and_change_hist_borrow"/>
-    <testcase time="5.13199999999999" classname="map_prior" name="can_read_and_change_effective_sampling_method"/>
-    <testcase time="1.17100000000001" classname="map_prior" name="menu_prior_is_invalidated_when_any_change_in_the_input_values_to_map_prior_happens"/>
-    <testcase time="4.206" classname="map_prior" name="menu_prior_is_invalidated_when_any_change_in_the_input_values_to_map_prior_happens"/>
-    <testcase time="3.86499999999999" classname="map_prior" name="menu_prior_is_invalidated_when_any_change_in_the_input_values_to_map_prior_happens"/>
-    <testcase time="3.871" classname="map_prior" name="menu_prior_is_invalidated_when_any_change_in_the_input_values_to_map_prior_happens"/>
+  <testsuite name="map_prior" timestamp="2024-08-16T14:15:22Z" hostname="6ef87486fc2e" tests="27" skipped="0" failures="0" errors="0" time="84.579">
+    <testcase time="0.341000000000001" classname="map_prior" name="preface_prior_txt_returns_correct_preface_for_MAP_approach"/>
+    <testcase time="0.00599999999999312" classname="map_prior" name="preface_prior_txt_returns_correct_preface_for_log_scale_approach"/>
+    <testcase time="0.0100000000000051" classname="map_prior" name="preface_prior_txt_returns_an_error_for_unknown_selection_analysis"/>
+    <testcase time="12.605" classname="map_prior" name="map_prior_is_calculated_when_button_is_pressed"/>
+    <testcase time="1.873" classname="map_prior" name="forest_plot_is_present"/>
+    <testcase time="2.07399999999999" classname="map_prior" name="mix_density_plot_is_present"/>
+    <testcase time="1.751" classname="map_prior" name="preface_prior_text_is_present"/>
+    <testcase time="1.738" classname="map_prior" name="density_function_is_present"/>
+    <testcase time="1.83800000000001" classname="map_prior" name="summary_table_is_present"/>
+    <testcase time="2.02699999999999" classname="map_prior" name="map_mcmc_returned_values_is_a_gMAP_object"/>
+    <testcase time="1.849" classname="map_prior" name="param_approx_returned_values_is_a_EM_object"/>
+    <testcase time="1.74300000000001" classname="map_prior" name="adj_tau_returned_values_is_a_numeric"/>
+    <testcase time="1.854" classname="map_prior" name="ess_method_is_a_subset_from_BSAFE_CHOICES_SEL_ESS_METHOD"/>
+    <testcase time="2.07899999999999" classname="map_prior" name="forest_plot_is_a_ggplot"/>
+    <testcase time="2.13800000000001" classname="map_prior" name="map_summary_table_is_a_data.frame"/>
+    <testcase time="5.32299999999999" classname="map_prior" name="map_mcmc_code_eval_matches_print"/>
+    <testcase time="5.726" classname="map_prior" name="param_approx_code_eval_matches_print"/>
+    <testcase time="1.75500000000001" classname="map_prior" name="adj_tau_code_eval_matches_value"/>
+    <testcase time="6.122" classname="map_prior" name="forest_plot_code_eval_matches_plot"/>
+    <testcase time="5.68499999999999" classname="map_prior" name="map_summary_table_code_eval_matches_value"/>
+    <testcase time="6.28200000000001" classname="map_prior" name="can_read_and_change_tau"/>
+    <testcase time="1.181" classname="map_prior" name="can_read_and_change_hist_borrow"/>
+    <testcase time="5.111" classname="map_prior" name="can_read_and_change_effective_sampling_method"/>
+    <testcase time="1.12899999999999" classname="map_prior" name="menu_prior_is_invalidated_when_any_change_in_the_input_values_to_map_prior_happens"/>
+    <testcase time="4.33800000000001" classname="map_prior" name="menu_prior_is_invalidated_when_any_change_in_the_input_values_to_map_prior_happens"/>
+    <testcase time="4.08099999999999" classname="map_prior" name="menu_prior_is_invalidated_when_any_change_in_the_input_values_to_map_prior_happens"/>
+    <testcase time="3.92000000000002" classname="map_prior" name="menu_prior_is_invalidated_when_any_change_in_the_input_values_to_map_prior_happens"/>
   </testsuite>
-  <testsuite name="new_trial_analysis" timestamp="2024-06-05T07:47:03Z" hostname="f6cb3f1653d8" tests="23" skipped="0" failures="0" errors="0" time="27.34">
-    <testcase time="5.76000000000001" classname="new_trial_analysis" name="ae_div_side_and_main_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
+  <testsuite name="new_trial_analysis" timestamp="2024-08-16T14:16:53Z" hostname="6ef87486fc2e" tests="23" skipped="0" failures="0" errors="0" time="30.287">
+    <testcase time="6.15299999999999" classname="new_trial_analysis" name="ae_div_side_and_main_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
     <testcase time="0.00600000000000023" classname="new_trial_analysis" name="ae_div_side_and_main_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
-    <testcase time="0.00800000000000978" classname="new_trial_analysis" name="inci_div_side_and_main_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
-    <testcase time="0.00499999999999545" classname="new_trial_analysis" name="inci_div_side_and_main_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
-    <testcase time="1.84100000000001" classname="new_trial_analysis" name="can_read_and_change_number_of_patients"/>
-    <testcase time="1.49699999999999" classname="new_trial_analysis" name="can_read_and_change_number_of_patients_with_AE"/>
-    <testcase time="1.542" classname="new_trial_analysis" name="number_of_patients_with_AE_slider_is_updated_when_number_of_patients_change"/>
-    <testcase time="1.47899999999998" classname="new_trial_analysis" name="number_of_patients_with_AE_slider_is_updated_when_number_of_patients_change"/>
-    <testcase time="0.748000000000019" classname="new_trial_analysis" name="mix_density_plot_is_present"/>
-    <testcase time="0.745999999999981" classname="new_trial_analysis" name="summary_table_is_present"/>
-    <testcase time="0.739000000000004" classname="new_trial_analysis" name="new_trial_analysis_is_a_string"/>
-    <testcase time="0.759000000000015" classname="new_trial_analysis" name="post_dist_is_a_string"/>
-    <testcase time="0.744" classname="new_trial_analysis" name="current_trial_data_is_a_string"/>
-    <testcase time="0.742999999999995" classname="new_trial_analysis" name="compare_plot_is_a_ggplot"/>
-    <testcase time="0.740000000000009" classname="new_trial_analysis" name="map_summary_table_is_a_data.frame"/>
-    <testcase time="0.995999999999981" classname="new_trial_analysis" name="compare_plot_code_eval_matches_plot"/>
-    <testcase time="0.832999999999998" classname="new_trial_analysis" name="compare_summary_table_code_eval_matches_value"/>
-    <testcase time="5.685" classname="new_trial_analysis" name="ae_div_side_and_main_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
+    <testcase time="0.00899999999998613" classname="new_trial_analysis" name="inci_div_side_and_main_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
+    <testcase time="0.00500000000002387" classname="new_trial_analysis" name="inci_div_side_and_main_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
+    <testcase time="2.065" classname="new_trial_analysis" name="can_read_and_change_number_of_patients"/>
+    <testcase time="1.733" classname="new_trial_analysis" name="can_read_and_change_number_of_patients_with_AE"/>
+    <testcase time="1.77199999999999" classname="new_trial_analysis" name="number_of_patients_with_AE_slider_is_updated_when_number_of_patients_change"/>
+    <testcase time="1.71299999999999" classname="new_trial_analysis" name="number_of_patients_with_AE_slider_is_updated_when_number_of_patients_change"/>
+    <testcase time="0.921999999999997" classname="new_trial_analysis" name="mix_density_plot_is_present"/>
+    <testcase time="0.944999999999993" classname="new_trial_analysis" name="summary_table_is_present"/>
+    <testcase time="0.914000000000016" classname="new_trial_analysis" name="new_trial_analysis_is_a_string"/>
+    <testcase time="0.923000000000002" classname="new_trial_analysis" name="post_dist_is_a_string"/>
+    <testcase time="0.936000000000007" classname="new_trial_analysis" name="current_trial_data_is_a_string"/>
+    <testcase time="0.939999999999998" classname="new_trial_analysis" name="compare_plot_is_a_ggplot"/>
+    <testcase time="0.921999999999997" classname="new_trial_analysis" name="map_summary_table_is_a_data.frame"/>
+    <testcase time="1.315" classname="new_trial_analysis" name="compare_plot_code_eval_matches_plot"/>
+    <testcase time="1.09299999999999" classname="new_trial_analysis" name="compare_summary_table_code_eval_matches_value"/>
+    <testcase time="5.613" classname="new_trial_analysis" name="ae_div_side_and_main_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
     <testcase time="0.00600000000000023" classname="new_trial_analysis" name="ae_div_side_and_main_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
-    <testcase time="0.00800000000000978" classname="new_trial_analysis" name="inci_div_side_and_main_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
+    <testcase time="0.00900000000001455" classname="new_trial_analysis" name="inci_div_side_and_main_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
     <testcase time="0.00600000000000023" classname="new_trial_analysis" name="inci_div_side_and_main_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
-    <testcase time="1.30199999999999" classname="new_trial_analysis" name="can_read_and_change_first_occurence"/>
-    <testcase time="1.14699999999999" classname="new_trial_analysis" name="can_read_and_change_cummulative_time"/>
+    <testcase time="1.20099999999999" classname="new_trial_analysis" name="can_read_and_change_first_occurence"/>
+    <testcase time="1.08600000000001" classname="new_trial_analysis" name="can_read_and_change_cummulative_time"/>
   </testsuite>
-  <testsuite name="robust_map" timestamp="2024-06-05T07:47:25Z" hostname="f6cb3f1653d8" tests="18" skipped="0" failures="0" errors="0" time="35.149">
-    <testcase time="0.0660000000000025" classname="robust_map" name="preface_rob_txt_returns_correct_preface_for_weakly_informative_conjugate_component"/>
-    <testcase time="0.0040000000000191" classname="robust_map" name="preface_rob_txt_returns_correct_preface_for_EX_NEX_approach"/>
-    <testcase time="0.0029999999999859" classname="robust_map" name="preface_rob_txt_returns_NULL_for_unknown_selection_analysis"/>
-    <testcase time="5.66200000000001" classname="robust_map" name="robust_mean_div_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
-    <testcase time="2.405" classname="robust_map" name="can_read_and_informative_prior_weight"/>
-    <testcase time="5.77799999999999" classname="robust_map" name="can_read_and_change_ess_method"/>
-    <testcase time="1.26500000000001" classname="robust_map" name="robust_map_mcmc_is_data.frame"/>
-    <testcase time="1.27199999999999" classname="robust_map" name="robust_plot_is_ggplot"/>
-    <testcase time="1.27699999999999" classname="robust_map" name="robust_summary_is_data.frame"/>
-    <testcase time="1.29700000000003" classname="robust_map" name="preface_text_is_present"/>
-    <testcase time="1.25299999999999" classname="robust_map" name="density_function_is_present"/>
-    <testcase time="1.291" classname="robust_map" name="robust_map_plot_is_present"/>
-    <testcase time="1.42600000000002" classname="robust_map" name="table_is_present"/>
-    <testcase time="1.47799999999998" classname="robust_map" name="robust_map_mcmc_code_eval_matches_value"/>
-    <testcase time="1.48100000000002" classname="robust_map" name="robust_plot_code_eval_matches_value"/>
-    <testcase time="1.36399999999998" classname="robust_map" name="robust_summary_code_eval_matches_value"/>
-    <testcase time="5.57300000000001" classname="robust_map" name="robust_mean_div_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
-    <testcase time="2.25399999999999" classname="robust_map" name="can_read_and_change_informative_prior_mean"/>
+  <testsuite name="robust_map" timestamp="2024-08-16T14:17:17Z" hostname="6ef87486fc2e" tests="18" skipped="0" failures="0" errors="0" time="38.164">
+    <testcase time="0.306999999999988" classname="robust_map" name="preface_rob_txt_returns_correct_preface_for_weakly_informative_conjugate_component"/>
+    <testcase time="0.00499999999999545" classname="robust_map" name="preface_rob_txt_returns_correct_preface_for_EX_NEX_approach"/>
+    <testcase time="0.00600000000000023" classname="robust_map" name="preface_rob_txt_returns_NULL_for_unknown_selection_analysis"/>
+    <testcase time="6.01400000000001" classname="robust_map" name="robust_mean_div_is_hidden_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_1_"/>
+    <testcase time="2.54399999999998" classname="robust_map" name="can_read_and_informative_prior_weight"/>
+    <testcase time="5.893" classname="robust_map" name="can_read_and_change_ess_method"/>
+    <testcase time="1.38800000000001" classname="robust_map" name="robust_map_mcmc_is_data.frame"/>
+    <testcase time="1.38" classname="robust_map" name="robust_plot_is_ggplot"/>
+    <testcase time="1.38900000000001" classname="robust_map" name="robust_summary_is_data.frame"/>
+    <testcase time="1.41999999999999" classname="robust_map" name="preface_text_is_present"/>
+    <testcase time="1.37800000000001" classname="robust_map" name="density_function_is_present"/>
+    <testcase time="1.41399999999999" classname="robust_map" name="robust_map_plot_is_present"/>
+    <testcase time="1.53900000000002" classname="robust_map" name="table_is_present"/>
+    <testcase time="1.61099999999999" classname="robust_map" name="robust_map_mcmc_code_eval_matches_value"/>
+    <testcase time="1.75200000000001" classname="robust_map" name="robust_plot_code_eval_matches_value"/>
+    <testcase time="1.72999999999999" classname="robust_map" name="robust_summary_code_eval_matches_value"/>
+    <testcase time="5.84200000000001" classname="robust_map" name="robust_mean_div_is_visible_when_analysis_type_is_BSAFE_CHOICES_SEL_ANALYSIS_2_"/>
+    <testcase time="2.55199999999999" classname="robust_map" name="can_read_and_change_informative_prior_mean"/>
   </testsuite>
-  <testsuite name="select_analysis" timestamp="2024-06-05T07:48:00Z" hostname="f6cb3f1653d8" tests="16" skipped="0" failures="0" errors="0" time="7.769">
-    <testcase time="0.0680000000000121" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_choices_when_previous_selection_is_empty"/>
-    <testcase time="0.0029999999999859" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_empty"/>
-    <testcase time="0.0040000000000191" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_choices_when_previous_selection_is_not_empty"/>
-    <testcase time="0.0029999999999859" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_not_empty"/>
-    <testcase time="0.00300000000001432" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_choices_when_there_are_choices"/>
-    <testcase time="0.0029999999999859" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_selected_value_when_there_are_choices"/>
-    <testcase time="0.00399999999999068" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_choices_when_previous_selection_is_not_empty"/>
-    <testcase time="0.00300000000001432" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_not_empty"/>
-    <testcase time="0.0029999999999859" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_NULL_choices_when_there_are_no_choices"/>
-    <testcase time="0.00500000000002387" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_NULL_selected_value_when_there_are_no_choices"/>
-    <testcase time="3.63" classname="select_analysis" name="can_read_and_change_treatment"/>
-    <testcase time="0.966000000000008" classname="select_analysis" name="can_read_and_change_change_analysis_type"/>
-    <testcase time="0.967999999999989" classname="select_analysis" name="can_read_and_change_safety_topic"/>
-    <testcase time="0.911000000000001" classname="select_analysis" name="can_read_and_change_seed"/>
-    <testcase time="0.393000000000001" classname="select_analysis" name="returned_data_is_a_data.frame"/>
-    <testcase time="0.801999999999992" classname="select_analysis" name="exported_data_code_matches_output"/>
+  <testsuite name="select_analysis" timestamp="2024-08-16T14:17:55Z" hostname="6ef87486fc2e" tests="16" skipped="0" failures="0" errors="0" time="7.997">
+    <testcase time="0.302999999999997" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_choices_when_previous_selection_is_empty"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_empty"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_choices_when_previous_selection_is_not_empty"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_not_empty"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_choices_when_there_are_choices"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_selected_value_when_there_are_choices"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_choices_when_previous_selection_is_not_empty"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_not_empty"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_NULL_choices_when_there_are_no_choices"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_NULL_selected_value_when_there_are_no_choices"/>
+    <testcase time="3.59899999999999" classname="select_analysis" name="can_read_and_change_treatment"/>
+    <testcase time="0.962000000000018" classname="select_analysis" name="can_read_and_change_change_analysis_type"/>
+    <testcase time="0.960999999999984" classname="select_analysis" name="can_read_and_change_safety_topic"/>
+    <testcase time="0.908000000000015" classname="select_analysis" name="can_read_and_change_seed"/>
+    <testcase time="0.395999999999987" classname="select_analysis" name="returned_data_is_a_data.frame"/>
+    <testcase time="0.813999999999993" classname="select_analysis" name="exported_data_code_matches_output"/>
   </testsuite>
-  <testsuite name="utils" timestamp="2024-06-05T07:48:08Z" hostname="f6cb3f1653d8" tests="5" skipped="0" failures="0" errors="0" time="0.072">
-    <testcase time="0.0600000000000023" classname="utils" name="_returns_a_when_a_is_not_NULL_not_NA_and_has_length_0"/>
-    <testcase time="0.0029999999999859" classname="utils" name="_returns_b_when_a_is_NULL"/>
-    <testcase time="0.00300000000001432" classname="utils" name="_returns_b_when_a_is_NA"/>
-    <testcase time="0.0029999999999859" classname="utils" name="_returns_b_when_a_is_an_empty_vector"/>
-    <testcase time="0.00300000000001432" classname="utils" name="_returns_b_when_a_is_a_vector_with_length_0"/>
+  <testsuite name="utils" timestamp="2024-08-16T14:18:03Z" hostname="6ef87486fc2e" tests="5" skipped="0" failures="0" errors="0" time="0.085">
+    <testcase time="0.0630000000000166" classname="utils" name="_returns_a_when_a_is_not_NULL_not_NA_and_has_length_0"/>
+    <testcase time="0.00499999999999545" classname="utils" name="_returns_b_when_a_is_NULL"/>
+    <testcase time="0.00600000000000023" classname="utils" name="_returns_b_when_a_is_NA"/>
+    <testcase time="0.00499999999999545" classname="utils" name="_returns_b_when_a_is_an_empty_vector"/>
+    <testcase time="0.00600000000000023" classname="utils" name="_returns_b_when_a_is_a_vector_with_length_0"/>
   </testsuite>
 </testsuites>
