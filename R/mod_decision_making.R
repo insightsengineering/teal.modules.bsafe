@@ -185,6 +185,7 @@ mod_decision_making_server <- function(
         shinymeta::metaExpr({
           bsafe::area_under_the_curve(
             ae_prop = ..(r_ae_prop),
+            select_analysis = ..(analysis_type()),
             mix = ..(mix()),
             saf_topic = ..(safety_topic())
           )
