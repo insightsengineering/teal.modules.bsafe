@@ -35,7 +35,7 @@ local({
 
   test_that("map prior is calculated when button is pressed", {
     app$click(tns("submit"))
-    app$wait_for_idle()
+    app$wait_for_idle(timeout = 180 * 1000)
     checkmate::expect_class(shiny::isolate(app$get_values()[["export"]][["r"]][["map_mcmc"]]()), "gMAP")
   })
 

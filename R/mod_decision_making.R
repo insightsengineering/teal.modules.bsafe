@@ -2,6 +2,7 @@ mod_decision_making_ui <- function(id) {
   ns <- shiny::NS(id)
 
   side <- list(
+    shinyjs::useShinyjs(),
     shiny::selectInput(ns(BSAFE_ID$SEL_DIST),
       "Make statistical inference about the",
       choices = BSAFE_CHOICES$SEL_DIST,
@@ -26,7 +27,6 @@ mod_decision_making_ui <- function(id) {
   )
 
   main <- list(
-    shinyjs::useShinyjs(),
     shiny::uiOutput(ns(BSAFE_ID$OUT_DM_HEADER_TXT)),
     shiny::uiOutput(ns(BSAFE_ID$OUT_DM_PREFACE_TXT)),
     shiny::plotOutput(ns(BSAFE_ID$OUT_STAT_INF_DENSITY_PLT)), # spinner
@@ -45,7 +45,7 @@ mod_decision_making_server <- function(
     safety_topic, treatment,
     current_trial_data, param_approx,
     robust_map_mcmc, post_dist,
-    new_trial_analysis) {
+    new_trial_analysis, seed) {
   mod <- function(input, output, session) {
     ns <- session[["ns"]]
 
@@ -59,7 +59,8 @@ mod_decision_making_server <- function(
             select_analysis = ..(analysis_type()),
             param_approx = ..(param_approx()),
             robust_map_object = ..(robust_map_mcmc()),
-            post_dist = ..(post_dist())
+            post_dist = ..(post_dist()),
+            seed = ..(seed())
           )
         })
       },
@@ -185,7 +186,8 @@ mod_decision_making_server <- function(
           bsafe::area_under_the_curve(
             ae_prop = ..(r_ae_prop),
             mix = ..(mix()),
-            saf_topic = ..(safety_topic())
+            saf_topic = ..(safety_topic()),
+            select_analysis = ..(analysis_type())
           )
         })
       },
@@ -229,19 +231,17 @@ mod_decision_making_server <- function(
   shiny::moduleServer(id, mod)
 }
 
-# TODO: Alexander input on what to expect and what to put in
 calc_log_hazard_area <- function(param_approx) {
   val <- c(
-    round(param_approx[2, 1] - 2 * param_approx[3, 1], 3),
-    round(param_approx[2, 1] + 2 * param_approx[3, 1], 3)
+    round(RBesT::qmix(param_approx, 0.01), 2),
+    round(RBesT::qmix(param_approx, 0.99), 2)
   )
   return(val)
 }
 
-# TODO: Alexander input on what to expect and what to put in
 calc_param_approx_boundaries <- function(param_approx) {
-  lower_bound <- param_approx[2, 1] - param_approx[3, 1]
-  upper_bound <- param_approx[2, 1] + param_approx[3, 1]
+  lower_bound <- RBesT::qmix(param_approx, 0.25)
+  upper_bound <- RBesT::qmix(param_approx, 0.75)
   return(c(lower_bound, upper_bound))
 }
 

@@ -12,10 +12,10 @@ params:
   bsafe_version: "holder"
   pwemap_version: "holder"
   seed: "holder"
+  ae_summary_log: "holder"
 ---
 
 ```{r setup, include=FALSE}
-# nolint start: object_name_linter
 COMMA_PLUS_ONE_SPACE <- 2
 STRING_START <- 1
 # Adverse Event proportion table data
@@ -30,16 +30,17 @@ array_er_comp <- params$ae_summary_Rmd[["EvenRatesComp"]]
 ID_trt_list <- params$ae_summary_Rmd[["ID_trt_list"]]
 # list of all STUDYIDs of the control arm
 ID_ctr_list <- params$ae_summary_Rmd[["ID_ctr_list"]]
-
 # list of all selected arms for the treatment arm
 cb_list_trt <- params$ae_summary_Rmd[["cb_list_trt"]]
 # list of all selected arms for the control arm
 cb_list_ctr <- params$ae_summary_Rmd[["cb_list_ctrl"]]
 # dynamic group variable for amount of comparisons chosen by the user //NUM_COMPARISONS in bsafe
+warnText <- params$ae_summary_Rmd[["warn_txt"]]
+
 if (dim(array_inci)[4] == 1) {
   groups <- 1
 } else {
-  groups <- dimnames(array_inci[, , , ])[[4]]
+  groups <- dimnames(array_inci)[[4]]
 }
 # initializing empty lists
 list_table_1_1 <- list()
@@ -51,17 +52,26 @@ knitr::opts_chunk$set(eval = TRUE)
 ```
 
 * **Seed used to generate this report:** `r sprintf("%i", params$seed)`
-* **teal.modules.bsafe version:** `r params$bsafe_version`
-* **bsafe version:** `r params$pwemap_version`
+* **bsafe app version:** `r params$bsafe_version`
+* **pwemap package version:** `r params$pwemap_version`
 * **date of report generation:** `r params$date`
 * **The report is not validated**
+
+\newpage
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+print(warnText)
+```
+
+\newpage
+```{r, echo=FALSE}
+print(params$ae_summary_log)
+```
 
 \newpage
 ```{r tables, results='asis', echo=FALSE, warning=FALSE, error=FALSE}
 # group as iterator
 for (g in groups) {
-  # pasting together the chosen arms of ARM A aka treatment arm and separating them
-  # by comma as well as removing the last comma
+  # pasting together the chosen arms of ARM A aka treatment arm and separating them by comma as well as removing the last comma
   ARMS_ARM_A <- substr(
     paste0(cb_list_trt[[paste0("grp", g)]],
       ", ",
@@ -73,8 +83,7 @@ for (g in groups) {
       collapse = ""
     )) - COMMA_PLUS_ONE_SPACE
   )
-  # pasting together the chosen arms of ARM B aka control arm and separating them
-  # by comma as well as removing the last comma
+  # pasting together the chosen arms of ARM B aka control arm and separating them by comma as well as removing the last comma
   ARMS_ARM_B <- substr(
     paste0(cb_list_ctr[[paste0("grp", g)]],
       ", ",
@@ -135,9 +144,11 @@ for (g in groups) {
     " vs. Arm B: ",
     ARMS_ARM_B
   )
-  # combining both ARM A and ARM B together into one list for proper display
-  list_table_1_1[[g]] <- as.data.frame(cbind(array_inci[, , 1, g], array_inci[, , 2, g]))
+
+
+  list_table_1_1[[g]] <- cbind(as.data.frame(array_inci[, , 1, g, drop = F]), as.data.frame(array_inci[, , 2, g, drop = F]))
   # list_table_1_1[[g]] <- list_table_1_1[[g]] %>% na.omit()
+  list_table_1_1[[g]][, c(3, 10)] <- round(list_table_1_1[[g]][, c(3, 10)] * 100, 1)
   list_table_1_1[[g]][, c(3, 10)] <- round(list_table_1_1[[g]][, c(3, 10)] * 100, 1)
   table_display_1 <- kableExtra::kable(list_table_1_1[[g]],
     format = "latex",
@@ -149,7 +160,7 @@ for (g in groups) {
     kableExtra::kable_styling(font_size = 8) %>%
     kableExtra::add_header_above( # adding extra separation layer of both Arms above the column names. They have to be equal to the names of the array/list
       c(
-        "Arm A" = 8,
+        "Arm A" = 7,
         "Arm B" = 7
       )
     ) %>%
@@ -171,7 +182,8 @@ for (g in groups) {
     " vs. Arm B: ",
     ARMS_ARM_B
   )
-  list_table_1_2[[g]] <- as.data.frame(cbind(array_inci_comp[, , 1, g], array_inci_comp[, , 2, g]))
+  list_table_1_2[[g]] <- cbind(as.data.frame(array_inci_comp[, , 1, g, drop = F]), as.data.frame(array_inci_comp[, , 2, g, drop = F]))
+  # list_table_1_2[[g]] <- as.data.frame(cbind(array_inci_comp[, , 1, g], array_inci_comp[, , 2, g]))
   # list_table_1_2[[g]] <- list_table_1_2[[g]] %>% na.omit()
   table_display_2 <- kableExtra::kable(list_table_1_2[[g]][, -6],
     format = "latex",
@@ -183,7 +195,7 @@ for (g in groups) {
     kableExtra::kable_styling(font_size = 8) %>%
     kableExtra::add_header_above(
       c(
-        "Risk Difference" = 6,
+        "Risk Difference" = 5,
         "Risk Ratio" = 6
       )
     ) %>%
@@ -210,7 +222,8 @@ for (g in groups) {
     " vs. Arm B: ",
     ARMS_ARM_B
   )
-  list_table_2_1[[g]] <- as.data.frame(cbind(array_er[, , 1, g], array_er[, , 2, g]))
+  # list_table_2_1[[g]] <- as.data.frame(cbind(array_er[, , 1, g], array_er[, , 2, g]))
+  list_table_2_1[[g]] <- cbind(as.data.frame(array_er[, , 1, g, drop = F]), as.data.frame(array_er[, , 2, g, drop = F]))
   # list_table_2_1[[g]] <- list_table_2_1[[g]] %>% na.omit()
   table_display_3 <- kableExtra::kable(list_table_2_1[[g]],
     format = "latex",
@@ -222,7 +235,7 @@ for (g in groups) {
     kableExtra::kable_styling(font_size = 8) %>%
     kableExtra::add_header_above(
       c(
-        "Arm A" = 6,
+        "Arm A" = 5,
         "Arm B" = 5
       )
     ) %>%
@@ -247,7 +260,8 @@ for (g in groups) {
     " vs. Arm B: ",
     ARMS_ARM_B
   )
-  list_table_2_2[[g]] <- as.data.frame(cbind(array_er_comp[, , 1, g], array_er_comp[, , 2, g]))
+  list_table_2_2[[g]] <- cbind(as.data.frame(array_er_comp[, , 1, g, drop = F]), as.data.frame(array_er_comp[, , 2, g, drop = F]))
+  # list_table_2_2[[g]] <- as.data.frame(cbind(array_er_comp[, , 1, g], array_er_comp[, , 2, g]))
   # list_table_2_2[[g]] <- list_table_2_2[[g]] %>% na.omit()
   if (length(list_table_2_2[[g]]) == 0) {
     print("Analysis is not applicable!")
@@ -262,7 +276,7 @@ for (g in groups) {
       kableExtra::kable_styling(font_size = 8) %>%
       kableExtra::add_header_above(
         c(
-          "Risk Difference" = 6,
+          "Risk Difference" = 5,
           "Risk Ratio" = 6
         )
       ) %>%
@@ -284,5 +298,4 @@ for (g in groups) {
     print(table_display_4)
   }
 }
-# nolint end
 ```

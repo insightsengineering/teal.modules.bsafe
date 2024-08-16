@@ -31,14 +31,17 @@ Imports:
     kableExtra,
     knitr,
     rlang,
+    rmarkdown,
     shinymeta,
-    teal.data,    
+    teal.data,
     teal.reporter,
     styler,
     markdown
 Suggests:
     testthat (>= 3.0.4),
     shinytest2,
+    RBesT,
     vdiffr
-RoxygenNote: 7.3.1
+Config/testthat/edition: 3
+RoxygenNote: 7.3.2
 Remotes: insightsengineering/bsafe@main

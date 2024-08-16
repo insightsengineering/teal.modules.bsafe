@@ -5,7 +5,7 @@
 \alias{test_dm_in}
 \title{test data for decision making}
 \format{
-An object of class \code{list} of length 9.
+An object of class \code{list} of length 10.
 }
 \usage{
 test_dm_in

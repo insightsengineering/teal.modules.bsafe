@@ -33,3 +33,4 @@ package-lock.json
 package.json
 auto_app/
 act
+*.log

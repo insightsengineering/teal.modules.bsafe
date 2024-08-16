@@ -26,7 +26,7 @@ bsafe_UI <- function(id, header = NULL) { # nolint
     bc
   }
 
-  collapsible_panel <- function(id, label, ..., open = TRUE) {
+  collapsible_panel <- function(id, label, ..., open = FALSE) {
     bs3_panel(
       bars_check(id, label, value = open),
       shiny::conditionalPanel(
@@ -42,40 +42,42 @@ bsafe_UI <- function(id, header = NULL) { # nolint
 
 
   ui_list <- list(
+    prep = list(mod_data_preparation_ui(ns("data_preparation")), "Data Preparation", FALSE),
     a_sel = list(mod_select_analysis_ui(ns("sel_analysis")), "Analysis selection", FALSE),
-    mp = list(mod_map_prior_ui(ns("map_prior")), "Map Prior", FALSE),
-    rmp = list(mod_robust_map_ui(ns("robust_map")), "Robust Map Prior", FALSE),
+    mp = list(mod_map_prior_ui(ns("map_prior")), "MAP Prior", FALSE),
+    rmp = list(mod_robust_map_ui(ns("robust_map")), "Robust MAP Prior", FALSE),
     nta = list(mod_new_trial_analysis_ui(ns("new_trial")), "New Trial Analysis", FALSE),
-    dm = list(mod_decision_making_ui(ns("decision_making")), "Decision Making", FALSE)
+    dm = list(mod_decision_making_ui(ns("decision_making")), "Decision Making", FALSE),
+    down = list(mod_simulation_ui(ns("simulation")), "Default Comparisons", FALSE)
   )
 
-  ui_list[["mp"]][[1]][["main"]] <- shiny::div(
-    style = "display: grid; grid-template-columns: 1fr 1fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0", # nolint
-    shiny::div(ui_list[["mp"]][[1]][["main"]][1:3], style = "grid-column: 1; grid-row:1; max-width: 100%; min-width: 0"), # nolint
-    shiny::div(ui_list[["mp"]][[1]][["main"]][4:7], style = "grid-column: 2; grid-row:1; max-width: 100%; min-width: 0"), # nolint
-    shiny::div(ui_list[["mp"]][[1]][["main"]][8], style = "grid-column: 1 / span 2; grid-row:2; max-width: 100%; min-width: 0") # nolint
-  )
-
-  ui_list[["rmp"]][[1]][["main"]] <- shiny::div(
-    style = "display: grid; grid-template-columns: 1.2fr 0.8fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0", # nolint
-    shiny::div(ui_list[["rmp"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1;max-width: 100%; min-width: 0"), # nolint
-    shiny::div(ui_list[["rmp"]][[1]][["main"]][3], style = "grid-column: 1; grid-row:2;max-width: 100%; min-width: 0"), # nolint
-    shiny::div(ui_list[["rmp"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2;max-width: 100%; min-width: 0") # nolint
-  )
-
-  ui_list[["nta"]][[1]][["main"]] <- shiny::div(
-    style = "display: grid; grid-template-columns: 1.2fr 0.8fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%", # nolint
-    shiny::div(ui_list[["nta"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1;max-width: 100%; min-width: 0"), # nolint
-    shiny::div(ui_list[["nta"]][[1]][["main"]][3], style = "grid-column: 1; grid-row:2;max-width: 100%; min-width: 0"), # nolint
-    shiny::div(ui_list[["nta"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2;max-width: 100%; min-width: 0") # nolint
-  )
-
-  ui_list[["dm"]][[1]][["main"]] <- shiny::div(
-    style = "display: grid; grid-template-columns: 1fr 1fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0", # nolint
-    shiny::div(ui_list[["dm"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1; min-width: 0"), # nolint
-    shiny::div(ui_list[["dm"]][[1]][["main"]][3:4], style = "grid-column: 1; grid-row:2; min-width: 0"), # nolint
-    shiny::div(ui_list[["dm"]][[1]][["main"]][5], style = "grid-column: 2; grid-row:2; min-width: 0") # nolint
-  )
+  # ui_list[["mp"]][[1]][["main"]] <- shiny::div(
+  #   style = "display: grid; grid-template-columns: 1fr 1fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0", # nolint
+  #   shiny::div(ui_list[["mp"]][[1]][["main"]][1:3], style = "grid-column: 1; grid-row:1; max-width: 100%; min-width: 0"), # nolint
+  #   shiny::div(ui_list[["mp"]][[1]][["main"]][4:7], style = "grid-column: 2; grid-row:1; max-width: 100%; min-width: 0"), # nolint
+  #   shiny::div(ui_list[["mp"]][[1]][["main"]][8], style = "grid-column: 1 / span 2; grid-row:2; max-width: 100%; min-width: 0") # nolint
+  # )
+  #
+  # ui_list[["rmp"]][[1]][["main"]] <- shiny::div(
+  #   style = "display: grid; grid-template-columns: 1.2fr 0.8fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0", # nolint
+  #   shiny::div(ui_list[["rmp"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1;max-width: 100%; min-width: 0"), # nolint
+  #   shiny::div(ui_list[["rmp"]][[1]][["main"]][3], style = "grid-column: 1; grid-row:2;max-width: 100%; min-width: 0"), # nolint
+  #   shiny::div(ui_list[["rmp"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2;max-width: 100%; min-width: 0") # nolint
+  # )
+  #
+  # ui_list[["nta"]][[1]][["main"]] <- shiny::div(
+  #   style = "display: grid; grid-template-columns: 1.2fr 0.8fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%", # nolint
+  #   shiny::div(ui_list[["nta"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1;max-width: 100%; min-width: 0"), # nolint
+  #   shiny::div(ui_list[["nta"]][[1]][["main"]][3], style = "grid-column: 1; grid-row:2;max-width: 100%; min-width: 0"), # nolint
+  #   shiny::div(ui_list[["nta"]][[1]][["main"]][4], style = "grid-column: 2; grid-row:2;max-width: 100%; min-width: 0") # nolint
+  # )
+  #
+  # ui_list[["dm"]][[1]][["main"]] <- shiny::div(
+  #   style = "display: grid; grid-template-columns: 1fr 1fr; grid-template-rows:auto auto; grid-gap: 1rem; width = 100%; max-width: 100%; min-width: 0", # nolint
+  #   shiny::div(ui_list[["dm"]][[1]][["main"]][1:2], style = "grid-column: 1 / span 2; grid-row:1; min-width: 0"), # nolint
+  #   shiny::div(ui_list[["dm"]][[1]][["main"]][3:4], style = "grid-column: 1; grid-row:2; min-width: 0"), # nolint
+  #   shiny::div(ui_list[["dm"]][[1]][["main"]][5], style = "grid-column: 2; grid-row:2; min-width: 0") # nolint
+  # )
 
   side <- shiny::tagList(
     header,
@@ -112,7 +114,20 @@ bsafe_UI <- function(id, header = NULL) { # nolint
       mustWork = TRUE
     )),
     shiny::h5("User Manual:"),
-    # shiny::a("open manual", href = "bsafe_manual.pdf")
+    shiny::a(
+      "open manual",
+      href = "www/manual.pdf"
+    ),
+    shiny::h5("Statistical Analysis Plan:"),
+    shiny::a(
+      "open SAP",
+      href = "www/statsplan.pdf"
+    ),
+    shiny::h5("Testing Documentation:"),
+    shiny::a(
+      "open Testing Documentation",
+      href = "www/test_validate_review.pdf"
+    )
   )
   main <- list(manual_ui, main)
 
@@ -160,11 +175,11 @@ bsafe_server <- function(
             "STUDYID needs to be a character"
           ),
           shiny::need(
-            checkmate::test_numeric(data[["N"]]),
+            checkmate::test_numeric(data[["N"]], null.ok = FALSE, any.missing = FALSE),
             "N needs to be a number"
           ),
           shiny::need(
-            checkmate::test_numeric(data[["N_WITH_AE"]]),
+            checkmate::test_numeric(data[["N_WITH_AE"]], null.ok = FALSE, any.missing = FALSE),
             "N_with_AE needs to be a number"
           ),
           shiny::need(
@@ -176,15 +191,9 @@ bsafe_server <- function(
             "SAF_TOPIC needs to be a character"
           ),
           shiny::need(
-            checkmate::test_character(data[["STUDY_ARM"]]),
-            "STUDY_ARM needs to be a character"
+            checkmate::test_character(data[["ARM"]]),
+            "ARM needs to be a character"
           ),
-          # TODO: Discuss with Lars the non-existing column
-          # nolint start
-          # shiny::need(
-          #   checkmate::test_numeric(data[["TOT_HIST"]]),
-          #   "HIST needs to be a number"),
-          # nolint end
           shiny::need(
             checkmate::test_true(all(data[["N_WITH_AE"]] <= data[["N"]])),
             "N_WITH_AE_COLUMN must me lower or equal than N"
@@ -199,9 +208,13 @@ bsafe_server <- function(
       varname = "receive_data"
     )
 
+    data_preparation <- mod_data_preparation_server(
+      "data_preparation",
+      data = receive_data
+    )
 
     # Data table preparation
-    sel_analysis <- mod_select_analysis_server("sel_analysis", receive_data)
+    sel_analysis <- mod_select_analysis_server("sel_analysis", data_preparation)
     selected_data <- sel_analysis[["data"]] # TODO: Careful with reactive overlap once poc is ready
     seed <- sel_analysis[["seed"]]
 
@@ -261,22 +274,33 @@ bsafe_server <- function(
       param_approx = map_prior[["param_approx"]],
       current_trial_data = new_trial[["current_trial_data"]],
       post_dist = new_trial[["post_dist"]],
-      new_trial_analysis = new_trial[["new_trial_analysis"]]
+      new_trial_analysis = new_trial[["new_trial_analysis"]],
+      seed = sel_analysis[["seed"]]
     )
 
     # nolint start
-    # TODO: data preparation and download results are not working on bsafe's side
-    # data_preparation <- mod_data_preparation_server(
-    #   "data_preparation",
-    #   data = receive_data
-    # )
 
-    # download_results <- mod_simulation_server(
-    #   "simulation",
-    #   data = receive_data
-    # )
+    tmpfolder <- tempfile(tmpdir = system.file("www", package = "teal.modules.bsafe"))
+    dir.create(tmpfolder)
+
+    download_results <- mod_simulation_server(
+      "simulation",
+      data = data_preparation,
+      tmpfolder = tmpfolder
+    )
+
+    shiny::onStop(function() {
+      unlink(
+        system.file(paste0("/www", strsplit(tmpfolder, "www")[[1]][2]),
+          package = "teal.modules.bsafe",
+          mustWork = TRUE
+        ),
+        recursive = TRUE
+      )
+    })
 
     # nolint end
+
 
     # return ----
 

@@ -1,50 +1,52 @@
 mod_simulation_ui <- function(id) {
   ns <- shiny::NS(id)
-  shiny::tagList(
-    shiny::sidebarLayout(
-      shiny::sidebarPanel(
-        shiny::sliderInput(ns(BSAFE_ID$SLDR_NUM_COMP),
-          "Number of comparisons",
-          min = 1,
-          max = 5,
-          value = 3,
-          step = 1
-        ),
-        shiny::uiOutput(ns(BSAFE_ID$OUT_COMP_CB)),
-        shiny::actionButton(
-          ns(BSAFE_ID$BUT_COMP_SUBMIT),
-          "Submit"
-        )
+  ui <- list(
+    side = shiny::tagList(
+      shiny::sliderInput(ns(BSAFE_ID$SLDR_NUM_COMP),
+        "Number of comparisons",
+        min = 1,
+        max = 5,
+        value = 3,
+        step = 1
       ),
-      shiny::mainPanel(
-        shiny::uiOutput(ns(BSAFE_ID$OUT_DWNLD_PLTS)),
-        shiny::br(),
-        shiny::downloadButton(
-          ns(BSAFE_ID$BUT_DWNLD_SUM_TBLS),
-          "Download All AE Summary Tables"
-        ),
-        shiny::h5(""),
-        shiny::downloadButton(
-          ns(BSAFE_ID$BUT_DWNLD_EXCEL),
-          "Download AE Summary Tables as Excel files"
-        ),
-        shiny::downloadButton(
-          ns(BSAFE_ID$BUT_DWNLD_LOG),
-          "Download log file"
-        ),
-        shiny::textOutput(ns(BSAFE_ID$OUT_EXCEL_PATH_TXT)),
-        shiny::h5(""),
-        shiny::h5("Simulating all tables might take a while."),
-        shiny::h5("You have to press the submit button prior to download."),
-        shiny::h5("The tables can be downloaded as soon as the chosen comparisons are displayed."),
-        shiny::h5("Chosen comparisons:"),
-        shiny::uiOutput(ns(BSAFE_ID$OUT_COMP_DISPLAY))
+      shiny::uiOutput(ns(BSAFE_ID$OUT_COMP_CB)),
+      shiny::actionButton(
+        ns(BSAFE_ID$BUT_COMP_SUBMIT),
+        "Submit"
       )
+    ),
+    main = shiny::tagList(
+      shiny::uiOutput(ns(BSAFE_ID$OUT_DWNLD_PLTS)),
+      shiny::br(),
+      shiny::downloadButton(
+        ns(BSAFE_ID$BUT_DWNLD_SUM_TBLS),
+        "Download All AE Summary Tables"
+      ),
+      # #nolint start
+      # shiny::h5(""),
+      # shiny::downloadButton(
+      #   ns(BSAFE_ID$BUT_DWNLD_EXCEL),
+      #   "Download AE Summary Tables as Excel files"
+      # ),
+      # shiny::downloadButton(
+      #   ns(BSAFE_ID$BUT_DWNLD_LOG),
+      #   "Download log file"
+      # ),
+      # nolint end
+      shiny::textOutput(ns(BSAFE_ID$OUT_EXCEL_PATH_TXT)),
+      shiny::h5(""),
+      shiny::h5("Simulating all tables might take a while."),
+      shiny::h5("You have to press the submit button prior to download."),
+      shiny::h5("The tables can be downloaded as soon as the chosen comparisons are displayed."),
+      shiny::h5("Chosen comparisons:"),
+      shiny::uiOutput(ns(BSAFE_ID$OUT_COMP_DISPLAY))
     )
   )
+
+  ui
 }
 
-mod_simulation_server <- function(id, data) {
+mod_simulation_server <- function(id, data, tmpfolder) {
   mod <- function(input, output, session) {
     ns <- session[["ns"]]
 
@@ -82,6 +84,7 @@ mod_simulation_server <- function(id, data) {
       })
     })
 
+    ae_summary_log <- list()
     ae_summary_data <- NULL
 
     shiny::observeEvent(input[[BSAFE_ID$BUT_COMP_SUBMIT]], {
@@ -143,18 +146,29 @@ mod_simulation_server <- function(id, data) {
       }
 
       pgrs <- shiny::showNotification("Running simulations", duration = NULL)
-      ae_summary_data <<- bsafe::ae_summary_table(
-        data(),
-        cb_list_ctrl,
-        cb_list_trt,
-        unique(data()[["SAF_TOPIC"]]),
-        input[[BSAFE_ID$SET_SEED]]
+      withCallingHandlers(
+        {
+          ae_summary_data <<- bsafe::ae_summary_table(
+            data(),
+            cb_list_ctrl,
+            cb_list_trt,
+            unique(data()[["SAF_TOPIC"]]),
+            input[[BSAFE_ID$SET_SEED]]
+          )
+        },
+        message = function(e) {
+          ae_summary_log[[length(ae_summary_log) + 1]] <<- e$message
+        },
+        warning = function(e) {
+          ae_summary_log[[length(ae_summary_log) + 1]] <<- e$message
+        }
       )
+
 
       shiny::removeNotification(pgrs)
 
 
-      tmp_dir <- tempdir()
+      tmp_dir <- tmpfolder
       # TODO: Asses usage of this part and how to improve this, otherwise we will polute the www directory
 
       # # create PDF-file from markdown document to show in popup window
@@ -168,11 +182,12 @@ mod_simulation_server <- function(id, data) {
         clean = TRUE,
         # parameters needed for markdown file
         params = list(
-          ae_summary_Rmd = ae_summary_data(),
+          ae_summary_Rmd = ae_summary_data,
           date = format(Sys.time(), "%d %B, %Y"),
           bsafe_version = utils::packageVersion("teal.modules.bsafe"),
           pwemap_version = utils::packageVersion("bsafe"),
-          seed = input[[BSAFE_ID$SET_SEED]]
+          seed = input[[BSAFE_ID$SET_SEED]],
+          ae_summary_log = ae_summary_log
         )
       )
 
@@ -186,7 +201,11 @@ mod_simulation_server <- function(id, data) {
           shiny::tags$head(shiny::tags$style(".modal-body{min-height:700px}")),
           shiny::tags$iframe(
             style = "height:700px; width:100%; scrolling=yes",
-            src = "template_ae_summary_table.pdf"
+            src = paste0(
+              "www",
+              strsplit(tmpfolder, "www")[[1]][2],
+              "/template_ae_summary_table.pdf"
+            )
           )
         )
       )
@@ -203,11 +222,12 @@ mod_simulation_server <- function(id, data) {
           output_file = file,
           clean = TRUE,
           params = list(
-            ae_summary_Rmd = ae_summary_data(),
+            ae_summary_Rmd = ae_summary_data,
             date = format(Sys.time(), "%d %B, %Y"),
             bsafe_version = utils::packageVersion("teal.modules.bsafe"),
             pwemap_version = utils::packageVersion("bsafe"),
-            seed = input[[BSAFE_ID$SET_SEED]]
+            seed = input[[BSAFE_ID$SET_SEED]],
+            ae_summary_log = ae_summary_log
           )
         )
       }

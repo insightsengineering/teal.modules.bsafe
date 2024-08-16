@@ -66,10 +66,12 @@ mod_select_analysis_server <- function(id, data) {
     )
 
     output[[BSAFE_ID$OUT_FILE_TABLE]] <- shiny::renderTable({
-      bsafe::input_data_display(
-        data = data(),
+      bsafe::data_table_prep(
+        input_data = data(),
         select_analysis = input[[BSAFE_ID$SEL_ANALYSIS]],
-        saf_topic = input[[BSAFE_ID$SEL_SAF_TOPIC]]
+        saf_topic = input[[BSAFE_ID$SEL_SAF_TOPIC]],
+        select_btrt = input[[BSAFE_ID$SEL_TRT]],
+        bool_pooled = input[[BSAFE_ID$CB_POOLED]]
       )
     })
 

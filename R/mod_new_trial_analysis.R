@@ -51,7 +51,7 @@ mod_new_trial_analysis_ui <- function(id) {
       "To assess prior data conflict, compare the prior and posterior probability density function, and the log likelihood of the observed data on the log scale.", # nolint: line_length_linter
     )),
     shiny::plotOutput(ns(BSAFE_ID$OUT_COMPARE_PLT)),
-    shiny::tableOutput(ns(BSAFE_ID$OUT_COMPARE_SUM_TBL))
+    shiny::htmlOutput(ns(BSAFE_ID$OUT_COMPARE_SUM_TBL))
   )
 
   list(
@@ -88,7 +88,6 @@ mod_new_trial_analysis_server <- function(
             select_analysis = ..(analysis_type()),
             input_data = ..(data()),
             robust_map_prior = ..(robust_map_mcmc()),
-            explore = TRUE,
             new_v1 = ..(current_trial_data()[["new_v1"]]),
             new_v2 = ..(current_trial_data()[["new_v2"]]),
             seed = ..(seed())
@@ -165,14 +164,17 @@ mod_new_trial_analysis_server <- function(
           ess_method = ..(ess_method()),
           current_trial_data = ..(current_trial_data()),
           post_dist = ..(post_dist()),
-          download = FALSE
+          numerical = FALSE,
+          seed = ..(seed())
         )
       },
       varname = "compare_summary_table"
     )
 
-    output[[BSAFE_ID$OUT_COMPARE_SUM_TBL]] <- shiny::renderTable({
-      compare_summary_table()
+    output[[BSAFE_ID$OUT_COMPARE_SUM_TBL]] <- shiny::renderText({
+      compare_summary_table() %>%
+        knitr::kable("html") %>%
+        kableExtra::kable_styling("striped")
     })
 
     r <- list(
