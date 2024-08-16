@@ -19,7 +19,6 @@ mod_data_preparation_ui <- function(id) {
   )
 
   main <- list(
-    shiny::uiOutput(ns("error_box")),
     shiny::tableOutput(ns(BSAFE_ID$OUT_ARM_SEL))
   )
 
@@ -27,6 +26,31 @@ mod_data_preparation_ui <- function(id) {
     list(side = side, main = main)
   )
 }
+
+#' New arm creation
+#' 
+#' @param data original data
+#' 
+#' @param new_arm new arm name
+#' 
+#' @param col_vals filtering criteria to create the new arm
+#' 
+#' @export
+#' 
+create_arm <- function(data, new_arm, col_vals) {
+      mask <- TRUE
+      for (idx in seq_along(col_vals)) {
+        col_name <- names(col_vals)[[idx]]
+        col_val <- col_vals[[col_name]]
+        mask <- mask & data[[col_name]] %in% col_val
+      }
+
+      data <- data[mask, , drop = FALSE]
+
+      if (nrow(data) > 0) data$ARM <- new_arm
+
+      return(data)
+    }
 
 mod_data_preparation_server <- function(id, data) {
   mod <- function(input, output, session) {
@@ -44,20 +68,7 @@ mod_data_preparation_server <- function(id, data) {
 
     shiny::setBookmarkExclude(names = BSAFE_ID$BUT_ADD_ARM)
 
-    create_arm <- function(data, new_arm, col_vals) {
-      mask <- TRUE
-      for (idx in seq_along(col_vals)) {
-        col_name <- names(col_vals)[[idx]]
-        col_val <- col_vals[[col_name]]
-        mask <- mask & data[[col_name]] %in% col_val
-      }
-
-      data <- data[mask, , drop = FALSE]
-
-      if (nrow(data) > 0) data$ARM <- new_arm
-
-      return(data)
-    }
+    
 
     get_names <- function(name, length) {
       helper <- paste0(name, 1)
@@ -77,7 +88,7 @@ mod_data_preparation_server <- function(id, data) {
       )
     })
 
-    output[[BSAFE_ID$OUT_SEL_VAR]] <- shiny::renderUI({
+    output[[BSAFE_ID$OUT_SEL_VAR]] <- shiny::renderUI({      
       shiny::req(input[[BSAFE_ID$SEL_COLUMN]])
       lapply(seq_along(input[[BSAFE_ID$SEL_COLUMN]]), function(i) {
         shiny::selectInput(ns(paste0("SEL_", i)),
@@ -85,13 +96,7 @@ mod_data_preparation_server <- function(id, data) {
             "Select the forms of ",
             input[[BSAFE_ID$SEL_COLUMN]][i]
           ),
-          choices = levels(
-            factor(
-              unique(
-                data()[, input[[BSAFE_ID$SEL_COLUMN]][i]]
-              )
-            )
-          ),
+          choices = sort(unique(data()[[input[[BSAFE_ID$SEL_COLUMN]][i]]])),
           multiple = TRUE
         )
       })
@@ -147,20 +152,25 @@ mod_data_preparation_server <- function(id, data) {
 
     shiny::outputOptions(output, BSAFE_ID$OUT_SEL_VAR, suspendWhenHidden = FALSE)
 
-    data_with_arms <- shiny::reactive({
-      if (length(current_arms()) > 0) {
-        d <- data()
-        new_arms <- list()
-        for (idx in seq_along(current_arms())) {
-          new_name <- names(current_arms())[[idx]]
-          new_sel_vals <- current_arms()[[idx]]
-          new_arms[[idx]] <- create_arm(d, new_name, new_sel_vals)
+    data_with_arms <- shinymeta::metaReactive({
+
+      new_arms <- shinymeta::..(current_arms()) 
+
+      if (length(new_arms) > 0) {
+        d <- shinymeta::..(data())
+        new_arms_df <- list()
+        for (idx in seq_along(new_arms)) {
+          new_name <- names(new_arms)[[idx]]
+          new_sel_vals <- new_arms[[idx]]
+          new_arms_df[[idx]] <- create_arm(d, new_name, new_sel_vals)
         }
-        dplyr::bind_rows(d, new_arms)
+        dplyr::bind_rows(d, new_arms_df)
       } else {
-        data()
+        shinymeta::..(data())
       }
-    })
+    },
+    varname = "data_with_arms"
+    )
 
     output[[BSAFE_ID$OUT_ARM_SEL]] <- shiny::renderTable({
       data_with_arms()
@@ -180,7 +190,8 @@ mock_data_preparation_mod <- function() {
       mod_data_preparation_ui(
         id = "mock"
       ),
-      shiny::verbatimTextOutput("out")
+      shiny::verbatimTextOutput("out_data"),
+      shiny::verbatimTextOutput("out_code")
     )
   }
 
@@ -190,10 +201,16 @@ mock_data_preparation_mod <- function() {
       data = shiny::reactive(as.data.frame(teal.modules.bsafe::bsafe_data))
     )
 
-    output[["out"]] <- shiny::renderPrint({
+    output[["out_data"]] <- shiny::renderPrint({
       x()
     })
+
+  output[["out_code"]] <- shiny::renderPrint({
+      shinymeta::expandChain(x())
+    })
+    
   }
+
 
   shiny::shinyApp(
     ui = ui,
