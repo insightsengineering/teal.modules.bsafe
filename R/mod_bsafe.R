@@ -44,8 +44,8 @@ bsafe_UI <- function(id, header = NULL) { # nolint
   ui_list <- list(
     prep = list(mod_data_preparation_ui(ns("data_preparation")), "Data Preparation", FALSE),
     a_sel = list(mod_select_analysis_ui(ns("sel_analysis")), "Analysis selection", FALSE),
-    mp = list(mod_map_prior_ui(ns("map_prior")), "Map Prior", FALSE),
-    rmp = list(mod_robust_map_ui(ns("robust_map")), "Robust Map Prior", FALSE),
+    mp = list(mod_map_prior_ui(ns("map_prior")), "MAP Prior", FALSE),
+    rmp = list(mod_robust_map_ui(ns("robust_map")), "Robust MAP Prior", FALSE),
     nta = list(mod_new_trial_analysis_ui(ns("new_trial")), "New Trial Analysis", FALSE),
     dm = list(mod_decision_making_ui(ns("decision_making")), "Decision Making", FALSE),
     down = list(mod_simulation_ui(ns("simulation")), "Default Comparisons", FALSE)
@@ -116,19 +116,18 @@ bsafe_UI <- function(id, header = NULL) { # nolint
     shiny::h5("User Manual:"),
     shiny::a(
       "open manual",
-      href = "www/user.manual.b_safe.pdf"
+      href = "www/manual.pdf"
+    ),
+    shiny::h5("Statistical Analysis Plan:"),
+    shiny::a(
+      "open SAP",
+      href = "www/statsplan.pdf"
+    ),
+    shiny::h5("Testing Documentation:"),
+    shiny::a(
+      "open Testing Documentation",
+      href = "www/test_validate_review.pdf"
     )
-    # ,
-    # shiny::h5("Statistical Analysis Plan:"),
-    # shiny::a(
-    #   "open SAP",
-    #   href = "www/user.manual.b_safe.pdf"
-    # ),
-    # shiny::h5("Testing Documentation:"),
-    # shiny::a(
-    #   "open Testing Documentation",
-    #   href = "www/user.manual.b_safe.pdf"
-    # )
   )
   main <- list(manual_ui, main)
 
