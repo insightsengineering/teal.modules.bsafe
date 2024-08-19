@@ -191,16 +191,16 @@ mod_robust_map_server <- function(
 preface_rob_txt <- function(sel_analysis, rob_weight, rob_mean) {
   if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[1]) {
     return(paste0(
-      "Based on a weakly informative conjugate component with weight ",
+      "Based on a weakly informative conjugate component with weight w = ",
       rob_weight, " and mean ", rob_mean,
-      " the robust MAP prior is approximated as w * (MAP Prior) + (1 - w) * (weakly informative prior): "
+      " the robust MAP prior is approximated as (1-w) * (MAP Prior) + w * (weakly informative prior): "
     ))
   } else if (sel_analysis == BSAFE_CHOICES$SEL_ANALYSIS[2]) {
     return(paste0(
-      "Based on a EX-NEX approach with non-exchangeable probability P(nex) =  ",
+      "Based on a weakly informative conjugate component with w =  ",
       rob_weight, " and mean ", rob_mean,
-      " on the log scale of the robust MAP prior is approximated as",
-      " (1 - P(nex)) * (MAP Prior) + P(nex) * (weakly informative prior): "
+      " on the exp scale (", round(log(rob_mean),4), " on the log scale) of the robust MAP prior is approximated as ",
+      " (1 - w) * (MAP prior) + w * (weakly informative prior): "
     ))
   }
 }
