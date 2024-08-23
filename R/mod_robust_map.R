@@ -199,7 +199,7 @@ preface_rob_txt <- function(sel_analysis, rob_weight, rob_mean) {
     return(paste0(
       "Based on a weakly informative conjugate component with w =  ",
       rob_weight, " and mean ", rob_mean,
-      " on the exp scale (", round(log(rob_mean),4), " on the log scale) of the robust MAP prior is approximated as ",
+      " on the exp scale (", round(log(rob_mean), 4), " on the log scale) of the robust MAP prior is approximated as ",
       " (1 - w) * (MAP prior) + w * (weakly informative prior): "
     ))
   }
