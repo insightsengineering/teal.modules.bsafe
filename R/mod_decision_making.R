@@ -114,7 +114,7 @@ mod_decision_making_server <- function(
         ),
         min = 0,
         max = 100,
-        value = c(30, 100), # TODO define this
+        value = c(10, 90),
         post = "%"
       )
     })
@@ -233,15 +233,15 @@ mod_decision_making_server <- function(
 
 calc_log_hazard_area <- function(param_approx) {
   val <- c(
-    round(RBesT::qmix(param_approx, 0.01), 2),
-    round(RBesT::qmix(param_approx, 0.99), 2)
+    round(RBesT::qmix(param_approx, 0.002), 3),
+    round(RBesT::qmix(param_approx, 0.998), 3)
   )
   return(val)
 }
 
 calc_param_approx_boundaries <- function(param_approx) {
-  lower_bound <- RBesT::qmix(param_approx, 0.25)
-  upper_bound <- RBesT::qmix(param_approx, 0.75)
+  lower_bound <- RBesT::qmix(param_approx, 0.1)
+  upper_bound <- RBesT::qmix(param_approx, 0.9)
   return(c(lower_bound, upper_bound))
 }
 
