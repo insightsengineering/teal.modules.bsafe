@@ -6,6 +6,11 @@
 \usage{
 tm_bsafe(label = "BSAFE", dataset_name)
 }
+\arguments{
+\item{label}{a label to be used for the application}
+
+\item{dataset_name}{the names of the dataset name}
+}
 \description{
 tm_bsafe
 }

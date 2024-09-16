@@ -65,6 +65,9 @@ srv_bsafe <- function(id, data, reporter, filter_panel_api, dataset_name) {
 }
 
 #' @title tm_bsafe
+#' @param label a label to be used for the application
+#'
+#' @param dataset_name the names of the dataset name
 #' @export
 tm_bsafe <- function(label = "BSAFE", dataset_name) {
   checkmate::assert_character(label)
