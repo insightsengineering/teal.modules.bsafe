@@ -40,12 +40,6 @@
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal.modules.bsafe/main">main</a> </div></li>
-<!-- end dropdown for versions -->
 <ul class="navbar-nav">
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/insightsengineering/teal.modules.bsafe"><span class="fa fa-github"></span></a></li>
       </ul>
@@ -58,6 +52,52 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="b-safe-shiny-module">B-SAFE Shiny Module<a class="anchor" aria-label="anchor" href="#b-safe-shiny-module"></a>
 </h1></div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"teal"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"https://github.com/insightsengineering/bsafe"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"https://github.com/insightsengineering/teal.modules.bsafe"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://insightsengineering.github.io/teal/" class="external-link">teal</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">bsafe</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">teal.modules.bsafe</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">teal.modules.bsafe</span><span class="fu">::</span><span class="va"><a href="reference/test_data.html">test_data</a></span></span>
+<span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html" class="external-link">teal_data</a></span><span class="op">(</span></span>
+<span>  bsafe_data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>  code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="va">bsafe_data</span> <span class="op">&lt;-</span> <span class="fu">teal.modules.bsafe</span><span class="fu">::</span><span class="va"><a href="reference/test_data.html">test_data</a></span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/verify.html" class="external-link">verify</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal/latest-tag/reference/init.html" class="external-link">init</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>  modules <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="fu">teal.modules.bsafe</span><span class="fu">:::</span><span class="fu"><a href="reference/tm_bsafe.html">tm_bsafe</a></span><span class="op">(</span></span>
+<span>      label <span class="op">=</span> <span class="st">"teal.modules.bsafe"</span>,</span>
+<span>      dataset_name <span class="op">=</span> <span class="st">"bsafe_data"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  header <span class="op">=</span> <span class="st">"DaVinci test of bsafe as teal module"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="further-information">Further Information<a class="anchor" aria-label="anchor" href="#further-information"></a>
+</h2>
+<p>B-SAFE is an R-Shiny app. The app is an innovate software tool for statistical analysis of adverse event summary data. The app can enhance the descriptive analysis for a current trial with historical information on one or more treatment arms for increased precision. It features a Bayesian Meta-Analytic Predictive (MAP) Prior approach and a robust extension, which incorporates historical information for safety analyses on adverse events into safety analyses for a new trial. The use of historical information has been used for efficacy analyses in the past and now being extended to safety analyses.</p>
+<p><a href="https://github.com/insightsengineering/teal.modules.bsafe/blob/main/inst/www/manual.pdf" class="external-link">Manual</a></p>
+</div>
 </div>
   </main><aside class="col-md-3"><div class="license">
 <h2 data-toc-skip>License</h2>
