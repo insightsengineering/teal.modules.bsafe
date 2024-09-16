@@ -149,8 +149,7 @@ bsafe_server <- function(
     id,
     dataset) {
   module <- function(input, output, session) {
-
-    shiny::addResourcePath('www', system.file('www', package='teal.modules.bsafe'))
+    shiny::addResourcePath("www", system.file("www", package = "teal.modules.bsafe"))
 
 
     # global variables --------------------------------------------------------
