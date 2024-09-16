@@ -9,3 +9,6 @@
 
 #' @title test data for robust map
 "test_rm_in"
+
+#' @title bsafe test dataset
+"test_data"
