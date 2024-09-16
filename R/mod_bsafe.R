@@ -115,18 +115,21 @@ bsafe_UI <- function(id, header = NULL) { # nolint
     )),
     shiny::h5("User Manual:"),
     shiny::a(
-      "open manual",
-      href = "www/manual.pdf"
+      "open SAP",
+      href = "www/manual.pdf",
+      target = "_blank"
     ),
     shiny::h5("Statistical Analysis Plan:"),
     shiny::a(
       "open SAP",
-      href = "www/statsplan.pdf"
+      href = "www/statsplan.pdf",
+      target = "_blank"
     ),
     shiny::h5("Testing Documentation:"),
     shiny::a(
       "open Testing Documentation",
-      href = "www/test_validate_review.pdf"
+      href = "www/test_validate_review.pdf",
+      target = "_blank"
     )
   )
   main <- list(manual_ui, main)
@@ -146,6 +149,10 @@ bsafe_server <- function(
     id,
     dataset) {
   module <- function(input, output, session) {
+
+    shiny::addResourcePath('www', system.file('www', package='teal.modules.bsafe'))
+
+
     # global variables --------------------------------------------------------
 
     ns <- session[["ns"]]

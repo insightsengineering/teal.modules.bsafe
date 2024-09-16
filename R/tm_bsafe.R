@@ -64,7 +64,8 @@ srv_bsafe <- function(id, data, reporter, filter_panel_api, dataset_name) {
   })
 }
 
-# the function which creates the teal module for users
+#' @title tm_bsafe
+#' @export
 tm_bsafe <- function(label = "BSAFE", dataset_name) {
   checkmate::assert_character(label)
 
