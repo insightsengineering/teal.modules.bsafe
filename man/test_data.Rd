@@ -13,4 +13,4 @@ test_data
 \description{
 bsafe test dataset
 }
-\keyword{datasets}
+\keyword{internal}

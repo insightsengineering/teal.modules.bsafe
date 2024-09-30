@@ -13,4 +13,4 @@ bsafe_data
 \description{
 bsafe dummy data
 }
-\keyword{datasets}
+\keyword{internal}

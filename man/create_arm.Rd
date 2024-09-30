@@ -16,3 +16,4 @@ create_arm(data, new_arm, col_vals)
 \description{
 New arm creation
 }
+\keyword{internal}

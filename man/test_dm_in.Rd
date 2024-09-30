@@ -13,4 +13,4 @@ test_dm_in
 \description{
 test data for decision making
 }
-\keyword{datasets}
+\keyword{internal}

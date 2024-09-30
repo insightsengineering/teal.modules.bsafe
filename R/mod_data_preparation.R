@@ -34,8 +34,8 @@ mod_data_preparation_ui <- function(id) {
 #' @param new_arm new arm name
 #'
 #' @param col_vals filtering criteria to create the new arm
-#'
-#' @export
+#' 
+#' @keywords internal
 #'
 create_arm <- function(data, new_arm, col_vals) {
   mask <- TRUE
