@@ -1,8 +1,8 @@
 #' @title bsafe's ui function
-#' 
+#'
 #' @name bsafe
-#' 
-#' 
+#'
+#'
 NULL
 
 #' @describeIn bsafe bsafe UI function UI for the bsafe shiny app
@@ -12,7 +12,7 @@ NULL
 #'
 #' @return the UI
 #' @export
-#' 
+#'
 bsafe_UI <- function(id, header = NULL) { # nolint
 
   bs3_panel <- function(...) {
@@ -158,7 +158,7 @@ bsafe_UI <- function(id, header = NULL) { # nolint
 #'
 #' @return the UI
 #' @export
-#' 
+#'
 bsafe_server <- function(
     id,
     dataset) {

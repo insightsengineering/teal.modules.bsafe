@@ -83,11 +83,11 @@ tm_bsafe <- function(label = "BSAFE", dataset_name) {
 }
 
 #' mock application for testing
-#' 
+#'
 #' Launches a demo application for the module
-#' 
+#'
 #' @export
-#' 
+#'
 mock_teal <- function() {
   data <- teal.data::teal_data(
     bsafe_data = teal.modules.bsafe::bsafe_data,
