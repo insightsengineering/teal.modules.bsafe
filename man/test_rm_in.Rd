@@ -13,4 +13,4 @@ test_rm_in
 \description{
 test data for robust map
 }
-\keyword{datasets}
+\keyword{internal}
