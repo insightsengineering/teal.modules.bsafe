@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="bsafe_app" timestamp="2025-03-21T13:03:28Z" hostname="e3f41109e0b1" tests="2" skipped="1" failures="0" errors="1" time="2.548">
+    <testcase time="2.447" classname="bsafe_app" name="bsafe_module_starts">
+      <error type="error" message="Error in `app_initialize(self, private, app_dir = app_dir, ..., load_timeout = load_timeout,  ('test-bsafe_app.R:4:5')">Error in `app_initialize(self, private, app_dir = app_dir, ..., load_timeout = load_timeout, 
+    timeout = timeout, wait = wait, expect_values_screenshot_args = expect_values_screenshot_args, 
+    screenshot_args = screenshot_args, check_names = check_names, 
+    name = name, variant = variant, view = view, height = height, 
+    width = width, seed = seed, clean_logs = clean_logs, shiny_args = shiny_args, 
+    render_args = render_args, options = options)`: code: -32602
+  message: Target position can only be set for new windows
+
+
+i You can inspect the failed AppDriver object via `rlang::last_error()$app`
+i AppDriver logs:
+{shinytest2} R info   13:03:29.85 Start AppDriver initialization
+{shinytest2} R info   13:03:29.88 Starting Shiny app
+{shinytest2} R info   13:03:30.72 Creating new ChromoteSession
+{shinytest2} R info   13:03:30.74 Error while initializing AppDriver:
+                                  code: -32602
+                                    message: Target position can only be set for new windows
+{shiny}      R stderr ----------- Loading required package: shiny
+{shiny}      R stderr ----------- Running application in test mode.
+{shiny}      R stderr ----------- 
+{shiny}      R stderr ----------- Listening on http://127.0.0.1:3570
+
+
+Caused by error in `callback()`:
+! code: -32602
+  message: Target position can only be set for new windows
+Backtrace:
+     x
+  1. +-shinytest2::AppDriver$new(teal.modules.bsafe:::mock_bsafe()) at test-bsafe_app.R:4:5
+  2. | \-shinytest2 (local) initialize(...)
+  3. |   \-shinytest2:::app_initialize(...)
+  4. |     +-base::withCallingHandlers(...)
+  5. |     \-shinytest2:::app_initialize_(self, private, ..., view = view)
+  6. |       \-chromote::default_chromote_object()$new_session()
+  7. |         \-chromote:::create_session(...)
+  8. |           \-ChromoteSession$new(...)
+  9. |             \-chromote (local) initialize(...)
+ 10. |               \-self$wait_for(p)
+ 11. |                 \-self$parent$wait_for(p)
+ 12. |                   \-chromote:::synchronize(p, loop = private$child_loop)
+ 13. |                     +-promises::with_promise_domain(...)
+ 14. |                     | \-domain$wrapSync(expr)
+ 15. |                     |   \-base::force(expr)
+ 16. |                     +-base::tryCatch(...)
+ 17. |                     | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 18. |                     |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 19. |                     |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
+ 20. |                     \-base::stop(value)
+ 21. \-shinytest2 (local) `&lt;fn&gt;`(`&lt;smplErrr&gt;`)
+ 22.   \-shinytest2:::app_abort(...)
+ 23.     \-rlang::abort(..., app = self, call = call)</error>
+    </testcase>
+    <testcase time="0.101" classname="bsafe_app" name="tm_bsafe_starts">
+      <skipped message="Reason: `shinytest2::AppDriver` can not be initialized as {chromote} can not be started ('test-bsafe_app.R:13:5')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="decision_making" timestamp="2025-03-21T13:03:33Z" hostname="e3f41109e0b1" tests="3" skipped="2" failures="0" errors="0" time="2.693">
+    <testcase time="2.634" classname="decision_making" name="calc_log_hazard_area_returns_correct_values"/>
+    <testcase time="0.0410000000000004" classname="decision_making" name="calc_param_approx_boundaries_returns_correct_lower_and_upper_boundaries">
+      <skipped message="Reason: On CRAN ('test-decision_making.R:12:5')"/>
+    </testcase>
+    <testcase time="0.0179999999999998" classname="decision_making" name="_unnamed_">
+      <skipped message="Reason: `shinytest2::AppDriver` can not be initialized as {chromote} can not be started ('test-decision_making.R:20:3')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="map_prior" timestamp="2025-03-21T13:03:33Z" hostname="e3f41109e0b1" tests="4" skipped="1" failures="0" errors="0" time="0.084">
+    <testcase time="0.0609999999999999" classname="map_prior" name="preface_prior_txt_returns_correct_preface_for_MAP_approach"/>
+    <testcase time="0.00499999999999989" classname="map_prior" name="preface_prior_txt_returns_correct_preface_for_log_scale_approach"/>
+    <testcase time="0.00900000000000034" classname="map_prior" name="preface_prior_txt_returns_an_error_for_unknown_selection_analysis"/>
+    <testcase time="0.00899999999999945" classname="map_prior" name="_unnamed_">
+      <skipped message="Reason: `shinytest2::AppDriver` can not be initialized as {chromote} can not be started ('test-map_prior.R:26:3')"/>
+    </testcase>
+    <testcase time="0.0170000000000003" classname="character(0)" name="_unnamed_">
+      <skipped message="Reason: `shinytest2::AppDriver` can not be initialized as {chromote} can not be started ('test-new_trial_analysis.R:11:3')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="robust_map" timestamp="2025-03-21T13:03:33Z" hostname="e3f41109e0b1" tests="5" skipped="2" failures="0" errors="0" time="0.056">
+    <testcase time="0.0149999999999997" classname="robust_map" name="preface_rob_txt_returns_correct_preface_for_weakly_informative_conjugate_component"/>
+    <testcase time="0.00600000000000023" classname="robust_map" name="preface_rob_txt_returns_correct_preface_for_EX_NEX_approach"/>
+    <testcase time="0.00499999999999989" classname="robust_map" name="preface_rob_txt_returns_NULL_for_unknown_selection_analysis"/>
+    <testcase time="0.0129999999999999" classname="robust_map" name="_unnamed_">
+      <skipped message="Reason: `shinytest2::AppDriver` can not be initialized as {chromote} can not be started ('test-robust_map.R:43:3')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="select_analysis" timestamp="2025-03-21T13:03:33Z" hostname="e3f41109e0b1" tests="11" skipped="1" failures="0" errors="0" time="0.077">
+    <testcase time="0.0149999999999997" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_choices_when_previous_selection_is_empty"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_empty"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_choices_when_previous_selection_is_not_empty"/>
+    <testcase time="0.00599999999999934" classname="select_analysis" name="get_arm_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_not_empty"/>
+    <testcase time="0.00500000000000078" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_choices_when_there_are_choices"/>
+    <testcase time="0.00599999999999934" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_selected_value_when_there_are_choices"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_choices_when_previous_selection_is_not_empty"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_correct_selected_value_when_previous_selection_is_not_empty"/>
+    <testcase time="0.00600000000000023" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_NULL_choices_when_there_are_no_choices"/>
+    <testcase time="0.00599999999999934" classname="select_analysis" name="get_safety_topic_choices_and_selection_returns_NULL_selected_value_when_there_are_no_choices"/>
+    <testcase time="0.00900000000000034" classname="select_analysis" name="_unnamed_">
+      <skipped message="Reason: `shinytest2::AppDriver` can not be initialized as {chromote} can not be started ('test-select_analysis.R:65:3')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="utils" timestamp="2025-03-21T13:03:33Z" hostname="e3f41109e0b1" tests="5" skipped="0" failures="0" errors="0" time="0.041">
+    <testcase time="0.0179999999999998" classname="utils" name="_returns_a_when_a_is_not_NULL_not_NA_and_has_length_0"/>
+    <testcase time="0.00600000000000023" classname="utils" name="_returns_b_when_a_is_NULL"/>
+    <testcase time="0.00600000000000023" classname="utils" name="_returns_b_when_a_is_NA"/>
+    <testcase time="0.00499999999999989" classname="utils" name="_returns_b_when_a_is_an_empty_vector"/>
+    <testcase time="0.00600000000000023" classname="utils" name="_returns_b_when_a_is_a_vector_with_length_0"/>
+  </testsuite>
+</testsuites>
