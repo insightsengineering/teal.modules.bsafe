@@ -1,3 +1,5 @@
+chromote::local_chrome_version(binary = "chrome-headless-shell", quiet = FALSE)
+
 is_CI <- isTRUE(as.logical(Sys.getenv("CI"))) # nolint
 is_shiny_test <- isTRUE(as.logical(Sys.getenv("TEST_LOCAL"))) | is_CI
 
