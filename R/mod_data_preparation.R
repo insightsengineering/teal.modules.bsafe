@@ -23,7 +23,6 @@ mod_data_preparation_ui <- function(id) {
   )
 
   list(side = side, main = main)
-
 }
 
 #' New arm creation
