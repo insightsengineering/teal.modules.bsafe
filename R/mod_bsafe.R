@@ -374,7 +374,8 @@ bsafe_server <- function(
         preset_statements = decision_making[["preset_statements"]]()
       )
     })
-    return(to_report)
+
+    to_report
   }
 
   shiny::moduleServer(
@@ -385,5 +386,5 @@ bsafe_server <- function(
 
 data_saf_topic_char_limiter <- function(data) {
   data[["SAF_TOPIC"]] <- stringr::str_sub(data[["SAF_TOPIC"]], end = 30)
-  return(data)
+  data
 }

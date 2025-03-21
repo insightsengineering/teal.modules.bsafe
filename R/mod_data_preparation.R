@@ -22,9 +22,8 @@ mod_data_preparation_ui <- function(id) {
     shiny::tableOutput(ns(BSAFE_ID$OUT_ARM_SEL))
   )
 
-  return(
-    list(side = side, main = main)
-  )
+  list(side = side, main = main)
+
 }
 
 #' New arm creation
@@ -49,7 +48,7 @@ create_arm <- function(data, new_arm, col_vals) {
 
   if (nrow(data) > 0) data$ARM <- new_arm
 
-  return(data)
+  data
 }
 
 mod_data_preparation_server <- function(id, data) {
@@ -75,7 +74,7 @@ mod_data_preparation_server <- function(id, data) {
       for (i in 2:length) {
         helper <- c(helper, paste0(name, i))
       }
-      return(helper)
+      helper
     }
 
     # Initial menus
@@ -184,8 +183,7 @@ mod_data_preparation_server <- function(id, data) {
       data_with_arms()
     })
 
-
-    return(data_with_arms)
+    data_with_arms
   }
 
   shiny::moduleServer(id, mod)
