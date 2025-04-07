@@ -39,9 +39,10 @@ Imports:
     markdown
 Suggests:
     testthat (>= 3.0.4),
+    chromote (>= 0.5.0),
     shinytest2,
     RBesT,
     vdiffr
 Config/testthat/edition: 3
 RoxygenNote: 7.3.2
-Remotes: insightsengineering/bsafe@main
+Remotes: insightsengineering/bsafe@main, rstudio/chromote@v0.5.0

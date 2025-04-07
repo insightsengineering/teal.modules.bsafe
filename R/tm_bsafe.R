@@ -19,7 +19,7 @@ srv_bsafe <- function(id, data, reporter, filter_panel_api, dataset_name) {
   shiny::moduleServer(id, function(input, output, session) {
     dataset <- shiny::reactive({
       d <- data()[[dataset_name]]
-      attr(d, "code") <- rlang::parse_expr(paste0("{", teal.data::get_code(data(), datanames = dataset_name), "}"))
+      attr(d, "code") <- teal.data::get_code(data(), names = dataset_name, deparse = FALSE)
       d
     })
 
@@ -82,7 +82,12 @@ tm_bsafe <- function(label = "BSAFE", dataset_name) {
   )
 }
 
-
+#' mock application for testing
+#'
+#' Launches a demo application for the module
+#'
+#' @export
+#'
 mock_teal <- function() {
   data <- teal.data::teal_data(
     bsafe_data = teal.modules.bsafe::bsafe_data,
@@ -98,7 +103,7 @@ mock_teal <- function() {
         dataset_name = "bsafe_data"
       )
     ),
-    header = "DaVinci test of a bsafe as teal module"
+    header = "Example teal app for teal.modules.bsafe"
   )
   shiny::shinyApp(app$ui, app$server)
 }

@@ -1,11 +1,18 @@
-#' @title quic.bsafe's ui function
-#' @description  implements the UI for the quic.bsafe shiny app
+#' @title bsafe's ui function
+#'
+#' @name bsafe
+#'
+#'
+NULL
+
+#' @describeIn bsafe bsafe UI function UI for the bsafe shiny app
 #'
 #' @param id the id
 #' @param header elements to be included in the header of the tabset of the module
 #'
 #' @return the UI
 #' @export
+#'
 bsafe_UI <- function(id, header = NULL) { # nolint
 
   bs3_panel <- function(...) {
@@ -144,7 +151,14 @@ bsafe_UI <- function(id, header = NULL) { # nolint
   )
 }
 
-
+#' @describeIn bsafe bsafe server function for the bsafe shiny app
+#'
+#' @param id the id
+#' @param dataset the dataset to be included in the application
+#'
+#' @return the UI
+#' @export
+#'
 bsafe_server <- function(
     id,
     dataset) {
@@ -360,7 +374,8 @@ bsafe_server <- function(
         preset_statements = decision_making[["preset_statements"]]()
       )
     })
-    return(to_report)
+
+    to_report
   }
 
   shiny::moduleServer(
@@ -371,5 +386,5 @@ bsafe_server <- function(
 
 data_saf_topic_char_limiter <- function(data) {
   data[["SAF_TOPIC"]] <- stringr::str_sub(data[["SAF_TOPIC"]], end = 30)
-  return(data)
+  data
 }
